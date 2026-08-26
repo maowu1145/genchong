@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">小鼻嘎</string>
+    <string name="main_title">小鼻嘎</string>
+    <string name="launch_pet">召唤</string>
+    <string name="recall_pet">收回</string>
+    <string name="skin_picker">小鼻嘎选择</string>
+    <string name="color_tuning">制作</string>
+    <string name="biga_island">鼻嘎小岛</string>
+    <string name="physics_settings">物理参数</string>
+    <string name="ai_settings">AI配置</string>
+    <string name="experimental_features">实验性功能</string>
+    <string name="operation_guard">操作防遮挡</string>
+</resources>

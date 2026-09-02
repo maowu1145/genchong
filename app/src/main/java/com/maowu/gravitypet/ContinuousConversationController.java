@@ -35,7 +35,6 @@ final class ContinuousConversationController {
     private static final int SAMPLE_RATE = 16_000;
     private static final int ANALYSIS_FRAME_SAMPLES = 320; // 20 ms at 16 kHz
     private static final int NO_SPEECH_TIMEOUT_MS = 15_000;
-    private static final int MAX_CONSECUTIVE_NO_SPEECH = 3;
     private static final int MAX_UTTERANCE_MS = 25_000;
     // Keep listening through normal pauses between clauses. 430 ms was short
     // enough to submit while the user was only taking a breath.
@@ -54,25 +53,18 @@ final class ContinuousConversationController {
     private final Listener listener;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final ExecutorService recordingExecutor = Executors.newSingleThreadExecutor();
-    private final ExecutorService cloudExecutor = Executors.newFixedThreadPool(3);
     private volatile AudioRecord currentRecorder;
     private volatile boolean bargeInMonitorActive;
     private MediaPlayer currentPlayer;
     private File currentSpeechFile;
     private final ArrayDeque<String> speechQueue = new ArrayDeque<>();
     private final ArrayDeque<byte[]> audioQueue = new ArrayDeque<>();
-    private final AiClient.ConversationHistory conversationHistory =
-            new AiClient.ConversationHistory();
-    private volatile RequestHandle asrRequest;
-    private volatile RequestHandle aiRequest;
-    private volatile RequestHandle ttsRequest;
     private boolean synthesisBusy;
     private boolean playbackBusy;
     private boolean replyStreamComplete;
     private volatile boolean active;
     private volatile boolean destroyed;
     private boolean submitted;
-    private int consecutiveNoSpeechCount;
     private volatile int sessionGeneration;
     private int conversationSkinId;
 
@@ -93,9 +85,6 @@ final class ContinuousConversationController {
         if (active || destroyed) return;
         active = true;
         submitted = false;
-        consecutiveNoSpeechCount = 0;
-        conversationHistory.reset();
-        cancelCloudRequests();
         resetSpeechPipeline();
         sessionGeneration++;
         startListening(sessionGeneration);
@@ -106,7 +95,6 @@ final class ContinuousConversationController {
         active = false;
         sessionGeneration++;
         handler.removeCallbacksAndMessages(null);
-        cancelCloudRequests();
         bargeInMonitorActive = false;
         closeRecorder();
         releasePlayer();
@@ -119,13 +107,11 @@ final class ContinuousConversationController {
         active = false;
         sessionGeneration++;
         handler.removeCallbacksAndMessages(null);
-        cancelCloudRequests();
         bargeInMonitorActive = false;
         closeRecorder();
         releasePlayer();
         resetSpeechPipeline();
         recordingExecutor.shutdownNow();
-        cloudExecutor.shutdownNow();
     }
 
     private void startListening(int generation) {
@@ -235,19 +221,16 @@ final class ContinuousConversationController {
         if (!isCurrent(generation) || submitted) return;
         submitted = true;
         listener.showStatus("正在识别…");
-        asrRequest = MimoAsrClient.transcribe(
-                context, wav, cloudExecutor, new MimoAsrClient.Callback() {
+        MimoAsrClient.transcribe(context, wav, new MimoAsrClient.Callback() {
             @Override
             public void onSuccess(String text) {
                 if (!isCurrent(generation)) return;
-                asrRequest = null;
                 submitRecognizedText(generation, text);
             }
 
             @Override
             public void onError(String message) {
                 if (!isCurrent(generation)) return;
-                asrRequest = null;
                 submitted = false;
                 listener.showPetMessage("语音识别失败：" + message);
                 listener.showStatus("🎙 我还在听…");
@@ -259,12 +242,10 @@ final class ContinuousConversationController {
     private void submitRecognizedText(int generation, String text) {
         if (!isCurrent(generation) || text == null || text.trim().isEmpty()) return;
         String recognized = text.trim();
-        consecutiveNoSpeechCount = 0;
         listener.showUserMessage(recognized);
         listener.showStatus("小鼻嘎正在思考…");
         resetSpeechPipeline();
-        aiRequest = AiClient.chat(context, conversationSkinId, recognized,
-                conversationHistory, cloudExecutor, new AiClient.Callback() {
+        AiClient.chat(context, conversationSkinId, recognized, new AiClient.Callback() {
             @Override
             public void onSentence(String sentence) {
                 if (!isCurrent(generation)) return;
@@ -274,7 +255,6 @@ final class ContinuousConversationController {
             @Override
             public void onSuccess(String reply) {
                 if (!isCurrent(generation)) return;
-                aiRequest = null;
                 listener.showPetMessage(reply);
                 replyStreamComplete = true;
                 finishReplyIfReady(generation);
@@ -283,7 +263,6 @@ final class ContinuousConversationController {
             @Override
             public void onError(String message) {
                 if (!isCurrent(generation)) return;
-                aiRequest = null;
                 listener.showPetMessage("对话失败：" + message);
                 replyStreamComplete = true;
                 finishReplyIfReady(generation);
@@ -307,12 +286,10 @@ final class ContinuousConversationController {
         String sentence = speechQueue.removeFirst();
         synthesisBusy = true;
         listener.showStatus("小鼻嘎正在说话…");
-        ttsRequest = MimoTtsClient.synthesize(
-                context, sentence, cloudExecutor, new MimoTtsClient.Callback() {
+        MimoTtsClient.synthesize(context, sentence, new MimoTtsClient.Callback() {
             @Override
             public void onSuccess(byte[] wavData) {
                 if (!isCurrent(generation)) return;
-                ttsRequest = null;
                 synthesisBusy = false;
                 audioQueue.addLast(wavData);
                 playNextAudio(generation);
@@ -323,7 +300,6 @@ final class ContinuousConversationController {
             @Override
             public void onError(String message) {
                 if (!isCurrent(generation)) return;
-                ttsRequest = null;
                 synthesisBusy = false;
                 listener.showStatus("这一句声音生成失败，继续播放后续…");
                 pumpSpeechPipeline(generation);
@@ -484,7 +460,6 @@ final class ContinuousConversationController {
                             sessionGeneration++;
                             captureGeneration = sessionGeneration;
                         }
-                        cancelCloudRequests();
                         interrupted = true;
                         speechStarted = now;
                         lastVoice = now;
@@ -550,35 +525,12 @@ final class ContinuousConversationController {
         }
         File file = currentSpeechFile;
         currentSpeechFile = null;
-        if (file != null && file.exists() && !file.delete()) {
-            Log.w(TAG, "Unable to delete temporary speech file: " + file.getName());
-        }
-    }
-
-    private void cancelCloudRequests() {
-        RequestHandle asr = asrRequest;
-        asrRequest = null;
-        if (asr != null) asr.cancel();
-        RequestHandle ai = aiRequest;
-        aiRequest = null;
-        if (ai != null) ai.cancel();
-        RequestHandle tts = ttsRequest;
-        ttsRequest = null;
-        if (tts != null) tts.cancel();
+        if (file != null && file.exists()) file.delete();
     }
 
     private void postNoSpeech(int generation) {
         handler.post(() -> {
             if (!isCurrent(generation)) return;
-            consecutiveNoSpeechCount++;
-            if (consecutiveNoSpeechCount >= MAX_CONSECUTIVE_NO_SPEECH) {
-                listener.showStatus("长时间没听到声音，已暂停对话");
-                active = false;
-                sessionGeneration++;
-                cancelCloudRequests();
-                listener.onConversationStopped();
-                return;
-            }
             listener.showStatus("没听到声音，再说一次吧…");
             handler.postDelayed(() -> startListening(generation), 400L);
         });

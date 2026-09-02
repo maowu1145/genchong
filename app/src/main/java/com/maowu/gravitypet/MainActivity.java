@@ -58,18 +58,17 @@ public class MainActivity extends Activity {
     private View actionButton;
     private View recallButton;
     private View skinButton;
-    private Canvas2HomeView homeView;
+    private GuardToggleView guardToggle;
     private SeekBar hueBar;
     private SeekBar saturationBar;
     private SeekBar brightnessBar;
     private SeekBar opacityBar;
-    private long lastSkinTapAt;
-    private int lastSkinTapId = -1;
+    private SeekBar ballSizeBar;
+    private SeekBar gravityBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PetPreferences.removeRetiredSkinData(this);
         setContentView(buildContentView());
 
         actionButton.setOnClickListener(v -> {
@@ -126,97 +125,81 @@ public class MainActivity extends Activity {
                 : "召唤小鼻嘎，当前" + count + "只");
         recallButton.setAlpha(running ? 1f : 0.55f);
         recallButton.setContentDescription("收回全部小鼻嘎");
-        if (homeView != null) bindHomeSettings();
+        if (guardToggle != null) {
+            guardToggle.setChecked(PetPreferences.get(this).getBoolean(
+                    PetPreferences.KEY_KEYBOARD_GUARD, false));
+        }
     }
 
     private View buildContentView() {
-        Window window = getWindow();
-        window.setStatusBarColor(Color.WHITE);
-        window.setNavigationBarColor(Color.WHITE);
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        getWindow().setStatusBarColor(Color.rgb(174, 213, 241));
+        getWindow().setNavigationBarColor(Color.rgb(174, 213, 241));
 
-        homeView = new Canvas2HomeView(this, new Canvas2HomeView.Listener() {
-            @Override public void onIsland() {
-                Toast.makeText(MainActivity.this,
-                        "岛屿正在修建，敬请期待", Toast.LENGTH_SHORT).show();
-            }
-            @Override public void onPetSelection() { showSkinPicker(); }
-            @Override public void onImport() {
-                startActivity(PetMakerActivity.intent(MainActivity.this,
-                        PetMakerActivity.MODE_IMPORT));
-            }
-            @Override public void onDraw() {
-                startActivity(PetMakerActivity.intent(MainActivity.this,
-                        PetMakerActivity.MODE_DRAW));
-            }
-            @Override public void onSummon() {
-                if (!Settings.canDrawOverlays(MainActivity.this)) {
-                    startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                            Uri.parse("package:" + getPackageName())));
-                } else {
-                    summonPet();
-                }
-            }
-            @Override public void onRecall() {
-                if (OverlayPetService.isRunning()) {
-                    stopService(new Intent(MainActivity.this, OverlayPetService.class));
-                    homeView.postDelayed(MainActivity.this::refreshState, 150);
-                }
-            }
-            @Override public void onAiSettings() {
-                startActivity(new Intent(MainActivity.this, AiSettingsActivity.class));
-            }
-            @Override public void onMusicChanged(boolean enabled) {
-                PetPreferences.get(MainActivity.this).edit()
-                        .putInt(PetPreferences.KEY_MUSIC_DANCE_PERCENT, enabled ? 50 : 0)
-                        .apply();
-            }
-            @Override public void onGuardChanged(boolean enabled) {
-                PetPreferences.get(MainActivity.this).edit()
-                        .putBoolean(PetPreferences.KEY_KEYBOARD_GUARD, enabled).apply();
-            }
-            @Override public void onSizeChanged(int diameterDp) {
-                PetPreferences.get(MainActivity.this).edit()
-                        .putInt(PetPreferences.KEY_BALL_DIAMETER_DP, diameterDp).apply();
-            }
-            @Override public void onGravityChanged(int percent) {
-                PetPreferences.get(MainActivity.this).edit()
-                        .putInt(PetPreferences.KEY_GRAVITY_PERCENT, percent).apply();
-            }
-        });
-        homeView.setOnApplyWindowInsetsListener((view, insets) -> {
-            int topInset;
-            int bottomInset;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                android.graphics.Insets bars = insets.getInsets(
-                        android.view.WindowInsets.Type.systemBars());
-                topInset = bars.top;
-                bottomInset = bars.bottom;
-            } else {
-                topInset = insets.getSystemWindowInsetTop();
-                bottomInset = insets.getSystemWindowInsetBottom();
-            }
-            view.setPadding(0, topInset, 0, bottomInset);
-            return insets;
-        });
-        homeView.requestApplyInsets();
-        actionButton = homeView.getSummonButton();
-        recallButton = homeView.getRecallButton();
-        skinButton = homeView;
-        bindHomeSettings();
-        updateSkinButtonText();
-        return homeView;
-    }
+        PullParallaxLayout root = new PullParallaxLayout(this);
+        root.setBackgroundColor(Color.rgb(174, 213, 241));
 
-    private void bindHomeSettings() {
-        if (homeView == null) return;
-        SharedPreferences preferences = PetPreferences.get(this);
-        homeView.bind(
-                preferences.getInt(PetPreferences.KEY_MUSIC_DANCE_PERCENT, 50) > 0,
-                preferences.getBoolean(PetPreferences.KEY_KEYBOARD_GUARD, false),
-                preferences.getInt(PetPreferences.KEY_BALL_DIAMETER_DP, 52),
-                preferences.getInt(PetPreferences.KEY_GRAVITY_PERCENT, 100));
+        View sky = new SkyView(this);
+        root.addDesignChild(sky, 0, 0, 862, 1825, 0f);
+
+        View clouds = new CloudsView(this);
+        root.addDesignChild(clouds, 0, 0, 862, 2050, 0.2f);
+
+        View titleDecoration = new TitleDecorationView(this);
+        root.addDesignChild(titleDecoration, 0, 0, 862, 1825, 0.46f);
+
+        TextView title = designText(R.string.main_title, Color.rgb(24, 105, 205));
+        title.setTypeface(Typeface.create("sans-serif-black", Typeface.BOLD));
+        title.setShadowLayer(2.5f, 0f, 2f, 0x33000000);
+        root.addDesignChild(title, 200, 176, 627, 352, 0.46f);
+
+        actionButton = new VectorButton(this, R.string.launch_pet, VectorButton.STYLE_LAUNCH);
+        root.addDesignChild(actionButton, 150, 562, 424, 790, 1f);
+
+        recallButton = new VectorButton(this, R.string.recall_pet, VectorButton.STYLE_LAUNCH);
+        root.addDesignChild(recallButton, 457, 562, 731, 790, 1f);
+
+        skinButton = new VectorButton(this, R.string.skin_picker, VectorButton.STYLE_MENU);
+        skinButton.setContentDescription("小鼻嘎选择");
+        skinButton.setOnClickListener(v -> showSkinPicker());
+        root.addDesignChild(skinButton, 152, 802, 728, 906, 1f);
+
+        View colorButton = new VectorButton(this, R.string.color_tuning, VectorButton.STYLE_MENU);
+        colorButton.setContentDescription("制作小鼻嘎");
+        colorButton.setOnClickListener(v -> showMakerOptions());
+        root.addDesignChild(colorButton, 152, 925, 728, 1029, 1f);
+
+        View islandButton = new VectorButton(this, R.string.biga_island, VectorButton.STYLE_MENU);
+        islandButton.setContentDescription("进入鼻嘎小岛");
+        islandButton.setOnClickListener(v ->
+                startActivity(new Intent(this, BigaIslandActivity.class)));
+        root.addDesignChild(islandButton, 152, 1048, 728, 1152, 1f);
+
+        View physicsButton = new VectorButton(this, R.string.physics_settings, VectorButton.STYLE_MENU);
+        physicsButton.setContentDescription("物理参数");
+        physicsButton.setOnClickListener(v -> showMotionSettings());
+        root.addDesignChild(physicsButton, 152, 1171, 728, 1275, 1f);
+
+        View experimentalButton = new VectorButton(
+                this, R.string.experimental_features, VectorButton.STYLE_MENU);
+        experimentalButton.setContentDescription("实验性功能");
+        experimentalButton.setOnClickListener(v -> showExperimentalFeatures());
+        root.addDesignChild(experimentalButton, 152, 1294, 728, 1398, 1f);
+
+        View guardButton = new VectorButton(this, R.string.operation_guard, VectorButton.STYLE_GUARD);
+        guardButton.setContentDescription("操作防遮挡");
+        guardButton.setOnClickListener(v -> toggleKeyboardGuard());
+        root.addDesignChild(guardButton, 152, 1417, 728, 1533, 1f);
+
+        guardToggle = new GuardToggleView(this);
+        guardToggle.setCheckedImmediately(PetPreferences.get(this).getBoolean(
+                PetPreferences.KEY_KEYBOARD_GUARD, false));
+        guardToggle.setOnClickListener(v -> toggleKeyboardGuard());
+        root.addDesignChild(guardToggle, 558, 1445, 662, 1503, 1f);
+
+        View grass = new GrassView(this);
+        root.addDesignChild(grass, 0, 0, 862, 2050, 0.72f);
+        root.post(root::playEntrance);
+        return root;
     }
 
     private TextView designText(int stringId, int color) {
@@ -234,7 +217,7 @@ public class MainActivity extends Activity {
         SharedPreferences preferences = PetPreferences.get(this);
         boolean next = !preferences.getBoolean(PetPreferences.KEY_KEYBOARD_GUARD, false);
         preferences.edit().putBoolean(PetPreferences.KEY_KEYBOARD_GUARD, next).apply();
-        bindHomeSettings();
+        guardToggle.setChecked(next);
     }
 
     private void showColorSettings() {
@@ -282,20 +265,20 @@ public class MainActivity extends Activity {
 
     private void showMakerOptions() {
         LinearLayout content = dialogContent();
-        Button importImage = new Button(this);
-        importImage.setText("导入");
-        AppVisualStyle.stylePrimary(importImage,
-                getResources().getDisplayMetrics().density);
         Button draw = new Button(this);
         draw.setText("绘制");
-        AppVisualStyle.styleSecondary(draw, getResources().getDisplayMetrics().density);
+        AppVisualStyle.stylePrimary(draw, getResources().getDisplayMetrics().density);
+        Button importImage = new Button(this);
+        importImage.setText("导入");
+        AppVisualStyle.styleSecondary(importImage,
+                getResources().getDisplayMetrics().density);
         LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(54));
-        content.addView(importImage, buttonParams);
+        content.addView(draw, buttonParams);
         LinearLayout.LayoutParams importParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(54));
         importParams.topMargin = dp(12);
-        content.addView(draw, importParams);
+        content.addView(importImage, importParams);
 
         AlertDialog dialog = showSecondaryDialog("制作小鼻嘎", content, "取消");
         draw.setOnClickListener(v -> {
@@ -309,8 +292,6 @@ public class MainActivity extends Activity {
     }
 
     private void showSkinPicker() {
-        lastSkinTapAt = 0L;
-        lastSkinTapId = -1;
         SharedPreferences preferences = PetPreferences.get(this);
         int selectedSkin = preferences.getInt(PetPreferences.KEY_SKIN, 0);
         Set<String> hiddenSkins = new HashSet<>(preferences.getStringSet(
@@ -366,8 +347,12 @@ public class MainActivity extends Activity {
                     14f, getResources().getDisplayMetrics().density));
             AppVisualStyle.applyPressMotion(choice);
             skinChoices.put(skinId, choice);
-            choice.setOnClickListener(v -> handleSkinPickerTap(skinId, preferences,
-                    skinChoices, defaultPetReference[0], pickerDialog[0]));
+            choice.setOnClickListener(v -> {
+                preferences.edit().putInt(PetPreferences.KEY_SKIN, skinId).apply();
+                updateSkinButtonText();
+                refreshSkinPickerSelection(skinChoices,
+                        defaultPetReference[0], skinId);
+            });
             View skinCell = namedSkinCell(choice, petName);
             choice.setOnLongClickListener(v -> {
                 showPetActions(skinId, PetPreferences.getPetName(this, skinId),
@@ -398,8 +383,12 @@ public class MainActivity extends Activity {
                     14f, getResources().getDisplayMetrics().density));
             AppVisualStyle.applyPressMotion(choice);
             skinChoices.put(skinId, choice);
-            choice.setOnClickListener(v -> handleSkinPickerTap(skinId, preferences,
-                    skinChoices, defaultPetReference[0], pickerDialog[0]));
+            choice.setOnClickListener(v -> {
+                preferences.edit().putInt(PetPreferences.KEY_SKIN, skinId).apply();
+                updateSkinButtonText();
+                refreshSkinPickerSelection(skinChoices,
+                        defaultPetReference[0], skinId);
+            });
             View skinCell = namedSkinCell(choice, customPetName);
             choice.setOnLongClickListener(v -> {
                 showPetActions(skinId, PetPreferences.getPetName(this, skinId),
@@ -420,8 +409,11 @@ public class MainActivity extends Activity {
             AppVisualStyle.styleSecondary(defaultPet,
                     getResources().getDisplayMetrics().density);
         }
-        defaultPet.setOnClickListener(v -> handleSkinPickerTap(0, preferences,
-                skinChoices, defaultPet, pickerDialog[0]));
+        defaultPet.setOnClickListener(v -> {
+            preferences.edit().putInt(PetPreferences.KEY_SKIN, 0).apply();
+            updateSkinButtonText();
+            refreshSkinPickerSelection(skinChoices, defaultPet, 0);
+        });
         defaultPet.setOnLongClickListener(v -> {
             showPersonaEditor(0);
             return true;
@@ -447,46 +439,8 @@ public class MainActivity extends Activity {
             content.addView(restoreDeleted, restoreParams);
         }
 
-        Button enterIsland = new Button(this);
-        enterIsland.setText("登岛");
-        styleCanvas2Button(enterIsland, true);
-        enterIsland.setOnClickListener(v -> {
-            if (pickerDialog[0] != null) pickerDialog[0].dismiss();
-            Toast.makeText(this, "岛屿正在修建，敬请期待",
-                    Toast.LENGTH_SHORT).show();
-        });
-        LinearLayout.LayoutParams enterParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, dp(54));
-        enterParams.topMargin = dp(14);
-        content.addView(enterIsland, enterParams);
-
-        pickerDialog[0] = showSecondaryDialog("登岛", content, "返回",
+        pickerDialog[0] = showSecondaryDialog("选择小鼻嘎", content, "关闭",
                 Math.round(getResources().getDisplayMetrics().heightPixels * 0.56f));
-    }
-
-    private void handleSkinPickerTap(int skinId, SharedPreferences preferences,
-                                     Map<Integer, ImageButton> skinChoices,
-                                     Button defaultPet, AlertDialog pickerDialog) {
-        long now = android.os.SystemClock.uptimeMillis();
-        boolean doubleTap = lastSkinTapId == skinId
-                && now - lastSkinTapAt <= ViewConfiguration.getDoubleTapTimeout();
-        preferences.edit().putInt(PetPreferences.KEY_SKIN, skinId).apply();
-        updateSkinButtonText();
-        refreshSkinPickerSelection(skinChoices, defaultPet, skinId);
-        if (!doubleTap) {
-            lastSkinTapId = skinId;
-            lastSkinTapAt = now;
-            return;
-        }
-        lastSkinTapId = -1;
-        lastSkinTapAt = 0L;
-        if (pickerDialog != null) pickerDialog.dismiss();
-        if (!Settings.canDrawOverlays(this)) {
-            startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:" + getPackageName())));
-        } else {
-            summonPet();
-        }
     }
 
     private void refreshSkinPickerSelection(Map<Integer, ImageButton> choices,
@@ -616,7 +570,7 @@ public class MainActivity extends Activity {
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(54)));
         AlertDialog dialog = showSecondaryDialog("删除" + petName + "？", content, "取消");
         confirm.setOnClickListener(v -> {
-            if (!deletePet(skin)) return;
+            deletePet(skin);
             dialog.dismiss();
             if (skinCell.getParent() instanceof ViewGroup) {
                 ((ViewGroup) skinCell.getParent()).removeView(skinCell);
@@ -624,14 +578,10 @@ public class MainActivity extends Activity {
         });
     }
 
-    private boolean deletePet(int skin) {
+    private void deletePet(int skin) {
         SharedPreferences preferences = PetPreferences.get(this);
         File file = PetMakerActivity.skinFile(this, skin);
-        if (file != null && file.isFile() && !file.delete()) {
-            android.util.Log.e("XiaoBiGa", "Unable to delete pet asset: " + file.getName());
-            Toast.makeText(this, "删除失败，请稍后重试", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        if (file != null && file.isFile()) file.delete();
         SharedPreferences.Editor editor = preferences.edit()
                 .remove("pet_persona_" + skin)
                 .remove("pet_name_" + skin)
@@ -654,7 +604,6 @@ public class MainActivity extends Activity {
         }
         updateSkinButtonText();
         Toast.makeText(this, "已删除", Toast.LENGTH_SHORT).show();
-        return true;
     }
 
     private void showLegacySkinPicker() {
@@ -813,7 +762,47 @@ public class MainActivity extends Activity {
         int skin = PetPreferences.get(this).getInt(PetPreferences.KEY_SKIN, 0);
         skinButton.setContentDescription(skin == 0 ? "小鼻嘎选择"
                 : "当前小鼻嘎：" + PetPreferences.getPetName(this, skin));
-        if (homeView != null) homeView.bindSelectedPet(skin);
+    }
+
+    private void showMotionSettings() {
+        SharedPreferences preferences = PetPreferences.get(this);
+        LinearLayout content = dialogContent();
+
+        ballSizeBar = addSlider(content, "小鼻嘎大小", 104,
+                preferences.getInt(PetPreferences.KEY_BALL_DIAMETER_DP, 52));
+        ballSizeBar.setMin(24);
+        gravityBar = addSlider(content, "重力大小", 300,
+                preferences.getInt(PetPreferences.KEY_GRAVITY_PERCENT, 100));
+        gravityBar.setMin(25);
+
+        ballSizeBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                preferences.edit()
+                        .putInt(PetPreferences.KEY_BALL_DIAMETER_DP, progress)
+                        .apply();
+            }
+
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        gravityBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    preferences.edit()
+                            .putInt(PetPreferences.KEY_GRAVITY_PERCENT, progress)
+                            .apply();
+                }
+            }
+
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        showSecondaryDialog("物理参数", content, "关闭");
     }
 
     private void showExperimentalFeatures() {
@@ -874,7 +863,7 @@ public class MainActivity extends Activity {
         shell.setPadding(dp(18), dp(18), dp(18), dp(16));
         shell.setClipChildren(false);
         shell.setClipToPadding(false);
-        shell.setBackground(AppVisualStyle.bordered(Color.WHITE, 0xFFBBBBBB, 26f, density));
+        shell.setBackground(AppVisualStyle.rounded(AppVisualStyle.PANEL, 26f, density));
         shell.setMinimumWidth(dialogWidth);
         // The dialog window itself appears immediately so its dim layer is
         // present on the first frame. Only the card animates afterwards.
@@ -885,9 +874,7 @@ public class MainActivity extends Activity {
 
         TextView title = new TextView(this);
         title.setText(titleText);
-        title.setTextColor(Color.BLACK);
-        title.setTextSize(25);
-        title.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        AppVisualStyle.styleTitle(title);
         title.setGravity(Gravity.CENTER_VERTICAL);
         shell.addView(title, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(44)));
@@ -900,7 +887,7 @@ public class MainActivity extends Activity {
         scroll.setClipToPadding(false);
         scroll.setVerticalScrollBarEnabled(false);
         scroll.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
-        scroll.setBackground(AppVisualStyle.rounded(Color.WHITE, 20f, density));
+        scroll.setBackground(AppVisualStyle.rounded(AppVisualStyle.CARD, 20f, density));
         scroll.addView(body, new ScrollView.LayoutParams(
                 ScrollView.LayoutParams.MATCH_PARENT,
                 ScrollView.LayoutParams.WRAP_CONTENT));
@@ -912,7 +899,7 @@ public class MainActivity extends Activity {
 
         Button close = new Button(this);
         close.setText(closeText);
-        styleCanvas2Button(close, false);
+        AppVisualStyle.styleSecondary(close, density);
         LinearLayout.LayoutParams closeParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(48));
         closeParams.topMargin = dp(12);
@@ -950,17 +937,6 @@ public class MainActivity extends Activity {
         });
         dialog.show();
         return dialog;
-    }
-
-    private void styleCanvas2Button(Button button, boolean primary) {
-        float density = getResources().getDisplayMetrics().density;
-        button.setAllCaps(false);
-        button.setTextSize(17);
-        button.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
-        button.setTextColor(primary ? Color.WHITE : Color.BLACK);
-        button.setBackground(AppVisualStyle.bordered(
-                primary ? Color.BLACK : Color.WHITE,
-                primary ? Color.BLACK : 0xFFBBBBBB, 17f, density));
     }
 
     private static final class BoundedScrollView extends ScrollView {
@@ -1104,17 +1080,10 @@ public class MainActivity extends Activity {
                     recycleVelocityTracker();
                     dragging = false;
                     startSpring(Math.max(-2500f, Math.min(2500f, releaseVelocity * 0.32f)));
-                    if (event.getActionMasked() == MotionEvent.ACTION_UP) performClick();
                     return true;
                 default:
                     return super.onTouchEvent(event);
             }
-        }
-
-        @Override
-        public boolean performClick() {
-            super.performClick();
-            return true;
         }
 
         private void obtainVelocityTracker(MotionEvent event) {

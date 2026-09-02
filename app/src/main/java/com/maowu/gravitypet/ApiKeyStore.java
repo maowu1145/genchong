@@ -41,32 +41,11 @@ public final class ApiKeyStore {
         String iv = preferences.getString(providerId + "_iv", null);
         if (data == null || iv == null) return "";
 
-        try {
-            Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
-            cipher.init(Cipher.DECRYPT_MODE, getOrCreateKey(),
-                    new GCMParameterSpec(128, Base64.decode(iv, Base64.NO_WRAP)));
-            byte[] decrypted = cipher.doFinal(Base64.decode(data, Base64.NO_WRAP));
-            return new String(decrypted, StandardCharsets.UTF_8);
-        } catch (java.security.InvalidKeyException
-                 | javax.crypto.AEADBadTagException
-                 | IllegalArgumentException unusableBackup) {
-            delete(context, providerId);
-            return "";
-        }
-    }
-
-    public static boolean isConfigured(Context context, String providerId) {
-        SharedPreferences preferences = context.getSharedPreferences(
-                STORE_NAME, Context.MODE_PRIVATE);
-        return preferences.contains(providerId + "_data")
-                && preferences.contains(providerId + "_iv");
-    }
-
-    public static void delete(Context context, String providerId) {
-        context.getSharedPreferences(STORE_NAME, Context.MODE_PRIVATE).edit()
-                .remove(providerId + "_data")
-                .remove(providerId + "_iv")
-                .apply();
+        Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
+        cipher.init(Cipher.DECRYPT_MODE, getOrCreateKey(),
+                new GCMParameterSpec(128, Base64.decode(iv, Base64.NO_WRAP)));
+        byte[] decrypted = cipher.doFinal(Base64.decode(data, Base64.NO_WRAP));
+        return new String(decrypted, StandardCharsets.UTF_8);
     }
 
     private static SecretKey getOrCreateKey() throws Exception {

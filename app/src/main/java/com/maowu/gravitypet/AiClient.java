@@ -17,37 +17,26 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public final class AiClient {
-    private static final int MAX_STREAMED_REPLY_CHARS = 100_000;
     public interface Callback {
         void onSentence(String sentence);
         void onSuccess(String reply);
         void onError(String message);
     }
 
+    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
-    static final class ConversationHistory {
-        private final List<JSONObject> messages = new ArrayList<>();
-        private String identity = "";
-
-        synchronized void reset() {
-            messages.clear();
-            identity = "";
-        }
-    }
+    private static final List<JSONObject> HISTORY = new ArrayList<>();
+    private static String historyIdentity = "";
 
     private AiClient() {}
 
-    public static RequestHandle chat(Context context, int skin, String userText,
-                                     ConversationHistory history, ExecutorService executor,
-                                     Callback callback) {
+    public static void chat(Context context, int skin, String userText, Callback callback) {
         Context appContext = context.getApplicationContext();
-        RequestHandle requestHandle = new RequestHandle();
-        requestHandle.attach(executor.submit(() -> {
-            HttpURLConnection connection = null;
+        EXECUTOR.execute(() -> {
             try {
-                if (requestHandle.isCancelled()) return;
                 ProviderPreset preset = ProviderPreset.find("mimo");
                 String apiKey = ApiKeyStore.load(appContext, "mimo");
                 if (apiKey.isEmpty()) throw new IllegalStateException("请先在 AI 设置中填写 API Key");
@@ -60,7 +49,7 @@ public final class AiClient {
                 JSONArray messages = new JSONArray();
                 String petName = PetPreferences.getPetName(appContext, skin);
                 String persona = PetPreferences.getPersona(appContext, skin);
-                String identity = skin + "\n" + petName + "\n" + persona;
+                String identity = skin + "\n" + persona;
                 StringBuilder systemPrompt = new StringBuilder()
                         .append("你是用户手机屏幕上的桌宠，名字叫")
                         .append(petName)
@@ -72,12 +61,12 @@ public final class AiClient {
                 messages.put(new JSONObject()
                         .put("role", "system")
                         .put("content", systemPrompt.toString()));
-                synchronized (history) {
-                    if (!identity.equals(history.identity)) {
-                        history.messages.clear();
-                        history.identity = identity;
+                synchronized (HISTORY) {
+                    if (!identity.equals(historyIdentity)) {
+                        HISTORY.clear();
+                        historyIdentity = identity;
                     }
-                    for (JSONObject message : history.messages) messages.put(message);
+                    for (JSONObject message : HISTORY) messages.put(message);
                 }
                 JSONObject userMessage = new JSONObject()
                         .put("role", "user").put("content", userText);
@@ -85,8 +74,7 @@ public final class AiClient {
                 request.put("messages", messages);
 
                 URL url = new URL(preset.baseUrl + "/chat/completions");
-                connection = (HttpURLConnection) url.openConnection();
-                requestHandle.track(connection);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
                 connection.setConnectTimeout(20_000);
                 connection.setReadTimeout(60_000);
@@ -102,7 +90,7 @@ public final class AiClient {
                 InputStream stream = code >= 200 && code < 300
                         ? connection.getInputStream() : connection.getErrorStream();
                 if (code < 200 || code >= 300) {
-                    String response = readAll(stream, 64_000);
+                    String response = readAll(stream);
                     String detail = response;
                     try {
                         JSONObject error = new JSONObject(response).optJSONObject("error");
@@ -111,37 +99,24 @@ public final class AiClient {
                     throw new IllegalStateException("接口返回 " + code + "："
                             + shorten(detail, 90));
                 }
-                String reply = readStreamingReply(stream, callback, requestHandle);
+                String reply = readStreamingReply(stream, callback);
+                connection.disconnect();
                 if (reply.isEmpty()) throw new IllegalStateException("模型没有返回文字内容");
 
-                synchronized (history) {
-                    history.messages.add(userMessage);
-                    history.messages.add(new JSONObject().put("role", "assistant").put("content", reply));
-                    while (history.messages.size() > 10) history.messages.remove(0);
+                synchronized (HISTORY) {
+                    HISTORY.add(userMessage);
+                    HISTORY.add(new JSONObject().put("role", "assistant").put("content", reply));
+                    while (HISTORY.size() > 10) HISTORY.remove(0);
                 }
-                if (!requestHandle.isCancelled()) {
-                    MAIN.post(() -> {
-                        if (!requestHandle.isCancelled()) callback.onSuccess(reply);
-                    });
-                }
+                MAIN.post(() -> callback.onSuccess(reply));
             } catch (Exception error) {
-                if (requestHandle.isCancelled()) return;
                 String message = error.getMessage() == null ? "对话失败" : error.getMessage();
-                MAIN.post(() -> {
-                    if (!requestHandle.isCancelled()) callback.onError(message);
-                });
-            } finally {
-                if (connection != null) {
-                    connection.disconnect();
-                    requestHandle.clear(connection);
-                }
+                MAIN.post(() -> callback.onError(message));
             }
-        }));
-        return requestHandle;
+        });
     }
 
-    private static String readStreamingReply(InputStream stream, Callback callback,
-                                             RequestHandle requestHandle)
+    private static String readStreamingReply(InputStream stream, Callback callback)
             throws Exception {
         StringBuilder reply = new StringBuilder();
         StringBuilder pendingSpeech = new StringBuilder();
@@ -149,7 +124,6 @@ public final class AiClient {
                 new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (requestHandle.isCancelled()) return "";
                 if (!line.startsWith("data:")) continue;
                 String data = line.substring(5).trim();
                 if (data.isEmpty() || "[DONE]".equals(data)) continue;
@@ -165,25 +139,18 @@ public final class AiClient {
                 if (!(content instanceof String)) continue;
                 String delta = (String) content;
                 if (delta.isEmpty()) continue;
-                if (reply.length() + delta.length() > MAX_STREAMED_REPLY_CHARS) {
-                    throw new IllegalStateException("模型回复过长");
-                }
                 reply.append(delta);
                 pendingSpeech.append(delta);
-                emitCompleteSentences(pendingSpeech, callback, requestHandle);
+                emitCompleteSentences(pendingSpeech, callback);
             }
         }
         String remainder = pendingSpeech.toString().trim();
-        if (!remainder.isEmpty() && !requestHandle.isCancelled()) {
-            MAIN.post(() -> {
-                if (!requestHandle.isCancelled()) callback.onSentence(remainder);
-            });
-        }
+        if (!remainder.isEmpty()) MAIN.post(() -> callback.onSentence(remainder));
         return reply.toString().trim();
     }
 
-    private static void emitCompleteSentences(StringBuilder pending, Callback callback,
-                                              RequestHandle requestHandle) {
+    private static void emitCompleteSentences(StringBuilder pending,
+                                              Callback callback) {
         int splitAt = -1;
         for (int i = 0; i < pending.length(); i++) {
             char value = pending.charAt(i);
@@ -207,26 +174,17 @@ public final class AiClient {
         if (splitAt <= 0) return;
         String sentence = pending.substring(0, splitAt).trim();
         pending.delete(0, splitAt);
-        if (!sentence.isEmpty() && !requestHandle.isCancelled()) {
-            MAIN.post(() -> {
-                if (!requestHandle.isCancelled()) callback.onSentence(sentence);
-            });
-        }
-        emitCompleteSentences(pending, callback, requestHandle);
+        if (!sentence.isEmpty()) MAIN.post(() -> callback.onSentence(sentence));
+        emitCompleteSentences(pending, callback);
     }
 
-    private static String readAll(InputStream stream, int maxChars) throws Exception {
+    private static String readAll(InputStream stream) throws Exception {
         if (stream == null) return "";
         StringBuilder result = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             String line;
-            while ((line = reader.readLine()) != null) {
-                if (result.length() + line.length() > maxChars) {
-                    throw new IllegalStateException("接口响应过大");
-                }
-                result.append(line);
-            }
+            while ((line = reader.readLine()) != null) result.append(line);
         }
         return result.toString();
     }

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 
 public final class PetPreferences {
-    private static final int REMOVED_BUILT_IN_SKIN_ID = 14;
     public static final String NAME = "pet_preferences";
     public static final String KEY_COLOR = "ball_color";
     public static final String KEY_HUE = "color_hue";
@@ -26,20 +25,6 @@ public final class PetPreferences {
 
     public static SharedPreferences get(Context context) {
         return context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
-    }
-
-    /** Removes persisted data left by a built-in skin that no longer ships. */
-    public static void removeRetiredSkinData(Context context) {
-        SharedPreferences preferences = get(context);
-        SharedPreferences.Editor editor = preferences.edit()
-                .remove("pet_persona_" + REMOVED_BUILT_IN_SKIN_ID)
-                .remove("pet_name_" + REMOVED_BUILT_IN_SKIN_ID)
-                .remove("pet_anchor_x_" + REMOVED_BUILT_IN_SKIN_ID)
-                .remove("pet_anchor_y_" + REMOVED_BUILT_IN_SKIN_ID);
-        if (preferences.getInt(KEY_SKIN, 0) == REMOVED_BUILT_IN_SKIN_ID) {
-            editor.putInt(KEY_SKIN, 0);
-        }
-        editor.apply();
     }
 
     public static int getColor(Context context) {

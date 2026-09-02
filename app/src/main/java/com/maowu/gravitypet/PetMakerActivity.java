@@ -111,10 +111,8 @@ public class PetMakerActivity extends Activity {
         editingSkinId = getIntent().getIntExtra(EXTRA_EDIT_SKIN_ID, -1);
         pencilThickness = PetPreferences.get(this).getInt(KEY_PENCIL_THICKNESS, 14);
         eraserThickness = PetPreferences.get(this).getInt(KEY_ERASER_THICKNESS, 24);
-        getWindow().setStatusBarColor(Color.WHITE);
-        getWindow().setNavigationBarColor(Color.WHITE);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+        getWindow().setStatusBarColor(Color.rgb(174, 213, 241));
+        getWindow().setNavigationBarColor(Color.rgb(174, 213, 241));
         setContentView(buildContent());
         if (editingSkinId > 0 && savedInstanceState == null) {
             makerCanvas.post(this::loadSkinForEditing);
@@ -128,17 +126,19 @@ public class PetMakerActivity extends Activity {
         LinearLayout content = new LinearLayout(this);
         content.setOrientation(LinearLayout.VERTICAL);
         content.setGravity(Gravity.CENTER_HORIZONTAL);
-        content.setPadding(dp(18), dp(14), dp(18), dp(24));
+        content.setPadding(dp(18), dp(18), dp(18), dp(24));
         content.setClipChildren(false);
         content.setClipToPadding(false);
-        content.setBackgroundColor(0xFFF4F4F4);
+        GradientDrawable sky = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{Color.rgb(174, 213, 241), Color.rgb(213, 237, 250)});
+        content.setBackground(sky);
 
         TextView title = new TextView(this);
-        title.setText("创意画布");
-        title.setTextColor(Color.BLACK);
-        title.setTextSize(24);
-        title.setTypeface(android.graphics.Typeface.create("sans-serif",
-                android.graphics.Typeface.BOLD));
+        title.setText(editingSkinId > 0
+                ? "编辑" + PetPreferences.getPetName(this, editingSkinId)
+                : importMode ? "导入小鼻嘎" : "绘制小鼻嘎");
+        AppVisualStyle.styleTitle(title);
         title.setGravity(Gravity.CENTER);
         content.addView(title, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(48)));
@@ -148,8 +148,8 @@ public class PetMakerActivity extends Activity {
         canvasCard.setClipToPadding(false);
         canvasCard.setPadding(dp(7), dp(7), dp(7), dp(7));
         canvasCard.setBackground(AppVisualStyle.bordered(
-                Color.WHITE, 0xFFBBBBBB, 22f, density));
-        canvasCard.setElevation(dp(3));
+                AppVisualStyle.CARD, 0xFFB9D5E7, 22f, density));
+        canvasCard.setElevation(dp(5));
         makerCanvas = new MakerCanvasView(this, !importMode);
         canvasCard.addView(makerCanvas, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -166,7 +166,7 @@ public class PetMakerActivity extends Activity {
         controls.setPadding(dp(14), dp(12), dp(14), dp(14));
         controls.setClipChildren(false);
         controls.setClipToPadding(false);
-        controls.setBackground(AppVisualStyle.bordered(Color.WHITE, 0xFFBBBBBB, 22f, density));
+        controls.setBackground(AppVisualStyle.rounded(AppVisualStyle.CARD, 22f, density));
         controls.setElevation(dp(3));
         LinearLayout.LayoutParams controlsParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -180,7 +180,7 @@ public class PetMakerActivity extends Activity {
 
         Button back = new Button(this);
         back.setText("返回");
-        styleCanvasButton(back, false);
+        AppVisualStyle.styleSecondary(back, density);
         back.setOnClickListener(v -> finish());
         LinearLayout.LayoutParams backParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(50));
@@ -370,18 +370,8 @@ public class PetMakerActivity extends Activity {
     private Button toolButton(String text) {
         Button button = new Button(this);
         button.setText(text);
-        styleCanvasButton(button, false);
+        AppVisualStyle.styleSecondary(button, getResources().getDisplayMetrics().density);
         return button;
-    }
-
-    private void styleCanvasButton(Button button, boolean primary) {
-        float density = getResources().getDisplayMetrics().density;
-        button.setAllCaps(false);
-        button.setTextSize(15);
-        button.setTextColor(primary ? Color.WHITE : Color.BLACK);
-        button.setBackground(AppVisualStyle.bordered(
-                primary ? AppVisualStyle.BLUE : Color.WHITE,
-                primary ? AppVisualStyle.BLUE : 0xFFBBBBBB, 15f, density));
     }
 
     private GridLayout.LayoutParams toolParams() {
@@ -398,11 +388,11 @@ public class PetMakerActivity extends Activity {
         for (Map.Entry<Integer, Button> entry : toolButtons.entrySet()) {
             boolean selected = entry.getKey() == makerCanvas.getTool();
             Button button = entry.getValue();
-            button.setTextColor(selected ? Color.WHITE : Color.BLACK);
+            button.setTextColor(selected ? Color.WHITE : AppVisualStyle.BLUE_DARK);
             button.setBackground(selected
                     ? AppVisualStyle.rounded(AppVisualStyle.BLUE, 16f, density)
-                    : AppVisualStyle.bordered(Color.WHITE,
-                            0xFFBBBBBB, 16f, density));
+                    : AppVisualStyle.bordered(AppVisualStyle.CARD,
+                            AppVisualStyle.TRACK, 16f, density));
         }
     }
 
@@ -432,7 +422,7 @@ public class PetMakerActivity extends Activity {
     private TextView sectionLabel(String text) {
         TextView label = new TextView(this);
         label.setText(text);
-        label.setTextColor(Color.BLACK);
+        label.setTextColor(AppVisualStyle.TEXT);
         label.setTextSize(15f);
         label.setGravity(Gravity.CENTER_VERTICAL);
         return label;
@@ -465,46 +455,19 @@ public class PetMakerActivity extends Activity {
             if (source == null) throw new IllegalArgumentException("图片无法读取");
             makerCanvas.setImportedBitmap(source);
             source.recycle();
-        } catch (Exception | OutOfMemoryError error) {
-            String message = error.getMessage();
-            Toast.makeText(this, message == null || message.trim().isEmpty()
-                    ? "导入失败：图片已损坏或不受支持"
-                    : "导入失败：" + message, Toast.LENGTH_LONG).show();
+        } catch (Exception error) {
+            Toast.makeText(this, "导入失败", Toast.LENGTH_SHORT).show();
         }
     }
 
     private Bitmap decodeImage(Uri uri) throws Exception {
-        String declaredType = getContentResolver().getType(uri);
-        if (declaredType != null && !declaredType.startsWith("image/")) {
-            throw new IllegalArgumentException("请选择图片文件");
-        }
         if (Build.VERSION.SDK_INT >= 28) {
             ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), uri);
-            return ImageDecoder.decodeBitmap(source, (decoder, info, src) -> {
-                int[] target = ImageImportPolicy.targetDimensions(
-                        info.getSize().getWidth(), info.getSize().getHeight());
-                decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE);
-                decoder.setTargetSize(target[0], target[1]);
-                decoder.setOnPartialImageListener(error -> false);
-            });
+            return ImageDecoder.decodeBitmap(source, (decoder, info, src) ->
+                    decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE));
         }
-        BitmapFactory.Options bounds = new BitmapFactory.Options();
-        bounds.inJustDecodeBounds = true;
         try (InputStream stream = getContentResolver().openInputStream(uri)) {
-            BitmapFactory.decodeStream(stream, null, bounds);
-        }
-        ImageImportPolicy.validateDimensions(bounds.outWidth, bounds.outHeight);
-        if (bounds.outMimeType != null && !bounds.outMimeType.startsWith("image/")) {
-            throw new IllegalArgumentException("文件内容不是图片");
-        }
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        options.inSampleSize = ImageImportPolicy.sampleSize(
-                bounds.outWidth, bounds.outHeight);
-        try (InputStream stream = getContentResolver().openInputStream(uri)) {
-            Bitmap decoded = BitmapFactory.decodeStream(stream, null, options);
-            if (decoded == null) throw new IllegalArgumentException("图片已损坏或不受支持");
-            return decoded;
+            return BitmapFactory.decodeStream(stream);
         }
     }
 
@@ -690,7 +653,6 @@ public class PetMakerActivity extends Activity {
             } else if (action == MotionEvent.ACTION_UP
                     || action == MotionEvent.ACTION_CANCEL) {
                 getParent().requestDisallowInterceptTouchEvent(false);
-                if (action == MotionEvent.ACTION_UP) performClick();
             }
             if (action != MotionEvent.ACTION_DOWN
                     && action != MotionEvent.ACTION_MOVE) return true;
@@ -710,12 +672,6 @@ public class PetMakerActivity extends Activity {
                         new float[]{hue, saturation, value}));
             }
             invalidate();
-            return true;
-        }
-
-        @Override
-        public boolean performClick() {
-            super.performClick();
             return true;
         }
 
@@ -937,7 +893,6 @@ public class PetMakerActivity extends Activity {
                     singleTouchPending = false;
                     ignoreUntilAllPointersUp = false;
                     invalidate();
-                    performClick();
                     return true;
                 case MotionEvent.ACTION_CANCEL:
                     finishScaleGesture();
@@ -947,12 +902,6 @@ public class PetMakerActivity extends Activity {
                 default:
                     return true;
             }
-        }
-
-        @Override
-        public boolean performClick() {
-            super.performClick();
-            return true;
         }
 
         private void beginSingleTouch(float x, float y) {

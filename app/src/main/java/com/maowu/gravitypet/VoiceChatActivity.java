@@ -2,7 +2,9 @@ package com.maowu.gravitypet;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,6 +19,9 @@ import android.widget.Toast;
  */
 public class VoiceChatActivity extends Activity {
     private static final int REQUEST_MICROPHONE = 51;
+    private static final String PRIVACY_PREFERENCES = "voice_privacy";
+    private static final String KEY_CLOUD_VOICE_DISCLOSURE_ACCEPTED =
+            "cloud_voice_disclosure_accepted";
     private boolean dispatched;
 
     @Override
@@ -27,6 +32,32 @@ public class VoiceChatActivity extends Activity {
         getWindow().setDimAmount(0f);
         getWindow().setStatusBarColor(Color.TRANSPARENT);
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        SharedPreferences privacy = getSharedPreferences(
+                PRIVACY_PREFERENCES, MODE_PRIVATE);
+        if (!privacy.getBoolean(KEY_CLOUD_VOICE_DISCLOSURE_ACCEPTED, false)) {
+            showCloudVoiceDisclosure(privacy);
+            return;
+        }
+        requestMicrophoneOrStart();
+    }
+
+    private void showCloudVoiceDisclosure(SharedPreferences privacy) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.voice_disclosure_title)
+                .setMessage(R.string.voice_disclosure_message)
+                .setCancelable(false)
+                .setNegativeButton(R.string.voice_disclosure_cancel,
+                        (dialog, which) -> finishWithoutAnimation())
+                .setPositiveButton(R.string.voice_disclosure_accept, (dialog, which) -> {
+                    privacy.edit().putBoolean(
+                            KEY_CLOUD_VOICE_DISCLOSURE_ACCEPTED, true).apply();
+                    requestMicrophoneOrStart();
+                })
+                .setOnCancelListener(dialog -> finishWithoutAnimation())
+                .show();
+    }
+
+    private void requestMicrophoneOrStart() {
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO)
                 == PackageManager.PERMISSION_GRANTED) {
             startOverlayConversation();

@@ -17,6 +17,8 @@
 
     <application
         android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/skin_fafa"
         android:label="@string/app_name"
         android:roundIcon="@drawable/skin_fafa"
@@ -42,7 +44,7 @@
 
         <activity
             android:name=".BigaIslandActivity"
-            android:configChanges="orientation|screenSize"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
             android:exported="false"
             android:screenOrientation="fullSensor" />
 

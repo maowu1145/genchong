@@ -20,6 +20,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.input.InputManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -62,6 +63,10 @@ public class OverlayPetService extends Service implements SensorEventListener {
             "com.maowu.gravitypet.action.REFRESH_SKIN";
     public static final String ACTION_DELETE_SKIN =
             "com.maowu.gravitypet.action.DELETE_SKIN";
+    public static final String ACTION_HIDE_FOR_ISLAND =
+            "com.maowu.gravitypet.action.HIDE_FOR_ISLAND";
+    public static final String ACTION_SHOW_AFTER_ISLAND =
+            "com.maowu.gravitypet.action.SHOW_AFTER_ISLAND";
     public static final String EXTRA_BUBBLE_TEXT = "bubble_text";
     public static final String EXTRA_SKIN_ID = "skin_id";
     private static final String TAG = "GravityPet";
@@ -102,9 +107,12 @@ public class OverlayPetService extends Service implements SensorEventListener {
     private SharedPreferences preferences;
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceListener;
     private boolean overlayAttached;
+    private boolean hiddenForIsland;
     private boolean interactionGuardEnabled;
     private final float[] filteredAcceleration = new float[3];
+    private final float[] linearAcceleration = new float[3];
     private boolean usingRawAccelerometer;
+    private boolean accelerationFilterInitialized;
     private boolean receivedSensorEvent;
     private ContinuousConversationController conversationController;
     private MusicBeatDetector musicBeatDetector;
@@ -159,7 +167,13 @@ public class OverlayPetService extends Service implements SensorEventListener {
             worldAccumulatorSeconds %= WORLD_STEP_SECONDS;
         }
         for (int index = 0; index < petSlots.size(); index++) {
-            petSlots.get(index).view.updateCrowdContact(crowdContacts[index]);
+            // On high-refresh-rate displays a Choreographer callback can arrive
+            // before a complete fixed substep has accumulated. Preserve the
+            // last solved contact state instead of publishing a false dropout
+            // that wakes a resting pile every other callback.
+            if (WorldFrameContactPolicy.shouldPublishSolvedContacts(substeps)) {
+                petSlots.get(index).view.updateCrowdContact(crowdContacts[index]);
+            }
             petSlots.get(index).view.finishWorldFrame();
         }
         Choreographer.getInstance().postFrameCallback(petCollisionFrame);
@@ -182,6 +196,10 @@ public class OverlayPetService extends Service implements SensorEventListener {
         float centerX;
         float centerY;
         float touchDiameter;
+        float touchCenterX;
+        float touchCenterY;
+        float touchWidth;
+        float touchHeight;
 
         PetSlot(PetView view, int skinId) {
             this.view = view;
@@ -201,6 +219,7 @@ public class OverlayPetService extends Service implements SensorEventListener {
         }
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        PetPreferences.removeRetiredSkinData(this);
         preferences = PetPreferences.get(this);
         // The opacity control no longer exists. Remove its legacy value so it
         // cannot make newly summoned pets translucent after an app update.
@@ -242,7 +261,7 @@ public class OverlayPetService extends Service implements SensorEventListener {
                         | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                 PixelFormat.RGBA_8888);
         petWindowParams.gravity = Gravity.TOP | Gravity.START;
-        petWindowParams.alpha = 1f;
+        petWindowParams.alpha = maximumSafeOverlayOpacity();
         petWindowParams.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING;
         useFullScreenCoordinates(petWindowParams);
         petLayer = new FrameLayout(this);
@@ -328,10 +347,38 @@ public class OverlayPetService extends Service implements SensorEventListener {
             for (PetSlot slot : snapshot) {
                 if (slot.skinId == skinId) removePet(slot);
             }
+        } else if (intent != null && ACTION_HIDE_FOR_ISLAND.equals(intent.getAction())) {
+            setHiddenForIsland(true);
+        } else if (intent != null && ACTION_SHOW_AFTER_ISLAND.equals(intent.getAction())) {
+            setHiddenForIsland(false);
         }
         return overlayAttached && Settings.canDrawOverlays(this)
                 ? START_STICKY
                 : START_NOT_STICKY;
+    }
+
+    private void setHiddenForIsland(boolean hidden) {
+        hiddenForIsland = hidden;
+        if (petLayer != null) {
+            petLayer.setVisibility(hidden ? View.GONE : View.VISIBLE);
+        }
+        for (PetSlot slot : petSlots) {
+            if (slot.handle != null) {
+                slot.handle.setVisibility(hidden ? View.GONE : View.VISIBLE);
+            }
+        }
+        if (hidden) {
+            if (conversationController != null && conversationController.isActive()) {
+                stopContinuousConversation();
+            }
+            removeConversationButton();
+            removeSpeechBubble();
+            removeBubbleTouchView();
+            removeConversationBackCapture();
+            removeOutsideTouchObserver();
+        } else {
+            updateDragHandleInteractionMode();
+        }
     }
 
     @Override
@@ -394,9 +441,16 @@ public class OverlayPetService extends Service implements SensorEventListener {
         if (usingRawAccelerometer) {
             // Low-pass filtering removes most hand tremor and isolates gravity.
             final float alpha = 0.82f;
-            for (int i = 0; i < 3; i++) {
-                filteredAcceleration[i] = alpha * filteredAcceleration[i]
-                        + (1f - alpha) * event.values[i];
+            if (!accelerationFilterInitialized) {
+                System.arraycopy(event.values, 0, filteredAcceleration, 0, 3);
+                Arrays.fill(linearAcceleration, 0f);
+                accelerationFilterInitialized = true;
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    filteredAcceleration[i] = alpha * filteredAcceleration[i]
+                            + (1f - alpha) * event.values[i];
+                    linearAcceleration[i] = event.values[i] - filteredAcceleration[i];
+                }
             }
             x = filteredAcceleration[0];
             y = filteredAcceleration[1];
@@ -433,6 +487,35 @@ public class OverlayPetService extends Service implements SensorEventListener {
         // Sensor X points right but measures support force, hence the minus sign.
         for (PetSlot slot : petSlots) {
             slot.view.setGravity(-screenSensorX, screenSensorY, z);
+        }
+
+        if (usingRawAccelerometer) {
+            float screenLinearX;
+            float screenLinearY;
+            switch (rotation) {
+                case Surface.ROTATION_90:
+                    screenLinearX = linearAcceleration[1];
+                    screenLinearY = -linearAcceleration[0];
+                    break;
+                case Surface.ROTATION_180:
+                    screenLinearX = -linearAcceleration[0];
+                    screenLinearY = -linearAcceleration[1];
+                    break;
+                case Surface.ROTATION_270:
+                    screenLinearX = -linearAcceleration[1];
+                    screenLinearY = linearAcceleration[0];
+                    break;
+                case Surface.ROTATION_0:
+                default:
+                    screenLinearX = linearAcceleration[0];
+                    screenLinearY = linearAcceleration[1];
+                    break;
+            }
+            for (PetSlot slot : petSlots) {
+                // The body lags behind the phone: rightward phone acceleration
+                // throws it left; sensor Y already opposes screen-space Y.
+                slot.view.setDeviceAcceleration(-screenLinearX, screenLinearY);
+            }
         }
     }
 
@@ -565,7 +648,7 @@ public class OverlayPetService extends Service implements SensorEventListener {
     }
 
     private void addDragHandle(PetSlot slot) {
-        int touchSize = Math.round(96f * getResources().getDisplayMetrics().density);
+        int touchSize = Math.round(48f * getResources().getDisplayMetrics().density);
         slot.handle = new DragHandleView(this, slot.view, () -> {
             activatePet(slot);
             handlePetDoubleTap();
@@ -604,7 +687,8 @@ public class OverlayPetService extends Service implements SensorEventListener {
         }
         updateDragHandleInteractionMode(slot);
 
-        slot.view.setPositionListener((centerX, centerY, touchDiameter, dragging) -> {
+        slot.view.setPositionListener((centerX, centerY, touchCenterX, touchCenterY,
+                                       touchWidth, touchHeight, dragging) -> {
             // PetView can start below the status bar while auxiliary overlay
             // windows use full-screen coordinates. Convert the pet's local
             // centre to screen coordinates so the invisible hit target is
@@ -612,7 +696,11 @@ public class OverlayPetService extends Service implements SensorEventListener {
             slot.view.getLocationOnScreen(petLocationOnScreen);
             slot.centerX = centerX + petLocationOnScreen[0];
             slot.centerY = centerY + petLocationOnScreen[1];
-            slot.touchDiameter = touchDiameter;
+            slot.touchCenterX = touchCenterX + petLocationOnScreen[0];
+            slot.touchCenterY = touchCenterY + petLocationOnScreen[1];
+            slot.touchWidth = touchWidth;
+            slot.touchHeight = touchHeight;
+            slot.touchDiameter = Math.max(touchWidth, touchHeight);
             if (activePetSlot == slot) {
                 syncActivePetPosition();
                 updateAuxiliaryPositions();
@@ -624,14 +712,16 @@ public class OverlayPetService extends Service implements SensorEventListener {
             if (interactionGuardEnabled || !slot.handleAttached) return;
             if (dragging) return;
 
-            int nextSize = Math.round(touchDiameter);
-            if (slot.handleParams.width != nextSize || slot.handleParams.height != nextSize) {
-                slot.handleParams.width = nextSize;
-                slot.handleParams.height = nextSize;
+            int nextWidth = Math.max(1, Math.round(touchWidth));
+            int nextHeight = Math.max(1, Math.round(touchHeight));
+            if (slot.handleParams.width != nextWidth
+                    || slot.handleParams.height != nextHeight) {
+                slot.handleParams.width = nextWidth;
+                slot.handleParams.height = nextHeight;
                 needsUpdate = true;
             }
-            int nextX = Math.round(centerX - slot.handleParams.width * 0.5f);
-            int nextY = Math.round(centerY - slot.handleParams.height * 0.5f);
+            int nextX = Math.round(slot.touchCenterX - slot.handleParams.width * 0.5f);
+            int nextY = Math.round(slot.touchCenterY - slot.handleParams.height * 0.5f);
             if (slot.handleParams.x != nextX || slot.handleParams.y != nextY) {
                 slot.handleParams.x = nextX;
                 slot.handleParams.y = nextY;
@@ -728,12 +818,13 @@ public class OverlayPetService extends Service implements SensorEventListener {
         }
         slot.handleParams.flags &= ~WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         slot.handleParams.alpha = 1f;
-        int normalSize = Math.max(1, Math.round(slot.touchDiameter));
-        if (normalSize > 1) {
-            slot.handleParams.width = normalSize;
-            slot.handleParams.height = normalSize;
-            slot.handleParams.x = Math.round(slot.centerX - normalSize * 0.5f);
-            slot.handleParams.y = Math.round(slot.centerY - normalSize * 0.5f);
+        int normalWidth = Math.max(1, Math.round(slot.touchWidth));
+        int normalHeight = Math.max(1, Math.round(slot.touchHeight));
+        if (normalWidth > 1 && normalHeight > 1) {
+            slot.handleParams.width = normalWidth;
+            slot.handleParams.height = normalHeight;
+            slot.handleParams.x = Math.round(slot.touchCenterX - normalWidth * 0.5f);
+            slot.handleParams.y = Math.round(slot.touchCenterY - normalHeight * 0.5f);
         }
         if (!slot.handleAttached) {
             try {
@@ -964,19 +1055,27 @@ public class OverlayPetService extends Service implements SensorEventListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 int type = ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE;
                 if (withMicrophone) type |= ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE;
-                startForeground(NOTIFICATION_ID, buildNotification(), type);
-            } else if (withMicrophone && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(NOTIFICATION_ID, buildNotification(),
+                startForeground(NOTIFICATION_ID, buildNotification(withMicrophone), type);
+            } else if (withMicrophone && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                startForeground(NOTIFICATION_ID, buildNotification(true),
                         ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE);
             } else {
-                startForeground(NOTIFICATION_ID, buildNotification());
+                startForeground(NOTIFICATION_ID, buildNotification(withMicrophone));
             }
             return true;
-        } catch (SecurityException error) {
+        } catch (SecurityException | IllegalArgumentException error) {
             Log.e(TAG, "Unable to enable foreground microphone", error);
             showSpeechBubble("系统暂时不允许后台使用麦克风，请重试");
             return false;
         }
+    }
+
+    private float maximumSafeOverlayOpacity() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return 1f;
+        InputManager inputManager = getSystemService(InputManager.class);
+        float systemLimit = inputManager == null
+                ? 0.8f : inputManager.getMaximumObscuringOpacityForTouch();
+        return Math.max(0f, Math.min(0.79f, systemLimit * 0.98f));
     }
 
     private void showSpeechBubble(String text) {
@@ -1095,7 +1194,7 @@ public class OverlayPetService extends Service implements SensorEventListener {
         getSystemService(NotificationManager.class).createNotificationChannel(channel);
     }
 
-    private Notification buildNotification() {
+    private Notification buildNotification(boolean usingMicrophone) {
         Intent openApp = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this,
@@ -1115,15 +1214,27 @@ public class OverlayPetService extends Service implements SensorEventListener {
                 startConversation,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        return new Notification.Builder(this, CHANNEL_ID)
+        Intent stopConversation = new Intent(this, OverlayPetService.class)
+                .setAction(ACTION_STOP_CONVERSATION);
+        PendingIntent stopConversationIntent = PendingIntent.getService(
+                this,
+                2,
+                stopConversation,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        Notification.Builder builder = new Notification.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher)
-                .setContentTitle("小鼻嘎正在活动")
-                .setContentText("转动手机，让小鼻嘎在屏幕上滚动")
+                .setContentTitle(usingMicrophone ? "小鼻嘎正在使用麦克风" : "小鼻嘎正在活动")
+                .setContentText(usingMicrophone
+                        ? "语音会发送给小米 MiMo；点此返回应用"
+                        : "转动手机，让小鼻嘎在屏幕上滚动")
                 .setContentIntent(pendingIntent)
-                .addAction(new Notification.Action.Builder(
-                        R.drawable.ic_launcher, "对话", conversationIntent).build())
                 .setOngoing(true)
-                .setColor(Color.rgb(98, 85, 246))
-                .build();
+                .setColor(Color.rgb(98, 85, 246));
+        builder.addAction(new Notification.Action.Builder(
+                R.drawable.ic_launcher,
+                usingMicrophone ? "结束对话" : "对话",
+                usingMicrophone ? stopConversationIntent : conversationIntent).build());
+        return builder.build();
     }
 }

@@ -16,7 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /** Generates XiaoBiGa's spoken reply with Xiaomi MiMo-V2.5-TTS. */
 final class MimoTtsClient {
@@ -27,16 +26,18 @@ final class MimoTtsClient {
 
     private static final String ENDPOINT =
             "https://api.xiaomimimo.com/v1/chat/completions";
-    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
     private MimoTtsClient() {}
 
-    static void synthesize(Context context, String text, Callback callback) {
+    static RequestHandle synthesize(Context context, String text,
+                                    ExecutorService executor, Callback callback) {
         Context appContext = context.getApplicationContext();
-        EXECUTOR.execute(() -> {
+        RequestHandle requestHandle = new RequestHandle();
+        requestHandle.attach(executor.submit(() -> {
             HttpURLConnection connection = null;
             try {
+                if (requestHandle.isCancelled()) return;
                 String apiKey = ApiKeyStore.load(appContext, "mimo");
                 if (apiKey.isEmpty()) throw new IllegalStateException("缺少小米 MiMo API Key");
 
@@ -56,6 +57,7 @@ final class MimoTtsClient {
                         .put("stream", false);
 
                 connection = (HttpURLConnection) new URL(ENDPOINT).openConnection();
+                requestHandle.track(connection);
                 connection.setRequestMethod("POST");
                 connection.setConnectTimeout(20_000);
                 connection.setReadTimeout(90_000);
@@ -69,7 +71,7 @@ final class MimoTtsClient {
                 int code = connection.getResponseCode();
                 InputStream stream = code >= 200 && code < 300
                         ? connection.getInputStream() : connection.getErrorStream();
-                String response = readAll(stream);
+                String response = readAll(stream, 12_000_000);
                 if (code < 200 || code >= 300) {
                     throw new IllegalStateException("语音合成接口返回 " + code + "："
                             + shorten(response, 160));
@@ -80,23 +82,39 @@ final class MimoTtsClient {
                 String encoded = audio == null ? "" : audio.optString("data", "");
                 if (encoded.isEmpty()) throw new IllegalStateException("模型没有返回声音");
                 byte[] wav = Base64.decode(encoded, Base64.DEFAULT);
-                MAIN.post(() -> callback.onSuccess(wav));
+                if (!requestHandle.isCancelled()) {
+                    MAIN.post(() -> {
+                        if (!requestHandle.isCancelled()) callback.onSuccess(wav);
+                    });
+                }
             } catch (Exception error) {
+                if (requestHandle.isCancelled()) return;
                 String message = error.getMessage() == null ? "语音合成失败" : error.getMessage();
-                MAIN.post(() -> callback.onError(message));
+                MAIN.post(() -> {
+                    if (!requestHandle.isCancelled()) callback.onError(message);
+                });
             } finally {
-                if (connection != null) connection.disconnect();
+                if (connection != null) {
+                    connection.disconnect();
+                    requestHandle.clear(connection);
+                }
             }
-        });
+        }));
+        return requestHandle;
     }
 
-    private static String readAll(InputStream stream) throws Exception {
+    private static String readAll(InputStream stream, int maxChars) throws Exception {
         if (stream == null) return "";
         StringBuilder result = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             String line;
-            while ((line = reader.readLine()) != null) result.append(line);
+            while ((line = reader.readLine()) != null) {
+                if (result.length() + line.length() > maxChars) {
+                    throw new IllegalStateException("语音合成响应过大");
+                }
+                result.append(line);
+            }
         }
         return result.toString();
     }

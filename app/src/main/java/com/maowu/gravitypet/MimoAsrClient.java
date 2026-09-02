@@ -16,7 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /** Uploads one detected utterance to Xiaomi MiMo-V2.5-ASR. */
 final class MimoAsrClient {
@@ -27,16 +26,18 @@ final class MimoAsrClient {
 
     private static final String ENDPOINT =
             "https://api.xiaomimimo.com/v1/chat/completions";
-    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
     private MimoAsrClient() {}
 
-    static void transcribe(Context context, byte[] wavData, Callback callback) {
+    static RequestHandle transcribe(Context context, byte[] wavData,
+                                    ExecutorService executor, Callback callback) {
         Context appContext = context.getApplicationContext();
-        EXECUTOR.execute(() -> {
+        RequestHandle requestHandle = new RequestHandle();
+        requestHandle.attach(executor.submit(() -> {
             HttpURLConnection connection = null;
             try {
+                if (requestHandle.isCancelled()) return;
                 String apiKey = ApiKeyStore.load(appContext, "mimo");
                 if (apiKey.isEmpty()) {
                     throw new IllegalStateException("请先在 AI 设置中填写小米 MiMo 语音 Key");
@@ -60,6 +61,7 @@ final class MimoAsrClient {
                         .put("stream", false);
 
                 connection = (HttpURLConnection) new URL(ENDPOINT).openConnection();
+                requestHandle.track(connection);
                 connection.setRequestMethod("POST");
                 connection.setConnectTimeout(20_000);
                 connection.setReadTimeout(60_000);
@@ -74,7 +76,7 @@ final class MimoAsrClient {
                 int code = connection.getResponseCode();
                 InputStream stream = code >= 200 && code < 300
                         ? connection.getInputStream() : connection.getErrorStream();
-                String response = readAll(stream);
+                String response = readAll(stream, 1_000_000);
                 if (code < 200 || code >= 300) {
                     String detail = response;
                     try {
@@ -90,23 +92,39 @@ final class MimoAsrClient {
                         .optString("content", "").trim();
                 if (text.isEmpty()) throw new IllegalStateException("没有识别到文字");
                 String result = text;
-                MAIN.post(() -> callback.onSuccess(result));
+                if (!requestHandle.isCancelled()) {
+                    MAIN.post(() -> {
+                        if (!requestHandle.isCancelled()) callback.onSuccess(result);
+                    });
+                }
             } catch (Exception error) {
+                if (requestHandle.isCancelled()) return;
                 String message = error.getMessage() == null ? "语音识别失败" : error.getMessage();
-                MAIN.post(() -> callback.onError(message));
+                MAIN.post(() -> {
+                    if (!requestHandle.isCancelled()) callback.onError(message);
+                });
             } finally {
-                if (connection != null) connection.disconnect();
+                if (connection != null) {
+                    connection.disconnect();
+                    requestHandle.clear(connection);
+                }
             }
-        });
+        }));
+        return requestHandle;
     }
 
-    private static String readAll(InputStream stream) throws Exception {
+    private static String readAll(InputStream stream, int maxChars) throws Exception {
         if (stream == null) return "";
         StringBuilder result = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(stream, StandardCharsets.UTF_8))) {
             String line;
-            while ((line = reader.readLine()) != null) result.append(line);
+            while ((line = reader.readLine()) != null) {
+                if (result.length() + line.length() > maxChars) {
+                    throw new IllegalStateException("语音接口响应过大");
+                }
+                result.append(line);
+            }
         }
         return result.toString();
     }

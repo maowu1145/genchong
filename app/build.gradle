@@ -11,8 +11,10 @@ android {
         applicationId "com.maowu.gravitypet"
         minSdk 26
         targetSdk 35
-        versionCode 84
-        versionName "5.3.5"
+        versionCode 133
+        versionName "5.8.15"
+        // The embedded Godot island now contributes native libraries. Keep the
+        // phone build intentionally arm64-only until ABI splits are introduced.
         ndk {
             abiFilters 'arm64-v8a'
         }
@@ -31,4 +33,8 @@ android {
     }
 }
 
-dependencies {}
+dependencies {
+    implementation 'org.godotengine:godot:4.7.2.stable'
+    implementation 'androidx.fragment:fragment:1.8.6'
+    testImplementation 'junit:junit:4.13.2'
+}

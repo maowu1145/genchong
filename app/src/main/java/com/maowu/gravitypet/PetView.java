@@ -32,7 +32,9 @@ public class PetView extends View implements Runnable {
     private static final long CHAT_ENTRY_DURATION_MS = 240L;
     public interface PositionListener {
         void onPositionChanged(float centerX, float centerY,
-                               float touchDiameter, boolean dragging);
+                               float touchCenterX, float touchCenterY,
+                               float touchWidth, float touchHeight,
+                               boolean dragging);
     }
     public interface BubbleRegionListener {
         void onBubbleRegionChanged(float left, float top, float right, float bottom,
@@ -52,11 +54,18 @@ public class PetView extends View implements Runnable {
     private static final float IMPULSE_TO_DEFORMATION = 0.34f;
     private static final float MAX_COMPRESSION = 0.38f;
     private static final float MAX_THROW_SPEED = 6000f;
+    private static final float SHAKE_ACCELERATION_SCALE = 1.18f;
+    private static final float SHAKE_DEAD_ZONE = .70f;
+    private static final float MAX_SHAKE_ACCELERATION = 15f;
     private static final float ROTATION_DAMPING = 5.5f;
     private static final float COLLISION_TORQUE = 0.24f;
     private static final float KEYBOARD_FLOOR_RESPONSE = 18f;
     private static final float MAX_KEYBOARD_FLOOR_SPEED = 4200f;
     private static final float RESTING_CONTACT_MARGIN = 3.0f;
+    // Keep the rectangular Android touch window inside the visible pet body.
+    // A window as large as the maximum deformation envelope blocks controls
+    // beside the pet even where the bitmap is transparent.
+    private static final float TOUCH_DIAMETER_TO_RADIUS = 1.80f;
 
     private final Paint ballPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint skinPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
@@ -66,6 +75,10 @@ public class PetView extends View implements Runnable {
     private final Paint chatShadowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint chatFadePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint dismissZonePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF bodyBounds = new RectF();
+    private final int[] dismissGradientColors = {
+            Color.TRANSPARENT, 0x44FF2929, 0xB8D90000};
+    private final float[] dismissGradientPositions = {0f, 0.55f, 1f};
     private final TextPaint chatTextPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG);
     private final List<ChatMessage> chatMessages = new ArrayList<>();
     private String conversationStatus = "";
@@ -83,6 +96,8 @@ public class PetView extends View implements Runnable {
     private float velocityY;
     private float gravityX;
     private float gravityY;
+    private float deviceAccelerationX;
+    private float deviceAccelerationY;
     private float deformation;
     private float deformationVelocity;
     private float impactNormalX = 0f;
@@ -109,6 +124,7 @@ public class PetView extends View implements Runnable {
     private boolean crowdStabilizing;
     private float sleepGravityX;
     private float sleepGravityY;
+    private float lastPhysicsStepSeconds = 1f / 120f;
     private float dragOffsetX;
     private float dragOffsetY;
     private PositionListener positionListener;
@@ -209,6 +225,22 @@ public class PetView extends View implements Runnable {
         }
     }
 
+    /** Adds the phone's short linear acceleration as inertia in screen axes. */
+    public void setDeviceAcceleration(float x, float y) {
+        float magnitude = (float) Math.hypot(x, y);
+        if (magnitude <= SHAKE_DEAD_ZONE) {
+            deviceAccelerationX = 0f;
+            deviceAccelerationY = 0f;
+            return;
+        }
+        float usableMagnitude = Math.min(MAX_SHAKE_ACCELERATION,
+                magnitude - SHAKE_DEAD_ZONE);
+        float scale = usableMagnitude / magnitude;
+        deviceAccelerationX = x * scale;
+        deviceAccelerationY = y * scale;
+        if (usableMagnitude > 1.25f) wakeFromCrowdSleep();
+    }
+
     public void setBallColor(int color) {
         ballPaint.setColor(color);
         invalidate();
@@ -239,6 +271,7 @@ public class PetView extends View implements Runnable {
     }
 
     public void setSkin(int skinId) {
+        if (skinId < 0 || skinId > PetMakerActivity.CUSTOM_SKIN_ID) skinId = 0;
         if (skinId == currentSkinId && (skinId == 0 || skinBitmap != null)) return;
         currentSkinId = skinId;
         if (skinBitmap != null) {
@@ -423,8 +456,12 @@ public class PetView extends View implements Runnable {
         // Ordinary resting overlap is resolved by the shared solver and must not
         // wake a sleeping pile every frame. Only a real impact or a held pet does.
         boolean entrySettling = crowdStabilizing || other.crowdStabilizing;
-        if (dragging || other.dragging
-                || (!entrySettling && previewClosingSpeed > 35f)) {
+        float expectedGravityClosingSpeed =
+                contactGravitySpeedToward(normalX, normalY)
+                        + other.contactGravitySpeedToward(-normalX, -normalY);
+        if (RestingPairWakePolicy.shouldWake(
+                dragging || other.dragging, entrySettling,
+                previewClosingSpeed, expectedGravityClosingSpeed)) {
             wakeFromCrowdSleep();
             other.wakeFromCrowdSleep();
         }
@@ -457,8 +494,8 @@ public class PetView extends View implements Runnable {
         float normalSpeed = relativeVelocityX * normalX + relativeVelocityY * normalY;
         if (normalSpeed < 0f) {
             float closingSpeed = -normalSpeed;
-            float restitution = !entrySettling && closingSpeed >= MIN_BOUNCE_SPEED
-                    ? 0.48f : 0f;
+            float restitution = entrySettling || closingSpeed < MIN_BOUNCE_SPEED
+                    ? 0f : .48f;
             float impulse = -(1f + restitution) * normalSpeed / inverseMassSum;
             float impulseX = impulse * normalX;
             float impulseY = impulse * normalY;
@@ -645,6 +682,10 @@ public class PetView extends View implements Runnable {
 
     @Override
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        float startX = width * 0.68f;
+        dismissZonePaint.setShader(new LinearGradient(
+                startX, 0f, width, 0f,
+                dismissGradientColors, dismissGradientPositions, Shader.TileMode.CLAMP));
         if (!positioned && width > 0 && height > 0) {
             x = width * spawnFractionX;
             y = height * spawnFractionY;
@@ -685,8 +726,7 @@ public class PetView extends View implements Runnable {
         }
         lastFrameNanos = frameTimeNanos;
         if (positioned && positionListener != null) {
-            // The hit target grows with the physical radius and the maximum soft-body bulge.
-            positionListener.onPositionChanged(x, y, radius * 3.5f, dragging);
+            notifyPositionListener();
         }
         if (isAttachedToWindow() && !managedByWorld) {
             postOnAnimation(this);
@@ -716,11 +756,19 @@ public class PetView extends View implements Runnable {
         if (!positioned) return;
         invalidate();
         if (positionListener != null) {
-            positionListener.onPositionChanged(x, y, radius * 3.5f, dragging);
+            notifyPositionListener();
         }
     }
 
+    private void notifyPositionListener() {
+        if (positionListener == null) return;
+        float diameter = radius * TOUCH_DIAMETER_TO_RADIUS;
+        positionListener.onPositionChanged(
+                x, y, x, y, diameter, diameter, dragging);
+    }
+
     private void stepPhysics(float dt) {
+        lastPhysicsStepSeconds = dt;
         if (crowdSleeping) {
             velocityX = 0f;
             velocityY = 0f;
@@ -728,8 +776,10 @@ public class PetView extends View implements Runnable {
             deformationVelocity = 0f;
             return;
         }
-        velocityX += gravityX * pixelsPerMeter * dt;
-        velocityY += gravityY * pixelsPerMeter * dt;
+        velocityX += (gravityX + deviceAccelerationX * SHAKE_ACCELERATION_SCALE)
+                * pixelsPerMeter * dt;
+        velocityY += (gravityY + deviceAccelerationY * SHAKE_ACCELERATION_SCALE)
+                * pixelsPerMeter * dt;
 
         float drag = (float) Math.pow(AIR_DRAG_PER_SECOND, dt);
         velocityX *= drag;
@@ -792,6 +842,15 @@ public class PetView extends View implements Runnable {
 
         if (Math.abs(velocityX) < 1f && Math.abs(gravityX) < 0.04f) velocityX = 0f;
         if (Math.abs(velocityY) < 1f && Math.abs(gravityY) < 0.04f) velocityY = 0f;
+    }
+
+    private float contactGravitySpeedToward(float directionX, float directionY) {
+        float accelerationX = (gravityX
+                + deviceAccelerationX * SHAKE_ACCELERATION_SCALE) * pixelsPerMeter;
+        float accelerationY = (gravityY
+                + deviceAccelerationY * SHAKE_ACCELERATION_SCALE) * pixelsPerMeter;
+        return Math.max(0f, accelerationX * directionX + accelerationY * directionY)
+                * Math.max(0f, lastPhysicsStepSeconds);
     }
 
     private void stepKeyboardFloor(float dt) {
@@ -957,31 +1016,23 @@ public class PetView extends View implements Runnable {
         super.onDraw(canvas);
         if (dismissZoneAlpha > 0.002f) {
             float startX = getWidth() * 0.68f;
-            dismissZonePaint.setShader(new LinearGradient(
-                    startX, 0f, getWidth(), 0f,
-                    new int[]{Color.TRANSPARENT, 0x44FF2929, 0xB8D90000},
-                    new float[]{0f, 0.55f, 1f}, Shader.TileMode.CLAMP));
             dismissZonePaint.setAlpha(Math.round(255f * dismissZoneAlpha));
             canvas.drawRect(startX, 0f, getWidth(), getHeight(), dismissZonePaint);
-            dismissZonePaint.setShader(null);
         }
+        canvas.save();
+        canvas.translate(x, y);
         float normalScale = Math.max(0.58f, 1f - deformation);
-        // Preserve the circle's area as an approximation of an incompressible body.
         float tangentScale = 1f / normalScale;
         float angleDegrees = (float) Math.toDegrees(
                 Math.atan2(impactNormalY, impactNormalX));
-
-        canvas.save();
-        canvas.translate(x, y);
         canvas.rotate(angleDegrees);
         canvas.scale(normalScale, tangentScale);
         canvas.rotate(-angleDegrees);
         canvas.rotate((float) Math.toDegrees(rotationAngle));
-
         if (skinBitmap != null) {
-            RectF body = new RectF(-radius, -radius, radius, radius);
+            bodyBounds.set(-radius, -radius, radius, radius);
             skinPaint.setAlpha(255);
-            canvas.drawBitmap(skinBitmap, null, body, skinPaint);
+            canvas.drawBitmap(skinBitmap, null, bodyBounds, skinPaint);
         } else {
             canvas.drawCircle(0f, 0f, radius, ballPaint);
         }

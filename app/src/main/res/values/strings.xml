@@ -7,8 +7,11 @@
     <string name="skin_picker">小鼻嘎选择</string>
     <string name="color_tuning">制作</string>
     <string name="biga_island">鼻嘎小岛</string>
-    <string name="physics_settings">物理参数</string>
     <string name="ai_settings">AI配置</string>
     <string name="experimental_features">实验性功能</string>
     <string name="operation_guard">操作防遮挡</string>
+    <string name="voice_disclosure_title">开始云端语音对话</string>
+    <string name="voice_disclosure_message">对话期间，小鼻嘎会持续使用麦克风，并把检测到的语音发送给小米 MiMo，用于语音识别、生成回复和语音合成。回复结束或暂时没听到声音后会自动继续监听，直到你点击“结束对话”或通知里的“结束对话”。\n\n音频仅作为本次请求临时处理；应用不会把录音长期保存在本机。请不要在对话中说出密码、验证码等敏感信息。</string>
+    <string name="voice_disclosure_accept">了解并开始</string>
+    <string name="voice_disclosure_cancel">暂不使用</string>
 </resources>

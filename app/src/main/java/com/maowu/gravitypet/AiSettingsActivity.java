@@ -9,6 +9,7 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,8 +24,11 @@ public class AiSettingsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window window = getWindow();
-        window.setStatusBarColor(Color.rgb(174, 213, 241));
-        window.setNavigationBarColor(Color.rgb(174, 213, 241));
+        window.addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        window.setStatusBarColor(Color.WHITE);
+        window.setNavigationBarColor(Color.WHITE);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         setContentView(buildContent());
     }
 
@@ -32,62 +36,87 @@ public class AiSettingsActivity extends Activity {
         int padding = dp(20);
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setGravity(Gravity.CENTER_VERTICAL);
+        root.setGravity(Gravity.CENTER_HORIZONTAL);
         root.setPadding(padding, padding, padding, padding);
-        GradientDrawable sky = new GradientDrawable(
-                GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{Color.rgb(174, 213, 241), Color.rgb(210, 235, 249)});
-        root.setBackground(sky);
+        root.setBackgroundColor(Color.WHITE);
 
-        TextView title = text("AI 设置", 27, true);
-        title.setTextColor(AppVisualStyle.BLUE_DARK);
-        root.addView(title);
+        LinearLayout header = new LinearLayout(this);
+        header.setGravity(Gravity.CENTER_VERTICAL);
+        Button back = new Button(this);
+        back.setText("‹");
+        canvasButton(back, false);
+        back.setTextSize(28);
+        back.setOnClickListener(v -> finish());
+        header.addView(back, new LinearLayout.LayoutParams(dp(58), dp(48)));
+        TextView title = text("AI配置", 25, true);
+        title.setGravity(Gravity.CENTER);
+        header.addView(title, new LinearLayout.LayoutParams(0, dp(48), 1f));
+        View balance = new View(this);
+        header.addView(balance, new LinearLayout.LayoutParams(dp(58), dp(48)));
+        root.addView(header, wrapParams());
 
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
-        card.setPadding(dp(18), dp(18), dp(18), dp(18));
-        card.setBackground(AppVisualStyle.rounded(AppVisualStyle.CARD, 22f,
+        card.setPadding(dp(18), dp(22), dp(18), dp(22));
+        card.setBackground(AppVisualStyle.bordered(Color.WHITE, 0xFFBBBBBB, 24f,
                 getResources().getDisplayMetrics().density));
-        card.setElevation(dp(4));
+        card.setElevation(dp(3));
         LinearLayout.LayoutParams cardParams = wrapParams();
-        cardParams.topMargin = dp(18);
+        cardParams.topMargin = dp(26);
         root.addView(card, cardParams);
 
-        TextView keyLabel = text("小米 MiMo API Key", 16, true);
-        card.addView(keyLabel, wrapParams());
+        card.addView(infoRow("免费模型", "暂未接入"), wrapParams());
+        card.addView(infoRow("模型厂商", "小米"), wrapParams());
+
+        TextView keyLabel = text("API Key", 17, true);
+        LinearLayout.LayoutParams labelParams = wrapParams();
+        labelParams.topMargin = dp(18);
+        card.addView(keyLabel, labelParams);
 
         apiKeyInput = new EditText(this);
         apiKeyInput.setHint("粘贴小米 MiMo API Key");
         apiKeyInput.setSingleLine(true);
+        apiKeyInput.setImportantForAutofill(View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS);
         apiKeyInput.setInputType(InputType.TYPE_CLASS_TEXT
                 | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        AppVisualStyle.styleInput(apiKeyInput, getResources().getDisplayMetrics().density);
+        apiKeyInput.setTextColor(Color.BLACK);
+        apiKeyInput.setHintTextColor(0xFF8B8B8B);
+        apiKeyInput.setPadding(dp(16), 0, dp(16), 0);
+        apiKeyInput.setBackground(AppVisualStyle.bordered(Color.WHITE, 0xFFBBBBBB, 15f,
+                getResources().getDisplayMetrics().density));
         LinearLayout.LayoutParams keyParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(56));
         keyParams.topMargin = dp(12);
         card.addView(apiKeyInput, keyParams);
 
-        try {
-            apiKeyInput.setText(ApiKeyStore.load(this, "mimo"));
-        } catch (Exception ignored) {}
+        if (ApiKeyStore.isConfigured(this, "mimo")) {
+            apiKeyInput.setHint("已配置；输入新 Key 才会替换");
+        }
+
+        card.addView(infoRow("模型选择", "MiMo"), wrapParams());
 
         Button save = new Button(this);
         save.setText("保存 AI 设置");
-        AppVisualStyle.stylePrimary(save, getResources().getDisplayMetrics().density);
+        canvasButton(save, true);
         save.setOnClickListener(v -> saveSettings());
         LinearLayout.LayoutParams saveParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(56));
         saveParams.topMargin = dp(24);
         card.addView(save, saveParams);
 
-        Button back = new Button(this);
-        back.setText("返回");
-        AppVisualStyle.styleSecondary(back, getResources().getDisplayMetrics().density);
-        back.setOnClickListener(v -> finish());
-        LinearLayout.LayoutParams backParams = new LinearLayout.LayoutParams(
+        Button delete = new Button(this);
+        delete.setText("删除已保存的 Key");
+        canvasButton(delete, false);
+        delete.setOnClickListener(v -> {
+            ApiKeyStore.delete(this, "mimo");
+            apiKeyInput.setText("");
+            apiKeyInput.setHint("粘贴小米 MiMo API Key");
+            Toast.makeText(this, "已删除", Toast.LENGTH_SHORT).show();
+        });
+        LinearLayout.LayoutParams deleteParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(50));
-        backParams.topMargin = dp(10);
-        card.addView(back, backParams);
+        deleteParams.topMargin = dp(10);
+        card.addView(delete, deleteParams);
 
         ScrollView scroll = new ScrollView(this);
         scroll.setFillViewport(true);
@@ -95,10 +124,34 @@ public class AiSettingsActivity extends Activity {
         return scroll;
     }
 
+    private LinearLayout infoRow(String left, String right) {
+        LinearLayout row = new LinearLayout(this);
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        TextView label = text(left, 17, true);
+        row.addView(label, new LinearLayout.LayoutParams(0, dp(54), 1f));
+        TextView value = text(right, 15, false);
+        value.setTextColor(0xFF666666);
+        value.setGravity(Gravity.END | Gravity.CENTER_VERTICAL);
+        row.addView(value, new LinearLayout.LayoutParams(dp(120), dp(54)));
+        return row;
+    }
+
+    private void canvasButton(Button button, boolean primary) {
+        button.setAllCaps(false);
+        button.setTextColor(primary ? Color.WHITE : Color.BLACK);
+        button.setTextSize(16);
+        button.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+        button.setBackground(AppVisualStyle.bordered(
+                primary ? Color.BLACK : Color.WHITE,
+                primary ? Color.BLACK : 0xFFBBBBBB, 16f,
+                getResources().getDisplayMetrics().density));
+    }
+
     private void saveSettings() {
         String key = apiKeyInput.getText().toString().trim();
         if (key.isEmpty()) {
-            Toast.makeText(this, "请先填写 API Key", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, ApiKeyStore.isConfigured(this, "mimo")
+                    ? "Key 未改变" : "请先填写 API Key", Toast.LENGTH_SHORT).show();
             return;
         }
         try {
@@ -107,6 +160,8 @@ public class AiSettingsActivity extends Activity {
                     .putString(PetPreferences.KEY_AI_PROVIDER, "mimo")
                     .apply();
             Toast.makeText(this, "已加密保存", Toast.LENGTH_SHORT).show();
+            apiKeyInput.setText("");
+            apiKeyInput.setHint("已配置；输入新 Key 才会替换");
         } catch (Exception error) {
             Toast.makeText(this, "保存失败：" + error.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -116,7 +171,7 @@ public class AiSettingsActivity extends Activity {
         TextView view = new TextView(this);
         view.setText(content);
         view.setTextSize(size);
-        view.setTextColor(Color.rgb(20, 33, 61));
+        view.setTextColor(Color.BLACK);
         if (bold) view.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         view.setGravity(Gravity.START);
         return view;

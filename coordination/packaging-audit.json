@@ -1,0 +1,487 @@
+{
+  "scope": "Read-only source packaging audit; not final APK inspection",
+  "groups": {
+    "assets/pets": {
+      "files": 46,
+      "bytes": 4920446
+    },
+    "res/anim": {
+      "files": 1,
+      "bytes": 540
+    },
+    "res/drawable": {
+      "files": 2,
+      "bytes": 160074
+    },
+    "res/drawable-nodpi": {
+      "files": 12,
+      "bytes": 576501
+    },
+    "res/values": {
+      "files": 4,
+      "bytes": 3096
+    }
+  },
+  "totalResourceBytes": 5660657,
+  "files": [
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_cat.png",
+      "bytes": 513662,
+      "group": "res/drawable-nodpi",
+      "sha256": "e8518df732c5c87d44c712d46155acba668ccc44b2e4c5954a0b7c5731ca89c2",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/assets/pets/doro/water.png",
+      "bytes": 166003,
+      "group": "assets/pets",
+      "sha256": "f10847b8e74bbc7f52797da46edd8f1a65d1ee200b63cfe0f3ff7565e2070267"
+    },
+    {
+      "path": "app/src/main/assets/pets/doro/remind.png",
+      "bytes": 161727,
+      "group": "assets/pets",
+      "sha256": "a7e66303551501a0ce299cb0ec1de39ba043ab1697015e905a9e15d62bf2e0f1"
+    },
+    {
+      "path": "app/src/main/assets/pets/doro/fruit.png",
+      "bytes": 161451,
+      "group": "assets/pets",
+      "sha256": "175f995ec556904f299b5962f13f9f811aef03dcf05d6fc124e422efb140979d"
+    },
+    {
+      "path": "app/src/main/assets/pets/doro/idle.png",
+      "bytes": 159649,
+      "group": "assets/pets",
+      "sha256": "b2afd023914aafbc558a778edd8456f7ea61cfc665d017aacfe9c0c8dac20cdc"
+    },
+    {
+      "path": "app/src/main/res/drawable/gengpet_icon.png",
+      "bytes": 159649,
+      "group": "res/drawable",
+      "sha256": "b2afd023914aafbc558a778edd8456f7ea61cfc665d017aacfe9c0c8dac20cdc",
+      "newJavaReference": false,
+      "legacyJavaReference": false,
+      "xmlReference": true
+    },
+    {
+      "path": "app/src/main/assets/pets/doro/satisfied.png",
+      "bytes": 159113,
+      "group": "assets/pets",
+      "sha256": "8d0437ee698d4eefc3c20a09c144d1b2aa956bf71b5ddff5087ada8ea7acbfc4"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/idle.png",
+      "bytes": 158999,
+      "group": "assets/pets",
+      "sha256": "fd79d72623e6d6862e9ce9db8b13f3b7f0fe24a078728ade80effca304a902fd"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/calculating.png",
+      "bytes": 158867,
+      "group": "assets/pets",
+      "sha256": "fcbc65922be7c792dc9cdedfb99b1a485da6a82fe636a028674181af7552b3e9"
+    },
+    {
+      "path": "app/src/main/assets/pets/thursday_bucket_cat/crazy.png",
+      "bytes": 157291,
+      "group": "assets/pets",
+      "sha256": "2b922fd7a255858ad11d87d4070c25867b9b32736844ff8b59f1950b19b41fd7"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/result.png",
+      "bytes": 155142,
+      "group": "assets/pets",
+      "sha256": "71f8a1e4124d9d59e46143b516e64dc44f16270a7ff71c83916041812704c19f"
+    },
+    {
+      "path": "app/src/main/assets/pets/grudge_panda/writing.png",
+      "bytes": 144976,
+      "group": "assets/pets",
+      "sha256": "9c625ba64a7e61a2d3a2d36f850dc38e779f7fec265fb06369c1025245049eb0"
+    },
+    {
+      "path": "app/src/main/assets/pets/grudge_panda/opening.png",
+      "bytes": 144365,
+      "group": "assets/pets",
+      "sha256": "d0ecbdb8ab4da9124a9ab84a784a7f14e14ce4ee77ba862f2f244817974dff75"
+    },
+    {
+      "path": "app/src/main/assets/pets/thursday_bucket_cat/excited.png",
+      "bytes": 143028,
+      "group": "assets/pets",
+      "sha256": "f8adf553f331c833f243dbea2e0f3f42cf35d57a3ea358625b82fe7b42a1727e"
+    },
+    {
+      "path": "app/src/main/assets/pets/thursday_bucket_cat/peek.png",
+      "bytes": 140786,
+      "group": "assets/pets",
+      "sha256": "190334914808fc2de60b26b136ee6e36d09f0b16385fabb1f3d01cbd612f0831"
+    },
+    {
+      "path": "app/src/main/assets/pets/grudge_panda/tearing.png",
+      "bytes": 140636,
+      "group": "assets/pets",
+      "sha256": "d548f8fe315f8ddfc2046b507fb5c398820257cfb2a31972ec1f911da5c4a169"
+    },
+    {
+      "path": "app/src/main/assets/pets/grudge_panda/idle.png",
+      "bytes": 136604,
+      "group": "assets/pets",
+      "sha256": "34871ba2014654b94c6f19a3a2dd39290f50eca554d503a03290c7ba48a0e46d"
+    },
+    {
+      "path": "app/src/main/assets/pets/grudge_panda/saved.png",
+      "bytes": 136422,
+      "group": "assets/pets",
+      "sha256": "41852104968cb03b156672cf1774c9c084a8aeafe3457ce91250bd9c44244378"
+    },
+    {
+      "path": "app/src/main/assets/pets/thursday_bucket_cat/calm.png",
+      "bytes": 134992,
+      "group": "assets/pets",
+      "sha256": "032f1ef3ad98dca3ecba80c31f94add7095e87b5d765a68223662c98b3935792"
+    },
+    {
+      "path": "app/src/main/assets/pets/thursday_bucket_cat/idle.png",
+      "bytes": 134972,
+      "group": "assets/pets",
+      "sha256": "1b51024a724e0b9014cae2862404e24790fc82c7b721a124b68dd53133469322"
+    },
+    {
+      "path": "app/src/main/assets/pets/grudge_panda/recording.png",
+      "bytes": 131975,
+      "group": "assets/pets",
+      "sha256": "d9eb889f24a7032749f0683f464d8641bb8535248c5dbd771c995ec966929ac7"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/idle.png",
+      "bytes": 129582,
+      "group": "assets/pets",
+      "sha256": "df1d1bba4f8119e1ebc0493b9ae01cc9a1e7fabdcacc813500b592ca7bc6509e"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/calm.png",
+      "bytes": 128382,
+      "group": "assets/pets",
+      "sha256": "2057d1e4e372820faddfaf40ff7c185b7fd1c71c09d5d1c5177a5ea284d26401"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/shocked.png",
+      "bytes": 126644,
+      "group": "assets/pets",
+      "sha256": "3ed5d904616ad6d18313f979b8d5438d41117be805b42fe87ca08246010b1b23"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/sweating.png",
+      "bytes": 124609,
+      "group": "assets/pets",
+      "sha256": "71ffda9d76e695806d7b44a1974ed74372786eafc94ab20ae702572cec1624bb"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/sad.png",
+      "bytes": 120723,
+      "group": "assets/pets",
+      "sha256": "ebb06f1205fd541bca0a716109239370b1c7a805739432c7c8a98a7e7c231d51"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/shy.png",
+      "bytes": 118763,
+      "group": "assets/pets",
+      "sha256": "c71964a0e352d9abf0105032bc8aefeebeddc2985df086e45c70e40ee16ca4e0"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/angry.png",
+      "bytes": 116864,
+      "group": "assets/pets",
+      "sha256": "c0d810646a9688f15b92582c72b67e89acbf42b13113edfd219888ddde904062"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/happy.png",
+      "bytes": 115906,
+      "group": "assets/pets",
+      "sha256": "bf811b74d7b851efba7b8c13b4d7ebc8a017a42c14f72ee727f66bbe27871df4"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/sleepy.png",
+      "bytes": 112856,
+      "group": "assets/pets",
+      "sha256": "b90a5694efff764f2cb76b849ea45d65eb592ea45ed3dd4358dadb23f82dfe48"
+    },
+    {
+      "path": "app/src/main/assets/pets/sweat_emoji/speechless.png",
+      "bytes": 109885,
+      "group": "assets/pets",
+      "sha256": "b794394e51432b88a439cf27df33ce58e910d3f73f8255a7f8767faeb5e1df0a"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_01.png",
+      "bytes": 58692,
+      "group": "assets/pets",
+      "sha256": "1ee9091f845ee4706053eab5eeaf022b8d3e64aa7bf28ed93fb80179078422fe"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_07.png",
+      "bytes": 57209,
+      "group": "assets/pets",
+      "sha256": "2cd53d11ba1f44e122f5014deaf4495d671b96da6878e98c47ff8d319b1c5ff4"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_00.png",
+      "bytes": 55939,
+      "group": "assets/pets",
+      "sha256": "a83368d369b5296b283b697cbc2c3cd410648ec15ac59034d591732c55cf9163"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_04.png",
+      "bytes": 55939,
+      "group": "assets/pets",
+      "sha256": "a83368d369b5296b283b697cbc2c3cd410648ec15ac59034d591732c55cf9163"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_02.png",
+      "bytes": 55872,
+      "group": "assets/pets",
+      "sha256": "f690f1a94dd06aaeeb5b4c0339d1e08410b2be351afe3ca804cc9c9786288793"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_06.png",
+      "bytes": 55826,
+      "group": "assets/pets",
+      "sha256": "d5a3a1abbe7b2ae311b314bb4e1885aceaf83a1f9b2e7cd6682d91b3abbc0c87"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_01.png",
+      "bytes": 55782,
+      "group": "assets/pets",
+      "sha256": "d3ea5aca919cbfce005870027193e754fb2336de496316ae7cb5086079376478"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_03.png",
+      "bytes": 55782,
+      "group": "assets/pets",
+      "sha256": "d3ea5aca919cbfce005870027193e754fb2336de496316ae7cb5086079376478"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_05.png",
+      "bytes": 55782,
+      "group": "assets/pets",
+      "sha256": "58940289b603d7815d40de816a20e258058030ff0cd72540eb7820cff5ff4693"
+    },
+    {
+      "path": "app/src/main/assets/pets/kinship_ride/animation/rock_07.png",
+      "bytes": 55782,
+      "group": "assets/pets",
+      "sha256": "58940289b603d7815d40de816a20e258058030ff0cd72540eb7820cff5ff4693"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_02.png",
+      "bytes": 54797,
+      "group": "assets/pets",
+      "sha256": "58d4a00e69e4ea1f1753bd8356e22b54abf1658bfcd4f78cd7f4571b7596f2b4"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_00.png",
+      "bytes": 54257,
+      "group": "assets/pets",
+      "sha256": "a915cc63e5a74b3119e4ac840b7db1be2a03be604bf702eea2c2c8e60f74c1c4"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_06.png",
+      "bytes": 53741,
+      "group": "assets/pets",
+      "sha256": "459fcf22dccac72b657ea863f71a0abed534413d0bc3e6935f5f2a8a56319ca5"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_05.png",
+      "bytes": 52246,
+      "group": "assets/pets",
+      "sha256": "eb768036f6e46d65eb83327de7b9a11b2d70afe177e52aef711ba09a88be6698"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_03.png",
+      "bytes": 51797,
+      "group": "assets/pets",
+      "sha256": "e2117aeafc61bd566dc576f0d29ca6ab731d48da9a442992daed9b4e4ea4a49d"
+    },
+    {
+      "path": "app/src/main/assets/pets/spinning_cat/animation/spin_04.png",
+      "bytes": 50293,
+      "group": "assets/pets",
+      "sha256": "a0e6aa762e5e3cb3adc8873ac5f99125f32c4a13b474f37c602d80d2389b2350"
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_twin_tail.png",
+      "bytes": 30697,
+      "group": "res/drawable-nodpi",
+      "sha256": "917a672f6f7ba259b40808cf4db4e1edb7b289291031b686e4d0f5000e14ccbc",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/assets/pets/catalog.json",
+      "bytes": 9498,
+      "group": "assets/pets",
+      "sha256": "3d0b5d5b34474844cc37434127fd9477ea8d44074d174e0a6a8fce04ff5d1bab"
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_bigan.png",
+      "bytes": 4350,
+      "group": "res/drawable-nodpi",
+      "sha256": "ed28321d89db24bb1ad6d834bdee9e0f9daa08bbdd901eb32959c54283ab6ad1",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_fat_mouse.png",
+      "bytes": 3971,
+      "group": "res/drawable-nodpi",
+      "sha256": "5deefdb71168337d76aab36370bfa20057aa8ec6dcf0f3820c3e572da4bd5922",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_plolt.png",
+      "bytes": 3679,
+      "group": "res/drawable-nodpi",
+      "sha256": "9a18b18635c9d85004cbb7fe6025f547b2ca3087661c936168877c5c41a4a1aa",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_fafa.png",
+      "bytes": 3636,
+      "group": "res/drawable-nodpi",
+      "sha256": "ed6a42bcb65967dc967715b8243120d6a69d71f2b896967e56d2c146d567fe0f",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_chocolate.png",
+      "bytes": 3129,
+      "group": "res/drawable-nodpi",
+      "sha256": "b49b125c4a6745aeed9576dee725e95ecbe832bf93fa3b868312cb4a66a279db",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_cat_dirty.png",
+      "bytes": 3018,
+      "group": "res/drawable-nodpi",
+      "sha256": "ce622d51b74fe8646169284bf6bc589a80e26118c5e51ed490caf1188f215cff",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_pale_green.png",
+      "bytes": 2838,
+      "group": "res/drawable-nodpi",
+      "sha256": "d3a24655fbcba88e409512828ea40f513d5dfd13af72367ca23fa49b6425fa6b",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_france.png",
+      "bytes": 2660,
+      "group": "res/drawable-nodpi",
+      "sha256": "8eacd54acb32e8fbf03ee8b7a5386cf022a5a579a8a550993312934abd765a85",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_cat_mew.png",
+      "bytes": 2541,
+      "group": "res/drawable-nodpi",
+      "sha256": "4199ab435ee135f0dbaf206cdaf6090b2177e7c115f9f9f8b4bfe997baee0c35",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/drawable-nodpi/skin_mumu.png",
+      "bytes": 2320,
+      "group": "res/drawable-nodpi",
+      "sha256": "960885388f645caa92e30bb667540c784ae56d993e33e6cd179a3c92bde2567c",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/values/styles.xml",
+      "bytes": 1222,
+      "group": "res/values",
+      "sha256": "9857afd424a08c5c823e89a958e9c7bdb1d15120051206294e81871d4aa45d52",
+      "newJavaReference": false,
+      "legacyJavaReference": false,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/values/gengpet_theme.xml",
+      "bytes": 1024,
+      "group": "res/values",
+      "sha256": "db94813104f2a31f102385cb58589581a2e06b9350e901f1c73cde2bb9149071",
+      "newJavaReference": false,
+      "legacyJavaReference": false,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/values/strings.xml",
+      "bytes": 656,
+      "group": "res/values",
+      "sha256": "71efc048e1ce16747a8adb7909b212cc538ba9e0bce98bab442c459f4daeb03a",
+      "newJavaReference": false,
+      "legacyJavaReference": false,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/anim/secondary_dialog_exit.xml",
+      "bytes": 540,
+      "group": "res/anim",
+      "sha256": "97fface68a77f5870a128d9c93204c4bc458ca7b512fd7d11136c466d95785a3",
+      "newJavaReference": false,
+      "legacyJavaReference": false,
+      "xmlReference": true
+    },
+    {
+      "path": "app/src/main/res/drawable/ic_launcher.xml",
+      "bytes": 425,
+      "group": "res/drawable",
+      "sha256": "290b9323d141c034ac8863d5cf454df65cef05aa48fa5d93f7711fa8fff8eed2",
+      "newJavaReference": false,
+      "legacyJavaReference": true,
+      "xmlReference": false
+    },
+    {
+      "path": "app/src/main/res/values/colors.xml",
+      "bytes": 194,
+      "group": "res/values",
+      "sha256": "f4c8538e6f5f3a2d030f2fb206ee5e0ee070af77d93f76e15dd9bc05de02a7eb",
+      "newJavaReference": false,
+      "legacyJavaReference": false,
+      "xmlReference": false
+    }
+  ],
+  "redactedSensitiveFindings": [],
+  "scannedFiles": 108,
+  "pets": {
+    "characters": 6,
+    "registeredPngs": 45,
+    "actualPngs": 45,
+    "traceRecords": 45,
+    "registeredEqualsActual": true,
+    "issues": []
+  },
+  "resourceReferenceCaveat": "Static reference scan only; dynamic identifier/reflection lookup not resolved.",
+  "sourceSetCaveat": "No custom source sets or packaging excludes in current app/build.gradle; release minifyEnabled false; no shrinkResources true."
+}

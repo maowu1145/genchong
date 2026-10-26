@@ -1,0 +1,7 @@
+EXPECTED_LOG Sprite ready callback failed
+PASS duplicate views, 12-character burst, no UI decode-lock wait, subscriber isolation, main dispatch
+PASS cached new view notification and callback reentrancy
+EXPECTED_LOG Cannot load sprite pets/pet_fail/idle.png
+PASS cache clear reload and missing-image completion
+PASS executor-full recovery preserves callback, no stale subscriptions
+PASS all preload regression scenarios; 21 successful subscriber notifications

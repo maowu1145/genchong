@@ -1,0 +1,16 @@
+{
+  "result": "PASS",
+  "scope": "Standalone PetCatalog compilation after callback fix",
+  "compiler": "javac 17.0.20.1",
+  "release": 17,
+  "androidApi": 36,
+  "exitCode": 0,
+  "warnings": 0,
+  "sourceSha256": "95d0da5af688cbae6a11e5d68076b333bb355c344120cb53db178de86ab753f2",
+  "regression": "21 subscriber notifications passed with Android/JSON test doubles",
+  "notVerified": [
+    "Full APK build",
+    "Real Android Activity lifecycle",
+    "On-device bitmap behavior"
+  ]
+}

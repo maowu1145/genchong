@@ -1,0 +1,3590 @@
+{
+  "schemaVersion": 1,
+  "sourceRoot": "C:\\Users\\STG-ARTIST2\\.codex\\.chatgpt-projects\\g-p-6adee59199608191adb40cf4bf7dcd61",
+  "runtimeRoot": "app/src/main/assets",
+  "importPolicy": "Byte-identical copy of approved sprite PNGs only; no masks, sheets, references or unused layers.",
+  "records": [
+    {
+      "characterId": "doro",
+      "state": "idle",
+      "sourcePath": "output/pet-assets-v1/pets/doro/idle.png",
+      "runtimePath": "pets/doro/idle.png",
+      "sha256": "b2afd023914aafbc558a778edd8456f7ea61cfc665d017aacfe9c0c8dac20cdc",
+      "runtimeSha256": "b2afd023914aafbc558a778edd8456f7ea61cfc665d017aacfe9c0c8dac20cdc",
+      "bytes": 159649,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        92,
+        456,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 81597,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "doro",
+          "state": "idle",
+          "sourceSheet": "sheets/doro_states_v1.png",
+          "sourceCrop": {
+            "x": 0,
+            "y": 46,
+            "width": 512,
+            "height": 466
+          },
+          "outputPath": "pets/doro/idle.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            92,
+            456,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "doro",
+          "name": "Doro",
+          "referencePage": "https://gengtu.net/memes/doro-q3v4/",
+          "localReference": "references/doro.jpg",
+          "identityInvariants": "粉色短发，紫眼，画面左侧玫瑰与蝴蝶结，白色短肢身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "doro",
+      "state": "water",
+      "sourcePath": "output/pet-assets-v1/pets/doro/water.png",
+      "runtimePath": "pets/doro/water.png",
+      "sha256": "f10847b8e74bbc7f52797da46edd8f1a65d1ee200b63cfe0f3ff7565e2070267",
+      "runtimeSha256": "f10847b8e74bbc7f52797da46edd8f1a65d1ee200b63cfe0f3ff7565e2070267",
+      "bytes": 166003,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        69,
+        456,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 83924,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "doro",
+          "state": "water",
+          "sourceSheet": "sheets/doro_states_v1.png",
+          "sourceCrop": {
+            "x": 512,
+            "y": 17,
+            "width": 512,
+            "height": 495
+          },
+          "outputPath": "pets/doro/water.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            69,
+            456,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "doro",
+          "name": "Doro",
+          "referencePage": "https://gengtu.net/memes/doro-q3v4/",
+          "localReference": "references/doro.jpg",
+          "identityInvariants": "粉色短发，紫眼，画面左侧玫瑰与蝴蝶结，白色短肢身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "doro",
+      "state": "fruit",
+      "sourcePath": "output/pet-assets-v1/pets/doro/fruit.png",
+      "runtimePath": "pets/doro/fruit.png",
+      "sha256": "175f995ec556904f299b5962f13f9f811aef03dcf05d6fc124e422efb140979d",
+      "runtimeSha256": "175f995ec556904f299b5962f13f9f811aef03dcf05d6fc124e422efb140979d",
+      "bytes": 161451,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        57,
+        72,
+        430,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 82225,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "doro",
+          "state": "fruit",
+          "sourceSheet": "sheets/doro_states_v1.png",
+          "sourceCrop": {
+            "x": 1025,
+            "y": 21,
+            "width": 478,
+            "height": 491
+          },
+          "outputPath": "pets/doro/fruit.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            57,
+            72,
+            430,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "doro",
+          "name": "Doro",
+          "referencePage": "https://gengtu.net/memes/doro-q3v4/",
+          "localReference": "references/doro.jpg",
+          "identityInvariants": "粉色短发，紫眼，画面左侧玫瑰与蝴蝶结，白色短肢身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "doro",
+      "state": "remind",
+      "sourcePath": "output/pet-assets-v1/pets/doro/remind.png",
+      "runtimePath": "pets/doro/remind.png",
+      "sha256": "a7e66303551501a0ce299cb0ec1de39ba043ab1697015e905a9e15d62bf2e0f1",
+      "runtimeSha256": "a7e66303551501a0ce299cb0ec1de39ba043ab1697015e905a9e15d62bf2e0f1",
+      "bytes": 161727,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        80,
+        56,
+        456,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 82509,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "doro",
+          "state": "remind",
+          "sourceSheet": "sheets/doro_states_v1.png",
+          "sourceCrop": {
+            "x": 29,
+            "y": 512,
+            "width": 483,
+            "height": 512
+          },
+          "outputPath": "pets/doro/remind.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            80,
+            56,
+            456,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "doro",
+          "name": "Doro",
+          "referencePage": "https://gengtu.net/memes/doro-q3v4/",
+          "localReference": "references/doro.jpg",
+          "identityInvariants": "粉色短发，紫眼，画面左侧玫瑰与蝴蝶结，白色短肢身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "doro",
+      "state": "satisfied",
+      "sourcePath": "output/pet-assets-v1/pets/doro/satisfied.png",
+      "runtimePath": "pets/doro/satisfied.png",
+      "sha256": "8d0437ee698d4eefc3c20a09c144d1b2aa956bf71b5ddff5087ada8ea7acbfc4",
+      "runtimeSha256": "8d0437ee698d4eefc3c20a09c144d1b2aa956bf71b5ddff5087ada8ea7acbfc4",
+      "bytes": 159113,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        76,
+        456,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79760,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "doro",
+          "state": "satisfied",
+          "sourceSheet": "sheets/doro_states_v1.png",
+          "sourceCrop": {
+            "x": 512,
+            "y": 512,
+            "width": 512,
+            "height": 486
+          },
+          "outputPath": "pets/doro/satisfied.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            76,
+            456,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "doro",
+          "name": "Doro",
+          "referencePage": "https://gengtu.net/memes/doro-q3v4/",
+          "localReference": "references/doro.jpg",
+          "identityInvariants": "粉色短发，紫眼，画面左侧玫瑰与蝴蝶结，白色短肢身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "grudge_panda",
+      "state": "idle",
+      "sourcePath": "output/pet-assets-v1/pets/grudge_panda/idle.png",
+      "runtimePath": "pets/grudge_panda/idle.png",
+      "sha256": "34871ba2014654b94c6f19a3a2dd39290f50eca554d503a03290c7ba48a0e46d",
+      "runtimeSha256": "34871ba2014654b94c6f19a3a2dd39290f50eca554d503a03290c7ba48a0e46d",
+      "bytes": 136604,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        75,
+        456,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 91692,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "grudge_panda",
+          "state": "idle",
+          "sourceSheet": "sheets/grudge_panda_states_v1.png",
+          "sourceCrop": {
+            "x": 0,
+            "y": 23,
+            "width": 512,
+            "height": 488
+          },
+          "outputPath": "pets/grudge_panda/idle.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            75,
+            456,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "grudge_panda",
+          "name": "记仇熊猫头",
+          "referencePage": "https://www.lovebykin.com/652930716/",
+          "localReference": "references/grudge_panda.jpg",
+          "identityInvariants": "白色大头，黑耳与黑臂，人脸眉眼和微笑，记事本",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "grudge_panda",
+      "state": "opening",
+      "sourcePath": "output/pet-assets-v1/pets/grudge_panda/opening.png",
+      "runtimePath": "pets/grudge_panda/opening.png",
+      "sha256": "d0ecbdb8ab4da9124a9ab84a784a7f14e14ce4ee77ba862f2f244817974dff75",
+      "runtimeSha256": "d0ecbdb8ab4da9124a9ab84a784a7f14e14ce4ee77ba862f2f244817974dff75",
+      "bytes": 144365,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        74,
+        453,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 92517,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "grudge_panda",
+          "state": "opening",
+          "sourceSheet": "sheets/grudge_panda_states_v1.png",
+          "sourceCrop": {
+            "x": 512,
+            "y": 23,
+            "width": 508,
+            "height": 489
+          },
+          "outputPath": "pets/grudge_panda/opening.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            74,
+            453,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "grudge_panda",
+          "name": "记仇熊猫头",
+          "referencePage": "https://www.lovebykin.com/652930716/",
+          "localReference": "references/grudge_panda.jpg",
+          "identityInvariants": "白色大头，黑耳与黑臂，人脸眉眼和微笑，记事本",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "grudge_panda",
+      "state": "writing",
+      "sourcePath": "output/pet-assets-v1/pets/grudge_panda/writing.png",
+      "runtimePath": "pets/grudge_panda/writing.png",
+      "sha256": "9c625ba64a7e61a2d3a2d36f850dc38e779f7fec265fb06369c1025245049eb0",
+      "runtimeSha256": "9c625ba64a7e61a2d3a2d36f850dc38e779f7fec265fb06369c1025245049eb0",
+      "bytes": 144976,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        57,
+        77,
+        428,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 92256,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "grudge_panda",
+          "state": "writing",
+          "sourceSheet": "sheets/grudge_panda_states_v1.png",
+          "sourceCrop": {
+            "x": 1025,
+            "y": 27,
+            "width": 475,
+            "height": 485
+          },
+          "outputPath": "pets/grudge_panda/writing.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            57,
+            77,
+            428,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "grudge_panda",
+          "name": "记仇熊猫头",
+          "referencePage": "https://www.lovebykin.com/652930716/",
+          "localReference": "references/grudge_panda.jpg",
+          "identityInvariants": "白色大头，黑耳与黑臂，人脸眉眼和微笑，记事本",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "grudge_panda",
+      "state": "recording",
+      "sourcePath": "output/pet-assets-v1/pets/grudge_panda/recording.png",
+      "runtimePath": "pets/grudge_panda/recording.png",
+      "sha256": "d9eb889f24a7032749f0683f464d8641bb8535248c5dbd771c995ec966929ac7",
+      "runtimeSha256": "d9eb889f24a7032749f0683f464d8641bb8535248c5dbd771c995ec966929ac7",
+      "bytes": 131975,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        60,
+        444,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 93732,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "grudge_panda",
+          "state": "recording",
+          "sourceSheet": "sheets/grudge_panda_states_v1.png",
+          "sourceCrop": {
+            "x": 0,
+            "y": 517,
+            "width": 496,
+            "height": 507
+          },
+          "outputPath": "pets/grudge_panda/recording.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            60,
+            444,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "grudge_panda",
+          "name": "记仇熊猫头",
+          "referencePage": "https://www.lovebykin.com/652930716/",
+          "localReference": "references/grudge_panda.jpg",
+          "identityInvariants": "白色大头，黑耳与黑臂，人脸眉眼和微笑，记事本",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "grudge_panda",
+      "state": "saved",
+      "sourcePath": "output/pet-assets-v1/pets/grudge_panda/saved.png",
+      "runtimePath": "pets/grudge_panda/saved.png",
+      "sha256": "41852104968cb03b156672cf1774c9c084a8aeafe3457ce91250bd9c44244378",
+      "runtimeSha256": "41852104968cb03b156672cf1774c9c084a8aeafe3457ce91250bd9c44244378",
+      "bytes": 136422,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        57,
+        56,
+        456,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 92806,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "grudge_panda",
+          "state": "saved",
+          "sourceSheet": "sheets/grudge_panda_states_v1.png",
+          "sourceCrop": {
+            "x": 513,
+            "y": 512,
+            "width": 511,
+            "height": 512
+          },
+          "outputPath": "pets/grudge_panda/saved.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            57,
+            56,
+            456,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "grudge_panda",
+          "name": "记仇熊猫头",
+          "referencePage": "https://www.lovebykin.com/652930716/",
+          "localReference": "references/grudge_panda.jpg",
+          "identityInvariants": "白色大头，黑耳与黑臂，人脸眉眼和微笑，记事本",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "grudge_panda",
+      "state": "tearing",
+      "sourcePath": "output/pet-assets-v1/pets/grudge_panda/tearing.png",
+      "runtimePath": "pets/grudge_panda/tearing.png",
+      "sha256": "d548f8fe315f8ddfc2046b507fb5c398820257cfb2a31972ec1f911da5c4a169",
+      "runtimeSha256": "d548f8fe315f8ddfc2046b507fb5c398820257cfb2a31972ec1f911da5c4a169",
+      "bytes": 140636,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        57,
+        76,
+        450,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 95254,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "grudge_panda",
+          "state": "tearing",
+          "sourceSheet": "sheets/grudge_panda_states_v1.png",
+          "sourceCrop": {
+            "x": 1025,
+            "y": 512,
+            "width": 503,
+            "height": 486
+          },
+          "outputPath": "pets/grudge_panda/tearing.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            57,
+            76,
+            450,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "grudge_panda",
+          "name": "记仇熊猫头",
+          "referencePage": "https://www.lovebykin.com/652930716/",
+          "localReference": "references/grudge_panda.jpg",
+          "identityInvariants": "白色大头，黑耳与黑臂，人脸眉眼和微笑，记事本",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "idle",
+      "sourcePath": "output/pet-assets-v1/pets/spinning_cat/idle.png",
+      "runtimePath": "pets/spinning_cat/idle.png",
+      "sha256": "df1d1bba4f8119e1ebc0493b9ae01cc9a1e7fabdcacc813500b592ca7bc6509e",
+      "runtimeSha256": "df1d1bba4f8119e1ebc0493b9ae01cc9a1e7fabdcacc813500b592ca7bc6509e",
+      "bytes": 129582,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        71,
+        77,
+        456,
+        439
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 67592,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "spinning_cat",
+          "state": "idle",
+          "sourceSheet": "sheets/spinning_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 9,
+            "y": 17,
+            "width": 878,
+            "height": 840
+          },
+          "outputPath": "pets/spinning_cat/idle.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            71,
+            77,
+            456,
+            439
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.4509582863585118,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "spinning_cat",
+          "name": "旋转猫",
+          "referencePage": "https://tenor.com/es-MX/view/cat-oiiaoiia-cat-cat-spinning-gif-7952242942163821023",
+          "localReference": "references/spinning_cat.png",
+          "identityInvariants": "Oiia 虎斑猫，棕灰条纹，额头 M 纹，短足、浅色下巴和趾尖",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "calm",
+      "sourcePath": "output/pet-assets-v1/pets/spinning_cat/calm.png",
+      "runtimePath": "pets/spinning_cat/calm.png",
+      "sha256": "2057d1e4e372820faddfaf40ff7c185b7fd1c71c09d5d1c5177a5ea284d26401",
+      "runtimeSha256": "2057d1e4e372820faddfaf40ff7c185b7fd1c71c09d5d1c5177a5ea284d26401",
+      "bytes": 128382,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        56,
+        74,
+        433,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 67312,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "spinning_cat",
+          "state": "calm",
+          "sourceSheet": "sheets/spinning_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 887,
+            "y": 17,
+            "width": 869,
+            "height": 850
+          },
+          "outputPath": "pets/spinning_cat/calm.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            56,
+            74,
+            433,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.4509582863585118,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "spinning_cat",
+          "name": "旋转猫",
+          "referencePage": "https://tenor.com/es-MX/view/cat-oiiaoiia-cat-cat-spinning-gif-7952242942163821023",
+          "localReference": "references/spinning_cat.png",
+          "identityInvariants": "Oiia 虎斑猫，棕灰条纹，额头 M 纹，短足、浅色下巴和趾尖",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_00",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_00.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_00.png",
+      "sha256": "a915cc63e5a74b3119e4ac840b7db1be2a03be604bf702eea2c2c8e60f74c1c4",
+      "runtimeSha256": "a915cc63e5a74b3119e4ac840b7db1be2a03be604bf702eea2c2c8e60f74c1c4",
+      "bytes": 54257,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        44,
+        45,
+        213,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 24146,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 0,
+          "file": "frames/spin_00.png",
+          "durationMs": 40,
+          "sourceRect": [
+            0,
+            0,
+            444,
+            443
+          ],
+          "sourceCrop": [
+            88,
+            73,
+            402,
+            396
+          ],
+          "scale": 0.536741214057508,
+          "placement": [
+            44,
+            45
+          ],
+          "centreX": 128.02874095041096,
+          "bottom": 215,
+          "height": 167
+        },
+        "frame": {
+          "file": "frames/spin_00.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_01",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_01.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_01.png",
+      "sha256": "1ee9091f845ee4706053eab5eeaf022b8d3e64aa7bf28ed93fb80179078422fe",
+      "runtimeSha256": "1ee9091f845ee4706053eab5eeaf022b8d3e64aa7bf28ed93fb80179078422fe",
+      "bytes": 58692,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        28,
+        45,
+        222,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 26255,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 1,
+          "file": "frames/spin_01.png",
+          "durationMs": 40,
+          "sourceRect": [
+            444,
+            0,
+            887,
+            443
+          ],
+          "sourceCrop": [
+            21,
+            73,
+            389,
+            402
+          ],
+          "scale": 0.5266457680250783,
+          "placement": [
+            28,
+            45
+          ],
+          "centreX": 127.42070805043647,
+          "bottom": 215,
+          "height": 167
+        },
+        "frame": {
+          "file": "frames/spin_01.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_02",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_02.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_02.png",
+      "sha256": "58d4a00e69e4ea1f1753bd8356e22b54abf1658bfcd4f78cd7f4571b7596f2b4",
+      "runtimeSha256": "58d4a00e69e4ea1f1753bd8356e22b54abf1658bfcd4f78cd7f4571b7596f2b4",
+      "bytes": 54797,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        29,
+        45,
+        222,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25221,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 2,
+          "file": "frames/spin_02.png",
+          "durationMs": 40,
+          "sourceRect": [
+            887,
+            0,
+            1330,
+            443
+          ],
+          "sourceCrop": [
+            14,
+            74,
+            381,
+            403
+          ],
+          "scale": 0.5266457680250783,
+          "placement": [
+            29,
+            45
+          ],
+          "centreX": 127.43321372618385,
+          "bottom": 215,
+          "height": 167
+        },
+        "frame": {
+          "file": "frames/spin_02.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_03",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_03.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_03.png",
+      "sha256": "e2117aeafc61bd566dc576f0d29ca6ab731d48da9a442992daed9b4e4ea4a49d",
+      "runtimeSha256": "e2117aeafc61bd566dc576f0d29ca6ab731d48da9a442992daed9b4e4ea4a49d",
+      "bytes": 51797,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        27,
+        45,
+        222,
+        219
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25818,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 3,
+          "file": "frames/spin_03.png",
+          "durationMs": 40,
+          "sourceRect": [
+            1330,
+            0,
+            1774,
+            443
+          ],
+          "sourceCrop": [
+            28,
+            73,
+            393,
+            398
+          ],
+          "scale": 0.535031847133758,
+          "placement": [
+            27,
+            45
+          ],
+          "centreX": 127.56477854775535,
+          "bottom": 216,
+          "height": 168
+        },
+        "frame": {
+          "file": "frames/spin_03.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_04",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_04.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_04.png",
+      "sha256": "a0e6aa762e5e3cb3adc8873ac5f99125f32c4a13b474f37c602d80d2389b2350",
+      "runtimeSha256": "a0e6aa762e5e3cb3adc8873ac5f99125f32c4a13b474f37c602d80d2389b2350",
+      "bytes": 50293,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        42,
+        45,
+        217,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 24779,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 4,
+          "file": "frames/spin_04.png",
+          "durationMs": 40,
+          "sourceRect": [
+            0,
+            443,
+            444,
+            887
+          ],
+          "sourceCrop": [
+            78,
+            25,
+            411,
+            355
+          ],
+          "scale": 0.525,
+          "placement": [
+            42,
+            45
+          ],
+          "centreX": 128.29310712761418,
+          "bottom": 215,
+          "height": 167
+        },
+        "frame": {
+          "file": "frames/spin_04.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_05",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_05.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_05.png",
+      "sha256": "eb768036f6e46d65eb83327de7b9a11b2d70afe177e52aef711ba09a88be6698",
+      "runtimeSha256": "eb768036f6e46d65eb83327de7b9a11b2d70afe177e52aef711ba09a88be6698",
+      "bytes": 52246,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        33,
+        45,
+        228,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25366,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 5,
+          "file": "frames/spin_05.png",
+          "durationMs": 40,
+          "sourceRect": [
+            444,
+            443,
+            887,
+            887
+          ],
+          "sourceCrop": [
+            49,
+            29,
+            419,
+            358
+          ],
+          "scale": 0.5266457680250783,
+          "placement": [
+            33,
+            45
+          ],
+          "centreX": 127.97128564282141,
+          "bottom": 216,
+          "height": 169
+        },
+        "frame": {
+          "file": "frames/spin_05.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_06",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_06.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_06.png",
+      "sha256": "459fcf22dccac72b657ea863f71a0abed534413d0bc3e6935f5f2a8a56319ca5",
+      "runtimeSha256": "459fcf22dccac72b657ea863f71a0abed534413d0bc3e6935f5f2a8a56319ca5",
+      "bytes": 53741,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        33,
+        45,
+        231,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25746,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 6,
+          "file": "frames/spin_06.png",
+          "durationMs": 40,
+          "sourceRect": [
+            887,
+            443,
+            1330,
+            887
+          ],
+          "sourceCrop": [
+            47,
+            26,
+            426,
+            358
+          ],
+          "scale": 0.5217391304347826,
+          "placement": [
+            33,
+            45
+          ],
+          "centreX": 127.78316441160318,
+          "bottom": 216,
+          "height": 168
+        },
+        "frame": {
+          "file": "frames/spin_06.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "spinning_cat",
+      "state": "animation_07",
+      "sourcePath": "output/spinning-cat-v4/frames/spin_07.png",
+      "runtimePath": "pets/spinning_cat/animation/spin_07.png",
+      "sha256": "2cd53d11ba1f44e122f5014deaf4495d671b96da6878e98c47ff8d319b1c5ff4",
+      "runtimeSha256": "2cd53d11ba1f44e122f5014deaf4495d671b96da6878e98c47ff8d319b1c5ff4",
+      "bytes": 57209,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        32,
+        45,
+        226,
+        218
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.84375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25850,
+      "transparentBorder": true,
+      "assetVersion": 4,
+      "provenance": {
+        "sourceAnimation": "output/spinning-cat-v4/animation.json",
+        "sourcePreparation": {
+          "index": 7,
+          "file": "frames/spin_07.png",
+          "durationMs": 40,
+          "sourceRect": [
+            1330,
+            443,
+            1774,
+            887
+          ],
+          "sourceCrop": [
+            40,
+            26,
+            414,
+            360
+          ],
+          "scale": 0.5185185185185185,
+          "placement": [
+            32,
+            45
+          ],
+          "centreX": 127.77101950135769,
+          "bottom": 216,
+          "height": 168
+        },
+        "frame": {
+          "file": "frames/spin_07.png",
+          "durationMs": 40
+        },
+        "notes": [
+          "Regenerated eight-phase spin with consistent directional blur.",
+          "Use one fixed collider; do not collide against blur tails.",
+          "Disable spin for calm/comfort mode.",
+          "The 320ms period is 2.5x faster than v3; source artwork is preserved separately."
+        ]
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "sweating",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/sweating.png",
+      "runtimePath": "pets/sweat_emoji/sweating.png",
+      "sha256": "71ffda9d76e695806d7b44a1974ed74372786eafc94ab20ae702572cec1624bb",
+      "runtimeSha256": "71ffda9d76e695806d7b44a1974ed74372786eafc94ab20ae702572cec1624bb",
+      "bytes": 124609,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        116,
+        143,
+        440,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79737,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "sweating",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 56,
+            "y": 79,
+            "width": 354,
+            "height": 342
+          },
+          "outputPath": "pets/sweat_emoji/sweating.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            116,
+            143,
+            440,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "happy",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/happy.png",
+      "runtimePath": "pets/sweat_emoji/happy.png",
+      "sha256": "bf811b74d7b851efba7b8c13b4d7ebc8a017a42c14f72ee727f66bbe27871df4",
+      "runtimeSha256": "bf811b74d7b851efba7b8c13b4d7ebc8a017a42c14f72ee727f66bbe27871df4",
+      "bytes": 115906,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        96,
+        87,
+        416,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 77973,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "happy",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 452,
+            "y": 25,
+            "width": 350,
+            "height": 403
+          },
+          "outputPath": "pets/sweat_emoji/happy.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            96,
+            87,
+            416,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "sad",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/sad.png",
+      "runtimePath": "pets/sweat_emoji/sad.png",
+      "sha256": "ebb06f1205fd541bca0a716109239370b1c7a805739432c7c8a98a7e7c231d51",
+      "runtimeSha256": "ebb06f1205fd541bca0a716109239370b1c7a805739432c7c8a98a7e7c231d51",
+      "bytes": 120723,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        71,
+        127,
+        418,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 78231,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "sad",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 843,
+            "y": 79,
+            "width": 379,
+            "height": 359
+          },
+          "outputPath": "pets/sweat_emoji/sad.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            71,
+            127,
+            418,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "angry",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/angry.png",
+      "runtimePath": "pets/sweat_emoji/angry.png",
+      "sha256": "c0d810646a9688f15b92582c72b67e89acbf42b13113edfd219888ddde904062",
+      "runtimeSha256": "c0d810646a9688f15b92582c72b67e89acbf42b13113edfd219888ddde904062",
+      "bytes": 116864,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        119,
+        138,
+        442,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 78962,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "angry",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 59,
+            "y": 455,
+            "width": 353,
+            "height": 347
+          },
+          "outputPath": "pets/sweat_emoji/angry.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            119,
+            138,
+            442,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "speechless",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/speechless.png",
+      "runtimePath": "pets/sweat_emoji/speechless.png",
+      "sha256": "b794394e51432b88a439cf27df33ce58e910d3f73f8255a7f8767faeb5e1df0a",
+      "runtimeSha256": "b794394e51432b88a439cf27df33ce58e910d3f73f8255a7f8767faeb5e1df0a",
+      "bytes": 109885,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        94,
+        127,
+        417,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79571,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "speechless",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 450,
+            "y": 455,
+            "width": 353,
+            "height": 359
+          },
+          "outputPath": "pets/sweat_emoji/speechless.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            94,
+            127,
+            417,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "sleepy",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/sleepy.png",
+      "runtimePath": "pets/sweat_emoji/sleepy.png",
+      "sha256": "b90a5694efff764f2cb76b849ea45d65eb592ea45ed3dd4358dadb23f82dfe48",
+      "runtimeSha256": "b90a5694efff764f2cb76b849ea45d65eb592ea45ed3dd4358dadb23f82dfe48",
+      "bytes": 112856,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        70,
+        122,
+        420,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79414,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "sleepy",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 842,
+            "y": 439,
+            "width": 382,
+            "height": 365
+          },
+          "outputPath": "pets/sweat_emoji/sleepy.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            70,
+            122,
+            420,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "shy",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/shy.png",
+      "runtimePath": "pets/sweat_emoji/shy.png",
+      "sha256": "c71964a0e352d9abf0105032bc8aefeebeddc2985df086e45c70e40ee16ca4e0",
+      "runtimeSha256": "c71964a0e352d9abf0105032bc8aefeebeddc2985df086e45c70e40ee16ca4e0",
+      "bytes": 118763,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        112,
+        138,
+        445,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79657,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "shy",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 52,
+            "y": 836,
+            "width": 364,
+            "height": 347
+          },
+          "outputPath": "pets/sweat_emoji/shy.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            112,
+            138,
+            445,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "sweat_emoji",
+      "state": "shocked",
+      "sourcePath": "output/pet-assets-v1/pets/sweat_emoji/shocked.png",
+      "runtimePath": "pets/sweat_emoji/shocked.png",
+      "sha256": "3ed5d904616ad6d18313f979b8d5438d41117be805b42fe87ca08246010b1b23",
+      "runtimeSha256": "3ed5d904616ad6d18313f979b8d5438d41117be805b42fe87ca08246010b1b23",
+      "bytes": 126644,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        94,
+        88,
+        441,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79868,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "sweat_emoji",
+          "state": "shocked",
+          "sourceSheet": "sheets/sweat_emoji_states_v1.png",
+          "sourceCrop": {
+            "x": 450,
+            "y": 834,
+            "width": 379,
+            "height": 402
+          },
+          "outputPath": "pets/sweat_emoji/shocked.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            94,
+            88,
+            441,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.9153318077803204,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "sweat_emoji",
+          "name": "流汗黄豆",
+          "referencePage": "https://cj.sina.com.cn/articles/view/2849964471/a9df01b701901a3a0",
+          "localReference": "references/sweat_emoji.png",
+          "identityInvariants": "圆形黄脸，眯眼笑，露齿，画面右上蓝色汗滴，无身体",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "idle",
+      "sourcePath": "output/pet-assets-v1/pets/kinship_ride/idle.png",
+      "runtimePath": "pets/kinship_ride/idle.png",
+      "sha256": "fd79d72623e6d6862e9ce9db8b13f3b7f0fe24a078728ade80effca304a902fd",
+      "runtimeSha256": "fd79d72623e6d6862e9ce9db8b13f3b7f0fe24a078728ade80effca304a902fd",
+      "bytes": 158999,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        50,
+        94,
+        438,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 91909,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "kinship_ride",
+          "state": "idle",
+          "sourceSheet": "sheets/kinship_ride_states_v1.png",
+          "sourceCrop": {
+            "x": 0,
+            "y": 51,
+            "width": 683,
+            "height": 637
+          },
+          "outputPath": "pets/kinship_ride/idle.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            50,
+            94,
+            438,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.5681818181818182,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "kinship_ride",
+          "name": "摇摇车",
+          "referencePage": "https://kr.made-in-china.com/co_hanseltech/product_Hansel-Coin-Operated-Kids-Rides-Amusement-Machines-Frog-Car_roiisigig.html",
+          "localReference": "references/kinship_ride.jpg",
+          "identityInvariants": "儿童投币摇摇车，青蛙脸小车、方向盘、座位、车轮、独立底座",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "calculating",
+      "sourcePath": "output/pet-assets-v1/pets/kinship_ride/calculating.png",
+      "runtimePath": "pets/kinship_ride/calculating.png",
+      "sha256": "fcbc65922be7c792dc9cdedfb99b1a485da6a82fe636a028674181af7552b3e9",
+      "runtimeSha256": "fcbc65922be7c792dc9cdedfb99b1a485da6a82fe636a028674181af7552b3e9",
+      "bytes": 158867,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        55,
+        94,
+        435,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 92491,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "kinship_ride",
+          "state": "calculating",
+          "sourceSheet": "sheets/kinship_ride_states_v1.png",
+          "sourceCrop": {
+            "x": 733,
+            "y": 51,
+            "width": 668,
+            "height": 637
+          },
+          "outputPath": "pets/kinship_ride/calculating.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            55,
+            94,
+            435,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.5681818181818182,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "kinship_ride",
+          "name": "摇摇车",
+          "referencePage": "https://kr.made-in-china.com/co_hanseltech/product_Hansel-Coin-Operated-Kids-Rides-Amusement-Machines-Frog-Car_roiisigig.html",
+          "localReference": "references/kinship_ride.jpg",
+          "identityInvariants": "儿童投币摇摇车，青蛙脸小车、方向盘、座位、车轮、独立底座",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "result",
+      "sourcePath": "output/pet-assets-v1/pets/kinship_ride/result.png",
+      "runtimePath": "pets/kinship_ride/result.png",
+      "sha256": "71f8a1e4124d9d59e46143b516e64dc44f16270a7ff71c83916041812704c19f",
+      "runtimeSha256": "71f8a1e4124d9d59e46143b516e64dc44f16270a7ff71c83916041812704c19f",
+      "bytes": 155142,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        66,
+        95,
+        451,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 92487,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "kinship_ride",
+          "state": "result",
+          "sourceSheet": "sheets/kinship_ride_states_v1.png",
+          "sourceCrop": {
+            "x": 1475,
+            "y": 50,
+            "width": 677,
+            "height": 636
+          },
+          "outputPath": "pets/kinship_ride/result.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            66,
+            95,
+            451,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.5681818181818182,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "kinship_ride",
+          "name": "摇摇车",
+          "referencePage": "https://kr.made-in-china.com/co_hanseltech/product_Hansel-Coin-Operated-Kids-Rides-Amusement-Machines-Frog-Car_roiisigig.html",
+          "localReference": "references/kinship_ride.jpg",
+          "identityInvariants": "儿童投币摇摇车，青蛙脸小车、方向盘、座位、车轮、独立底座",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_00",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_00.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_00.png",
+      "sha256": "a83368d369b5296b283b697cbc2c3cd410648ec15ac59034d591732c55cf9163",
+      "runtimeSha256": "a83368d369b5296b283b697cbc2c3cd410648ec15ac59034d591732c55cf9163",
+      "bytes": 55939,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        23,
+        30,
+        225,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25657,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_00.png",
+          "durationMs": 100,
+          "rotationDeg": 0.0,
+          "visibleBounds": [
+            23,
+            30,
+            225,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_01",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_01.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_01.png",
+      "sha256": "d3ea5aca919cbfce005870027193e754fb2336de496316ae7cb5086079376478",
+      "runtimeSha256": "d3ea5aca919cbfce005870027193e754fb2336de496316ae7cb5086079376478",
+      "bytes": 55782,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        20,
+        28,
+        221,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25585,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_01.png",
+          "durationMs": 100,
+          "rotationDeg": 4.94975,
+          "visibleBounds": [
+            20,
+            28,
+            221,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_02",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_02.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_02.png",
+      "sha256": "f690f1a94dd06aaeeb5b4c0339d1e08410b2be351afe3ca804cc9c9786288793",
+      "runtimeSha256": "f690f1a94dd06aaeeb5b4c0339d1e08410b2be351afe3ca804cc9c9786288793",
+      "bytes": 55872,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        19,
+        28,
+        220,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25546,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_02.png",
+          "durationMs": 100,
+          "rotationDeg": 7.0,
+          "visibleBounds": [
+            19,
+            28,
+            220,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_03",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_03.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_03.png",
+      "sha256": "d3ea5aca919cbfce005870027193e754fb2336de496316ae7cb5086079376478",
+      "runtimeSha256": "d3ea5aca919cbfce005870027193e754fb2336de496316ae7cb5086079376478",
+      "bytes": 55782,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        20,
+        28,
+        221,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25585,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_03.png",
+          "durationMs": 100,
+          "rotationDeg": 4.94975,
+          "visibleBounds": [
+            20,
+            28,
+            221,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_04",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_04.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_04.png",
+      "sha256": "a83368d369b5296b283b697cbc2c3cd410648ec15ac59034d591732c55cf9163",
+      "runtimeSha256": "a83368d369b5296b283b697cbc2c3cd410648ec15ac59034d591732c55cf9163",
+      "bytes": 55939,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        23,
+        30,
+        225,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25657,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_04.png",
+          "durationMs": 100,
+          "rotationDeg": 0.0,
+          "visibleBounds": [
+            23,
+            30,
+            225,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_05",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_05.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_05.png",
+      "sha256": "58940289b603d7815d40de816a20e258058030ff0cd72540eb7820cff5ff4693",
+      "runtimeSha256": "58940289b603d7815d40de816a20e258058030ff0cd72540eb7820cff5ff4693",
+      "bytes": 55782,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        26,
+        31,
+        227,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25672,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_05.png",
+          "durationMs": 100,
+          "rotationDeg": -4.94975,
+          "visibleBounds": [
+            26,
+            31,
+            227,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_06",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_06.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_06.png",
+      "sha256": "d5a3a1abbe7b2ae311b314bb4e1885aceaf83a1f9b2e7cd6682d91b3abbc0c87",
+      "runtimeSha256": "d5a3a1abbe7b2ae311b314bb4e1885aceaf83a1f9b2e7cd6682d91b3abbc0c87",
+      "bytes": 55826,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        27,
+        32,
+        229,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25688,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_06.png",
+          "durationMs": 100,
+          "rotationDeg": -7.0,
+          "visibleBounds": [
+            27,
+            32,
+            229,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "kinship_ride",
+      "state": "animation_07",
+      "sourcePath": "output/kinship-ride-animation-v1/frames/rock_07.png",
+      "runtimePath": "pets/kinship_ride/animation/rock_07.png",
+      "sha256": "58940289b603d7815d40de816a20e258058030ff0cd72540eb7820cff5ff4693",
+      "runtimeSha256": "58940289b603d7815d40de816a20e258058030ff0cd72540eb7820cff5ff4693",
+      "bytes": 55782,
+      "canvasSize": [
+        256,
+        256
+      ],
+      "visibleBounds": [
+        26,
+        31,
+        227,
+        232
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.8984375
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 25672,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "sourceAnimation": "output/kinship-ride-animation-v1/animation.json",
+        "sourcePreparation": {
+          "crops": [
+            {
+              "layer": "upper",
+              "sourceRect": [
+                0,
+                0,
+                938,
+                887
+              ],
+              "visibleCrop": [
+                61,
+                156,
+                892,
+                718
+              ]
+            },
+            {
+              "layer": "base",
+              "sourceRect": [
+                938,
+                0,
+                1774,
+                887
+              ],
+              "visibleCrop": [
+                50,
+                416,
+                774,
+                802
+              ]
+            }
+          ],
+          "sharedScale": 0.23756906077348067,
+          "basePosition": [
+            42.0,
+            138.25
+          ],
+          "upperPosition": [
+            25.25,
+            31.5
+          ],
+          "pivot": [
+            128.0,
+            146.25
+          ],
+          "supersampling": 4
+        },
+        "frame": {
+          "file": "frames/rock_07.png",
+          "durationMs": 100,
+          "rotationDeg": -4.94975,
+          "visibleBounds": [
+            26,
+            31,
+            227,
+            232
+          ]
+        },
+        "notes": [
+          "Base remains pixel-identical; only upper layer rocks.",
+          "Either play the baked PNG sequence or animate the two layers; do not apply both.",
+          "Keep collider stable; pause rocking while the kinship panel is open."
+        ]
+      }
+    },
+    {
+      "characterId": "thursday_bucket_cat",
+      "state": "idle",
+      "sourcePath": "output/pet-assets-v1/pets/thursday_bucket_cat/idle.png",
+      "runtimePath": "pets/thursday_bucket_cat/idle.png",
+      "sha256": "1b51024a724e0b9014cae2862404e24790fc82c7b721a124b68dd53133469322",
+      "runtimeSha256": "1b51024a724e0b9014cae2862404e24790fc82c7b721a124b68dd53133469322",
+      "bytes": 134972,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        82,
+        81,
+        441,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 79434,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "thursday_bucket_cat",
+          "state": "idle",
+          "sourceSheet": "sheets/thursday_bucket_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 33,
+            "y": 32,
+            "width": 459,
+            "height": 480
+          },
+          "outputPath": "pets/thursday_bucket_cat/idle.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            82,
+            81,
+            441,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "thursday_bucket_cat",
+          "name": "全家桶小猫",
+          "referencePage": "https://tenor.com/view/kfc-cat-kitten-gif-6821675047804930220",
+          "localReference": "references/thursday_bucket_cat.png",
+          "identityInvariants": "灰白小猫，白纸帽，白口鼻、粉鼻，红白桶",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "thursday_bucket_cat",
+      "state": "peek",
+      "sourcePath": "output/pet-assets-v1/pets/thursday_bucket_cat/peek.png",
+      "runtimePath": "pets/thursday_bucket_cat/peek.png",
+      "sha256": "190334914808fc2de60b26b136ee6e36d09f0b16385fabb1f3d01cbd612f0831",
+      "runtimeSha256": "190334914808fc2de60b26b136ee6e36d09f0b16385fabb1f3d01cbd612f0831",
+      "bytes": 140786,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        103,
+        99,
+        451,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 83190,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "thursday_bucket_cat",
+          "state": "peek",
+          "sourceSheet": "sheets/thursday_bucket_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 572,
+            "y": 31,
+            "width": 446,
+            "height": 457
+          },
+          "outputPath": "pets/thursday_bucket_cat/peek.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            103,
+            99,
+            451,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "thursday_bucket_cat",
+          "name": "全家桶小猫",
+          "referencePage": "https://tenor.com/view/kfc-cat-kitten-gif-6821675047804930220",
+          "localReference": "references/thursday_bucket_cat.png",
+          "identityInvariants": "灰白小猫，白纸帽，白口鼻、粉鼻，红白桶",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "thursday_bucket_cat",
+      "state": "excited",
+      "sourcePath": "output/pet-assets-v1/pets/thursday_bucket_cat/excited.png",
+      "runtimePath": "pets/thursday_bucket_cat/excited.png",
+      "sha256": "f8adf553f331c833f243dbea2e0f3f42cf35d57a3ea358625b82fe7b42a1727e",
+      "runtimeSha256": "f8adf553f331c833f243dbea2e0f3f42cf35d57a3ea358625b82fe7b42a1727e",
+      "bytes": 143028,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        90,
+        102,
+        416,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 83578,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "thursday_bucket_cat",
+          "state": "excited",
+          "sourceSheet": "sheets/thursday_bucket_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 1067,
+            "y": 32,
+            "width": 421,
+            "height": 453
+          },
+          "outputPath": "pets/thursday_bucket_cat/excited.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            90,
+            102,
+            416,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "thursday_bucket_cat",
+          "name": "全家桶小猫",
+          "referencePage": "https://tenor.com/view/kfc-cat-kitten-gif-6821675047804930220",
+          "localReference": "references/thursday_bucket_cat.png",
+          "identityInvariants": "灰白小猫，白纸帽，白口鼻、粉鼻，红白桶",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "thursday_bucket_cat",
+      "state": "crazy",
+      "sourcePath": "output/pet-assets-v1/pets/thursday_bucket_cat/crazy.png",
+      "runtimePath": "pets/thursday_bucket_cat/crazy.png",
+      "sha256": "2b922fd7a255858ad11d87d4070c25867b9b32736844ff8b59f1950b19b41fd7",
+      "runtimeSha256": "2b922fd7a255858ad11d87d4070c25867b9b32736844ff8b59f1950b19b41fd7",
+      "bytes": 157291,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        113,
+        83,
+        447,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 94232,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "thursday_bucket_cat",
+          "state": "crazy",
+          "sourceSheet": "sheets/thursday_bucket_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 73,
+            "y": 512,
+            "width": 428,
+            "height": 478
+          },
+          "outputPath": "pets/thursday_bucket_cat/crazy.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            113,
+            83,
+            447,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "thursday_bucket_cat",
+          "name": "全家桶小猫",
+          "referencePage": "https://tenor.com/view/kfc-cat-kitten-gif-6821675047804930220",
+          "localReference": "references/thursday_bucket_cat.png",
+          "identityInvariants": "灰白小猫，白纸帽，白口鼻、粉鼻，红白桶",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    },
+    {
+      "characterId": "thursday_bucket_cat",
+      "state": "calm",
+      "sourcePath": "output/pet-assets-v1/pets/thursday_bucket_cat/calm.png",
+      "runtimePath": "pets/thursday_bucket_cat/calm.png",
+      "sha256": "032f1ef3ad98dca3ecba80c31f94add7095e87b5d765a68223662c98b3935792",
+      "runtimeSha256": "032f1ef3ad98dca3ecba80c31f94add7095e87b5d765a68223662c98b3935792",
+      "bytes": 134992,
+      "canvasSize": [
+        512,
+        512
+      ],
+      "visibleBounds": [
+        72,
+        112,
+        419,
+        456
+      ],
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "alphaRange": [
+        0,
+        255
+      ],
+      "semitransparentPixels": 81223,
+      "transparentBorder": true,
+      "assetVersion": 1,
+      "provenance": {
+        "crop": {
+          "characterId": "thursday_bucket_cat",
+          "state": "calm",
+          "sourceSheet": "sheets/thursday_bucket_cat_states_v1.png",
+          "sourceCrop": {
+            "x": 533,
+            "y": 550,
+            "width": 444,
+            "height": 440
+          },
+          "outputPath": "pets/thursday_bucket_cat/calm.png",
+          "canvasSize": [
+            512,
+            512
+          ],
+          "visibleBounds": [
+            72,
+            112,
+            419,
+            456
+          ],
+          "anchor": {
+            "x": 0.5,
+            "y": 0.890625
+          },
+          "scale": 0.78125,
+          "alphaRange": [
+            0,
+            255
+          ],
+          "transparentBorder": true,
+          "reviewStatus": "technical_checked_visual_review",
+          "assetVersion": 1
+        },
+        "referenceCard": {
+          "id": "thursday_bucket_cat",
+          "name": "全家桶小猫",
+          "referencePage": "https://tenor.com/view/kfc-cat-kitten-gif-6821675047804930220",
+          "localReference": "references/thursday_bucket_cat.png",
+          "identityInvariants": "灰白小猫，白纸帽，白口鼻、粉鼻，红白桶",
+          "referenceStatus": "selected_for_v1",
+          "visualReview": "v1_previewed",
+          "releaseReview": "pending",
+          "style": "简单卡通手绘、深色粗描边、少量色块",
+          "productionMethod": "whole_state_sprites"
+        }
+      }
+    }
+  ]
+}

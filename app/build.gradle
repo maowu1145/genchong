@@ -4,18 +4,21 @@ plugins {
 
 android {
     namespace 'com.maowu.gravitypet'
-    compileSdk 35
-    buildToolsVersion '35.0.0'
+    compileSdk 36
+    buildToolsVersion '36.0.0'
+
+    // Keep upstream code available for comparison, without shipping its retired cloud/UI paths.
+    sourceSets {
+        main.java.setSrcDirs(['src/main/java/com/maowu/gravitypet/gengpet'])
+        main.res.setSrcDirs(['src/gengpet/res'])
+    }
 
     defaultConfig {
-        applicationId "com.maowu.gravitypet"
+        applicationId "com.maowu.gengpet"
         minSdk 26
-        targetSdk 35
-        versionCode 84
-        versionName "5.3.5"
-        ndk {
-            abiFilters 'arm64-v8a'
-        }
+        targetSdk 36
+        versionCode 1
+        versionName "0.1.0"
     }
 
     buildTypes {

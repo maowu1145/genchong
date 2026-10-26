@@ -1,0 +1,61 @@
+TOOLS IMPLEMENTATION - completed code / integration handoff, 2026-10-26
+All tools sources now exist under com.maowu.gravitypet.gengpet; no Gradle run, no manifest edits, no shared-file edits, no Git mutations.
+
+Manifest declarations required by main:
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+RECORD_AUDIO and POST_NOTIFICATIONS already required; no exact-alarm permission or microphone service needed.
+<activity android:name=".gengpet.FeatureActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+<receiver android:name=".gengpet.ReminderReceiver" android:exported="false">
+  <intent-filter>
+    <action android:name="android.intent.action.BOOT_COMPLETED" />
+    <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+    <action android:name="android.intent.action.TIME_SET" />
+    <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+    <action android:name="android.intent.action.DATE_CHANGED" />
+  </intent-filter>
+</receiver>
+<provider android:name=".gengpet.RecordingShareProvider" android:authorities="${applicationId}.gengpet.recordings" android:exported="false" android:grantUriPermissions="true" />
+
+Shared integration:
+- FeatureActivity.open(Context, characterId, instanceId). Empty/unknown character opens all six tools. No UiKit methods beyond contract.
+- Call ReminderScheduler.reschedule(Context) at main startup. It reschedules only user-enabled reminders; it never starts overlay or microphone. Overlay screen-on/resume/reload calls public ReminderScheduler.deliverPendingFeedback(Context) after slots are ready, to show only the newest meaningful reminder missed during screen-off. The method checks canReceiveFeedback("doro") BEFORE writing reminder_latest_feedback and never starts a service. ReminderReceiver uses this same method rather than broadcasting directly, so main startup, alarm receiver, and overlay resume all share the readiness gate. Separately opted-in background notifications remain available without a Doro window.
+- PetStore.add for sweat_emoji should initialize mood from mood_default (default sweating) and moodText from mood_text_default (default empty). Existing instances are updated individually through PetStore.update.
+- Overlay already reads comfort_reset_token and ThursdayRules.state / claimCelebration. State strings emitted and checked against catalog.json: doro water/fruit/satisfied; panda writing/recording/saved/tearing; mood sweating/happy/sad/angry/speechless/sleepy/shy/shocked; kinship result; Thursday crazy/calm. FeatureActivity accepts stored wronged as sad when opening the picker. No new code emits wronged.
+- ThursdayRules.refresh only requests settings reload. The visible overlay owns claimCelebration, so opening the app while overlay stopped does not consume first-appearance celebration. Date history prevents repeats when clock rolls back to an already celebrated date.
+- Main should apply the shared three-color theme to native TimePicker/AlertDialog chrome as well as custom controls. All tool-created controls use UiKit colors/tints.
+- Notes live in gengpet_notes.db, audio in files/recordings. Export provider only serves saved row IDs, read-only, with temporary URI grants.
+
+Implementation:
+1. Persistent SQLite notes: search/edit/rename/delete with confirmation/text share; recording AAC/M4A start/stop/meter/5-minute limit/preview/play/save/share/recovery. Only records while FeatureActivity visible; onPause stops and auto-saves completed audio. Canceled audio is removed. Process-death draft files remain recoverable if valid; incomplete media explicitly reports failure. No cloud/transcription.
+2. Independent water/fruit config: enabled, interval/daily, active window, per-kind quiet window, snooze minutes, background opt-in. Non-exact alarms, explicit notification receiver actions, stale alarm/action tokens, skip today, two-hour expiry, reboot/timezone/update reschedule. No overlay startup from receiver.
+3. Comfort controls: shared enabled/strength/opacity/reset token; immediate stop; sensor availability note. Rendering remains overlay task.
+4. 8 moods persisted per selected instance, optional 12-character text; no existing instance uses default preference for future creation.
+5. Original maintainable common-Mandarin table (not external licensed library), explicit unknown-age candidates/unsupported relationships, chain undo/clear/sex selection.
+6. Local Thursday date/timezone status, shared date dedup, one-hour quiet, repeat celebration request, sound preference. Explicit unmuted manual celebration in visible Activity plays a short system-generated tone. No bundled song or automatic looping audio.
+
+Actual verification:
+- tools-tests/run.ps1 with local JDK 17: PASS 90 assertions; 60 substantive kinship cases; 121 relationship table entries. Covers paternal/maternal families, spouses, seniority, cousins, descendants, unknown age/sex, invalid/unsupported relationships, undo/clear, reminder daily/interval/quiet/overnight/snooze/skip boundaries, Thursday Wednesday/Friday midnight and timezone differences. This is real executed pure Java testing, not Android runtime testing.
+- Own 13 Android/pure-Java tool classes compiled successfully using javac Java17 and installed Android API35 android.jar, with real current PetStore.java, UiKit.java and PetCatalog.java. A second full-new-package compile uses only a temporary GengMainActivity placeholder because main Activity had not landed yet. Full target36 Gradle/build remains main's responsibility; no Gradle process started by this task.
+- Verified all feedback state IDs against actual assets/pets/catalog.json.
+- adb devices reported no attached device. Audio hardware, interruption, low storage, granted-URI share, notification denial/Doze/reboot, and Android 8-16 UI behavior have NOT been device-tested. No claims of end-to-end or health-effect verification.
+
+Owned changed files (all new Java classes under gengpet): FeatureActivity.java, FeaturePreferences.java, FeatureUi.java, NotesStore.java, NotesPanel.java, LocalRecording.java, RecordingShareProvider.java, ReminderRules.java, ReminderScheduler.java, ReminderReceiver.java, KinshipEngine.java, ThursdayCalendar.java, ThursdayRules.java. Also tools-tests/ToolsRulesTest.java, tools-tests/run.ps1, and this report. No RecordingService.java is needed.
+
+Known scope/limits:
+- Recording deliberately stops and preserves usable audio on Activity pause (home/lock/rotation/interruption). It does not continue in background. Draft metadata recovery validates playable duration; unfinished/corrupt media can be explicitly deleted. Completed files orphaned between rename and SQLite commit are also offered for recovery.
+- Full-body text draft survives Activity pause in preferences; it is not a committed note until Save. No automatic speech transcription.
+- Kinship rules cover common Mandarin relationships and explicitly decline unsupported complex chains, adoptive/step-family assumptions and alternative marital models; cousin age is never inferred from parent's sibling order.
+- Notification and alarm delivery can be delayed by OS/OEM power management. The two business schedules have separate pending intents, revisions and notifications; old task/action tokens are rejected.
+- Thursday auto-animation and comfort rendering remain overlay implementation; tool code supplies persistent controls and shared rule entry points.
+
+Platform sources checked during implementation: https://developer.android.com/reference/android/media/MediaRecorder and https://developer.android.com/develop/background-work/services/alarms .
+
+FINAL ERROR/STATE REVIEW (after GengMainActivity landed):
+- Fixed DATE_CHANGED handling: ordinary midnight now preserves an already scheduled cross-midnight snooze. Only actual TIME_SET/TIMEZONE_CHANGED discards obsolete wall-clock triggers and clears old pending/dedup state.
+- Fixed stale notification actions: respond rejects disabled, missing, future-dated and >2-hour-old pending reminders; notifications have a matching remaining lifetime. Startup preserves one still-relevant overdue reminder before replacing a delayed alarm. Quiet periods remain start-inclusive/end-exclusive across midnight; snooze rounds upward and is never shorter than the requested duration.
+- Configuration revisions use fresh random tokens on each save/clock rebuild, so clearing preferences and reenabling cannot recreate an old generation number. Confirmed current GengMainActivity.deleteData clears prefs and calls reschedule: both alarm identities are cancelled, both notifications are cancelled, and disabled config clears pending/snooze values. Queued old receivers fail enabled/due/revision checks. No main-file change needed.
+- Pending feedback uses the newly available GengOverlayService.canReceiveFeedback("doro") readiness check before consuming it. Thus absent/hidden/unready Doro instances do not lose pending feedback; the overlay's own pendingFeedback callback invokes delivery after readiness changes. Only the newest meaningful pending reminder is emitted.
+- Recording stop errors no longer delete a nonempty file merely because MediaRecorder.stop threw. They retain a recoverable draft, whose actual playable duration is checked before database save. Explicit cancel still deletes; deletion failure is reported rather than falsely claiming success. Recorder/focus cleanup is guarded, including constructor/start/release failures.
+- NotesPanel pause is idempotent, preventing duplicate autosaves and an onDestroy callback from rewriting a draft after an already-paused screen. Returning to recording UI refreshes its stopped state. Recording metadata is committed only after finalized local media validates.
+- Share review: ACTION_SEND includes both EXTRA_STREAM and ClipData plus read-only grant; provider exported=false/grantUriPermissions=true; provider accepts only saved numeric row IDs and read mode, no raw file path. Deleting a recording now revokes its granted read URI. Files already opened by another application cannot be retroactively unread; this is normal shared-file semantics.
+- Executed verification: PASS 101 assertions, including the previous 60 substantive kinship cases and 11 additional midnight/expiry/snooze checks. Entire current gengpet Java package, INCLUDING REAL GengMainActivity/PetStore/UiKit/PetCatalog/overlay classes, compiled with JDK17 + Android API35 android.jar; no placeholders in this last compile, no Gradle run. Device behavior remains untested. No cross-file integration blocker found in this review.

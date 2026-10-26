@@ -1,0 +1,30 @@
+Java/Gradle communication diagnosis — COMPLETE: JVM IPC workaround verified
+
+Usable existing JDK (no alternate JDK needed so far):
+C:\Users\STG-ARTIST2\AppData\Local\jdk17\jdk-17.0.20.1+1
+
+Add this option to the JVM that actually runs Gradle/daemon, using process-local JAVA_TOOL_OPTIONS or equivalent; do not persist system environment:
+-Djdk.net.unixdomain.tmpdir=C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-tools\uds-disabled
+
+IMPORTANT: uds-disabled is an existing regular FILE, intentionally NOT a directory. I created this isolated marker outside the project. It makes Unix-domain listener bind fail early, so OpenJDK's existing PipeImpl.createListener fallback uses loopback TCP. Simply changing to another valid/short directory does not select this fallback.
+
+Observed on Temurin17.0.20.1+1: default legacy and NIO TCP IPv4/IPv6 all PASS; explicit Unix-domain connect fails Invalid argument: connect; default Pipe.open and Selector.open fail with same stack as Gradle. With the option pointing to a regular file, Pipe.open data transfer and Selector.open/wakeup PASS. Explicit UNIX sockets still fail; this is a targeted Gradle IPC workaround, not an OS-level AF_UNIX repair.
+
+Source evidence read locally: this JDK's lib/src.zip, java.base/sun/nio/ch/PipeImpl.java. createListener tries UNIX and catches IOException/UnsupportedOperationException during listener open/bind before falling back to TCP; the later connect failure is outside that fallback. Hence changing IPv4 preference or SelectorProvider does not fix this particular path.
+
+No Gradle executed, no build/Manifest/source configuration edited, no system environment altered, no JDK overwritten. Main must run the actual build; full Gradle result is not yet verified here.
+
+Repeated validation completed:
+- One process, 100 Pipe data-transfer + Selector wakeup + selected TCP read cycles: PASS, exit 0.
+- Four simultaneous JVM processes, 100 cycles each: all PASS, all exit 0, 400 additional cycles.
+- Those four runs used process-local JAVA_TOOL_OPTIONS, confirming the property is picked up without a java command-line flag. This is the convenient way to ensure Gradle daemon child JVMs inherit it. Preserve any existing JAVA_TOOL_OPTIONS when composing the main build command; append the option rather than silently discarding settings.
+- IPv4 and IPv6 legacy/NIO sockets also passed in every run.
+- No need to change preferIPv4Stack, WindowsSelectorProvider, java.io.tmpdir or the global TEMP/TMP values.
+- No alternative JDK was downloaded because the existing requested JDK17 passes the relevant communication probes with the above targeted option. This option does not disable a security check; it selects OpenJDK's existing TCP fallback by making its optional UNIX listener path unusable.
+
+Evidence files in coordination/build-diagnostics/:
+NioProbe.java, jdk17-default.txt, jdk17-tcp-fallback.txt, jdk17-fallback-stress.txt, jdk17-parallel-1.txt through jdk17-parallel-4.txt.
+The default probe includes a cleanup exception masking the explicit UNIX connect exception; the corrected fallback probe preserves the actual Invalid argument: connect stack. Both default Pipe/Selector stacks show the same UnixDomainSockets.connect0 failure as reported by main.
+
+Confidence/limits:
+Confirmed failing primitive: AF_UNIX connect in this current execution environment. TCP is healthy. Exact Windows OS/App-container cause has not been established, so do not attribute this to firewall or an installed product without further evidence. Explicit UNIX-domain socket users still fail. Gradle 8.9 must be retried by main before claiming the build blocker is fully resolved; pass the option to the JVM executing the daemon, not only to Java compiler tasks.

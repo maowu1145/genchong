@@ -1,0 +1,102 @@
+java.version=17.0.20.1
+java.vendor=Eclipse Adoptium
+java.home=C:\Users\STG-ARTIST2\AppData\Local\jdk17\jdk-17.0.20.1+1
+os.name=Windows 11
+os.version=10.0
+os.arch=amd64
+java.io.tmpdir=C:\Users\STG-AR~1\AppData\Local\Temp\
+jdk.net.unixdomain.tmpdir=null
+java.nio.channels.spi.SelectorProvider=null
+java.net.preferIPv4Stack=null
+provider=sun.nio.ch.WEPollSelectorProvider
+PASS legacy TCP IPv4 13ms
+PASS legacy TCP IPv6 0ms
+PASS NIO IPv4 1ms
+PASS NIO IPv6 0ms
+FAIL NIO UNIX C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-probe\nio-29076.sock
+java.util.concurrent.ExecutionException: java.util.concurrent.CompletionException: java.nio.file.FileSystemException: C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-probe\nio-29076.sock: ϵͳ�޷����ʴ��ļ���
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:205)
+	at NioProbe.test(NioProbe.java:14)
+	at NioProbe.main(NioProbe.java:59)
+Caused by: java.util.concurrent.CompletionException: java.nio.file.FileSystemException: C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-probe\nio-29076.sock: ϵͳ�޷����ʴ��ļ���
+	at NioProbe.lambda$test$1(NioProbe.java:14)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.nio.file.FileSystemException: C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-probe\nio-29076.sock: ϵͳ�޷����ʴ��ļ���
+	at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+	at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+	at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:275)
+	at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+	at java.base/java.nio.file.Files.deleteIfExists(Files.java:1191)
+	at NioProbe.lambda$main$6(NioProbe.java:59)
+	... 6 more
+FAIL Pipe.open data
+java.util.concurrent.ExecutionException: java.util.concurrent.CompletionException: java.io.IOException: Unable to establish loopback connection
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:205)
+	at NioProbe.test(NioProbe.java:14)
+	at NioProbe.main(NioProbe.java:60)
+Caused by: java.util.concurrent.CompletionException: java.io.IOException: Unable to establish loopback connection
+	at NioProbe.lambda$test$1(NioProbe.java:14)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.io.IOException: Unable to establish loopback connection
+	at java.base/sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:103)
+	at java.base/sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:67)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:569)
+	at java.base/sun.nio.ch.PipeImpl.<init>(PipeImpl.java:198)
+	at java.base/sun.nio.ch.PipeImpl.<init>(PipeImpl.java:182)
+	at java.base/sun.nio.ch.SelectorProviderImpl.openPipe(SelectorProviderImpl.java:64)
+	at java.base/java.nio.channels.Pipe.open(Pipe.java:155)
+	at NioProbe.pipe(NioProbe.java:20)
+	... 6 more
+Caused by: java.net.SocketException: Invalid argument: connect
+	at java.base/sun.nio.ch.UnixDomainSockets.connect0(Native Method)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:148)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:144)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:851)
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:285)
+	at java.base/sun.nio.ch.PipeImpl$Initializer$LoopbackConnector.run(PipeImpl.java:133)
+	at java.base/sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:85)
+	... 13 more
+FAIL Selector.open wakeup
+java.util.concurrent.ExecutionException: java.util.concurrent.CompletionException: java.io.IOException: Unable to establish loopback connection
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:205)
+	at NioProbe.test(NioProbe.java:14)
+	at NioProbe.main(NioProbe.java:61)
+Caused by: java.util.concurrent.CompletionException: java.io.IOException: Unable to establish loopback connection
+	at NioProbe.lambda$test$1(NioProbe.java:14)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.io.IOException: Unable to establish loopback connection
+	at java.base/sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:103)
+	at java.base/sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:67)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:569)
+	at java.base/sun.nio.ch.PipeImpl.<init>(PipeImpl.java:198)
+	at java.base/sun.nio.ch.WEPollSelectorImpl.<init>(WEPollSelectorImpl.java:78)
+	at java.base/sun.nio.ch.WEPollSelectorProvider.openSelector(WEPollSelectorProvider.java:33)
+	at java.base/java.nio.channels.Selector.open(Selector.java:295)
+	at NioProbe.selector(NioProbe.java:27)
+	... 6 more
+Caused by: java.net.SocketException: Invalid argument: connect
+	at java.base/sun.nio.ch.UnixDomainSockets.connect0(Native Method)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:148)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:144)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:851)
+	at java.base/java.nio.channels.SocketChannel.open(SocketChannel.java:285)
+	at java.base/sun.nio.ch.PipeImpl$Initializer$LoopbackConnector.run(PipeImpl.java:133)
+	at java.base/sun.nio.ch.PipeImpl$Initializer.run(PipeImpl.java:85)
+	... 13 more
+FAILED=3

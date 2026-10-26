@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.GengPetBase" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">#A8B8A2</item>
+        <item name="android:colorControlNormal">#302A27</item>
+        <item name="android:colorControlActivated">#A8B8A2</item>
+        <item name="android:colorButtonNormal">#A8B8A2</item>
+        <item name="android:textColorPrimary">#302A27</item>
+        <item name="android:textColorSecondary">#302A27</item>
+        <item name="android:colorBackground">#F6F0E7</item>
+        <item name="android:windowBackground">#F6F0E7</item>
+        <item name="android:navigationBarColor">#F6F0E7</item>
+        <item name="android:statusBarColor">#F6F0E7</item>
+        <item name="android:windowLightStatusBar">true</item>
+
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+    <style name="Theme.GengPet" parent="Theme.GengPetBase" />
+</resources>

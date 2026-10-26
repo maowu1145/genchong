@@ -1,0 +1,40 @@
+Read-only packaging-scope audit — 2026-10-26
+
+Summary: no large unrelated asset collection found. Only 45 pet PNGs plus catalog.json exist in app/src/main/assets. Legacy res skins remain (~563 KiB); they are optional future cleanup candidates, not a blocker. No resource/source/build input was changed or deleted and no Gradle command was run.
+
+Current source resource inventory (source-file bytes, NOT final compressed APK sizes):
+- assets/pets: 46 files, 4,920,446 bytes = 45 PNGs (4,910,948 bytes) plus catalog.json (9,498 bytes).
+- res/drawable-nodpi: 12 legacy skins, 576,501 bytes (563.0 KiB).
+- res/drawable: current gengpet_icon.png (159,649 bytes) plus legacy ic_launcher.xml (425 bytes).
+- res/anim: secondary_dialog_exit.xml, 540 bytes.
+- res/values: 4 XML files, 3,096 bytes.
+- Total inspected runtime resource source bytes: 5,660,657 (5.40 MiB).
+- Only main source set exists. No other source-set assets/res, no src/main/resources, no jniLibs, no app/libs payload found. app dependencies block is empty. Current app/build.gradle has no custom sourceSets or packaging excludes; release minifyEnabled false, no shrinkResources true. Therefore removing old Activities from Manifest alone does not remove their source classes/resources from the current package.
+
+Candidate cleanup, for main to evaluate later:
+1. res/drawable-nodpi/skin_cat.png: 513,662 bytes, 857x1079. Largest legacy file, about 89% of legacy skin bytes. New gengpet Java does not reference it.
+2. Remaining 11 skin_*.png files: combined 62,839 bytes. Most are 300x300. All 12 legacy skins are directly referenced by old MainActivity.java and PetMakerActivity.java. Blindly deleting them while those Java files still compile breaks R.drawable references. Preserve them for the first runnable APK; a later main-owned source-set/resource-shrinking change can keep historical files in Git while omitting unreachable legacy code/resources from release.
+3. res/drawable/ic_launcher.xml, old styles/strings/colors and secondary_dialog_exit.xml: very small. Old launcher is still referenced by legacy Java, exit animation is referenced by XML. Savings do not justify rushed deletion. New theme/launcher are required.
+4. Current gengpet_icon.png is byte-identical to pets/doro/idle.png, so two resource namespaces contain the same 159,649-byte image. It is explicitly referenced by the current Manifest and must not simply be removed. A future dedicated smaller launcher icon may reduce this duplication, but no artwork was changed here.
+
+Excluded from package by location/configuration:
+- Original source sheets, masks, atlases, references, animation GIF/WebP previews live outside assets/res.
+- coordination reports, contact sheets and pending-30 lists are outside app runtime resource directories.
+- Repository-root cat-transparent variants, developer scripts and the sibling output tree are not configured as Android assets/resources.
+- No generated references, masks or raw large sheets were found in pets payload.
+
+Sensitive-value review (redacted procedure):
+- Scanned 108 resource, Java, Manifest and build input files for private-key blocks, recognizable API/cloud token formats, JWT/credential URLs, credential-named literals, keystore/key/database-sensitive filenames.
+- No matching embedded-secret candidates found in that inspected set. No values are reproduced in reports.
+- All packaged PNG metadata dictionaries were empty in Pillow inspection; no PNG text/EXIF metadata keys found on inspected resource images.
+- This is a bounded heuristic scan, not proof that every possible obfuscated or unknown-format secret is absent. No credential store, user preferences, global environment secrets or unrelated home directory was read.
+
+Final pet integrity recheck:
+- Exactly 6 core IDs, 29 state images and 16 animation images = 45 registered PNGs.
+- Registered set == actual PNG set == 45 source trace records. No missing or extra PNGs.
+- All 45 runtime SHA-256 match the approved source trace; canvas dimensions match and all have 0/255/partial Alpha. No image changes detected.
+- 30 candidates remain outside catalog and are not counted as complete.
+
+Limitations: this is a source packaging audit while the main build is in progress. Final APK ZIP contents, compressed entry sizes, manifest merge, DEX/resource shrink results and signing metadata were not inspected. Main should compare final APK assets/pets entries/hashes against coordination/assets/source-to-runtime.json after its build completes.
+
+Machine-readable inventory: coordination/packaging-audit.json (paths, sizes, hashes, reference flags, redacted findings, integrity result).

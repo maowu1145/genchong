@@ -1,0 +1,1857 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Lint Report</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+ <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.blue-indigo.min.css" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+<script defer src="https://code.getmdl.io/1.2.0/material.min.js"></script>
+<style>
+section.section--center {
+    max-width: 860px;
+}
+.mdl-card__supporting-text + .mdl-card__actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+main > .mdl-layout__tab-panel {
+  padding: 8px;
+  padding-top: 48px;
+}
+
+.mdl-card__actions {
+    margin: 0;
+    padding: 4px 40px;
+    color: inherit;
+}
+.mdl-card > * {
+    height: auto;
+}
+.mdl-card__actions a {
+    color: #00BCD4;
+    margin: 0;
+}
+.error-icon {
+    color: #bb7777;
+    vertical-align: bottom;
+}
+.warning-icon {
+    vertical-align: bottom;
+}
+.mdl-layout__content section:not(:last-of-type) {
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.mdl-card .mdl-card__supporting-text {
+  margin: 40px;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  padding: 0;
+  color: inherit;
+  width: calc(100% - 80px);
+}
+div.mdl-layout__drawer-button .material-icons {
+    line-height: 48px;
+}
+.mdl-card .mdl-card__supporting-text {
+    margin-top: 0px;
+}
+.chips {
+    float: right;
+    vertical-align: middle;
+}
+
+pre.errorlines {
+    background-color: white;
+    font-family: monospace;
+    border: 1px solid #e0e0e0;
+    line-height: 0.9rem;
+    font-size: 0.9rem;    padding: 1px 0px 1px; 1px;
+    overflow: scroll;
+}
+.prefix {
+    color: #660e7a;
+    font-weight: bold;
+}
+.attribute {
+    color: #0000ff;
+    font-weight: bold;
+}
+.value {
+    color: #008000;
+    font-weight: bold;
+}
+.tag {
+    color: #000080;
+    font-weight: bold;
+}
+.comment {
+    color: #808080;
+    font-style: italic;
+}
+.javadoc {
+    color: #808080;
+    font-style: italic;
+}
+.annotation {
+    color: #808000;
+}
+.string {
+    color: #008000;
+    font-weight: bold;
+}
+.number {
+    color: #0000ff;
+}
+.keyword {
+    color: #000080;
+    font-weight: bold;
+}
+.caretline {
+    background-color: #fffae3;
+}
+.lineno {
+    color: #999999;
+    background-color: #f0f0f0;
+}
+.error {
+    display: inline-block;
+    position:relative;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AwCFR4T/3uLMgAAADxJREFUCNdNyLERQEAABMCjL4lQwIzcjErpguAL+C9AvgKJDbeD/PRpLdm35Hm+MU+cB+tCKaJW4L4YBy+CAiLJrFs9mgAAAABJRU5ErkJggg==) bottom repeat-x;
+}
+.warning {
+    text-decoration: none;
+    background-color: #f6ebbc;
+}
+.overview {
+    padding: 10pt;
+    width: 100%;
+    overflow: auto;
+    border-collapse:collapse;
+}
+.overview tr {
+    border-bottom: solid 1px #eeeeee;
+}
+.categoryColumn a {
+     text-decoration: none;
+     color: inherit;
+}
+.countColumn {
+    text-align: right;
+    padding-right: 20px;
+    width: 50px;
+}
+.issueColumn {
+   padding-left: 16px;
+}
+.categoryColumn {
+   position: relative;
+   left: -50px;
+   padding-top: 20px;
+   padding-bottom: 5px;
+}
+.options {
+   padding-left: 16px;
+}
+</style>
+<script language="javascript" type="text/javascript">
+<!--
+function reveal(id) {
+if (document.getElementById) {
+document.getElementById(id).style.display = 'block';
+document.getElementById(id+'Link').style.display = 'none';
+}
+}
+function hideid(id) {
+if (document.getElementById) {
+document.getElementById(id).style.display = 'none';
+}
+}
+//-->
+</script>
+</head>
+<body class="mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">Lint Report: 60 warnings</span>
+      <div class="mdl-layout-spacer"></div>
+      <nav class="mdl-navigation mdl-layout--large-screen-only">Check performed at Mon Oct 26 15:30:50 CST 2026 by AGP (8.10.1)</nav>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Issue Types</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="#overview"><i class="material-icons">dashboard</i>Overview</a>
+      <a class="mdl-navigation__link" href="#ApplySharedPref"><i class="material-icons warning-icon">warning</i>Use <code>apply()</code> on <code>SharedPreferences</code> (16)</a>
+      <a class="mdl-navigation__link" href="#InlinedApi"><i class="material-icons warning-icon">warning</i>Using inlined constants on older versions (1)</a>
+      <a class="mdl-navigation__link" href="#DiscouragedApi"><i class="material-icons warning-icon">warning</i>Using discouraged APIs (2)</a>
+      <a class="mdl-navigation__link" href="#DataExtractionRules"><i class="material-icons warning-icon">warning</i>Missing data extraction rules (1)</a>
+      <a class="mdl-navigation__link" href="#DrawAllocation"><i class="material-icons warning-icon">warning</i>Memory allocations within drawing code (14)</a>
+      <a class="mdl-navigation__link" href="#UsableSpace"><i class="material-icons warning-icon">warning</i>Using getUsableSpace() (2)</a>
+      <a class="mdl-navigation__link" href="#ViewConstructor"><i class="material-icons warning-icon">warning</i>Missing View constructors for XML inflation (4)</a>
+      <a class="mdl-navigation__link" href="#ClickableViewAccessibility"><i class="material-icons warning-icon">warning</i>Accessibility in Custom Views (3)</a>
+      <a class="mdl-navigation__link" href="#SetTextI18n"><i class="material-icons warning-icon">warning</i>TextView Internationalization (15)</a>
+      <a class="mdl-navigation__link" href="#RtlHardcoded"><i class="material-icons warning-icon">warning</i>Using left/right instead of start/end attributes (2)</a>
+    </nav>
+  </div>
+  <main class="mdl-layout__content">
+    <div class="mdl-layout__tab-panel is-active">
+<a name="overview"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="OverviewCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Overview</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<table class="overview">
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Correctness">Correctness</a>
+</td></tr>
+<tr>
+<td class="countColumn">16</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#ApplySharedPref">ApplySharedPref</a>: Use <code>apply()</code> on <code>SharedPreferences</code></td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#InlinedApi">InlinedApi</a>: Using inlined constants on older versions</td></tr>
+<tr>
+<td class="countColumn">2</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#DiscouragedApi">DiscouragedApi</a>: Using discouraged APIs</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Security">Security</a>
+</td></tr>
+<tr>
+<td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#DataExtractionRules">DataExtractionRules</a>: Missing data extraction rules</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Performance">Performance</a>
+</td></tr>
+<tr>
+<td class="countColumn">14</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#DrawAllocation">DrawAllocation</a>: Memory allocations within drawing code</td></tr>
+<tr>
+<td class="countColumn">2</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#UsableSpace">UsableSpace</a>: Using getUsableSpace()</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Usability">Usability</a>
+</td></tr>
+<tr>
+<td class="countColumn">4</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#ViewConstructor">ViewConstructor</a>: Missing View constructors for XML inflation</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Accessibility">Accessibility</a>
+</td></tr>
+<tr>
+<td class="countColumn">3</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#ClickableViewAccessibility">ClickableViewAccessibility</a>: Accessibility in Custom Views</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Internationalization">Internationalization</a>
+</td></tr>
+<tr>
+<td class="countColumn">15</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#SetTextI18n">SetTextI18n</a>: TextView Internationalization</td></tr>
+<tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Internationalization:Bidirectional Text">Internationalization:Bidirectional Text</a>
+</td></tr>
+<tr>
+<td class="countColumn">2</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<a href="#RtlHardcoded">RtlHardcoded</a>: Using left/right instead of start/end attributes</td></tr>
+<tr><td></td><td class="categoryColumn"><a href="#MissingIssues">Disabled Checks (39)</a>
+</td></tr>
+</table>
+<br/>              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="OverviewCardLink" onclick="hideid('OverviewCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Correctness"></a>
+<a name="ApplySharedPref"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="ApplySharedPrefCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Use apply() on SharedPreferences</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java</a>:617</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 614 </span>  <span class="keyword">try</span> (NotesStore s = <span class="keyword">new</span> NotesStore(<span class="keyword">this</span>)) {
+<span class="lineno"> 615 </span>    <span class="keyword">for</span> (NotesStore.Note n : s.list(<span class="string">""</span>)) s.delete(n);
+<span class="lineno"> 616 </span>    <span class="keyword">for</span> (File f : s.drafts()) <span class="keyword">if</span> (f.exists() &amp;&amp; !f.delete()) <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"draft"</span>);
+<span class="caretline"><span class="lineno"> 617 </span>    PetStore.prefs(<span class="keyword">this</span>).edit().clear().<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 618 </span>    ReminderScheduler.reschedule(<span class="keyword">this</span>);
+<span class="lineno"> 619 </span>    message(<span class="string">"本机数据已删除"</span>);
+<span class="lineno"> 620 </span>    show();
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java</a>:617</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 614 </span>  <span class="keyword">try</span> (NotesStore s = <span class="keyword">new</span> NotesStore(<span class="keyword">this</span>)) {
+<span class="lineno"> 615 </span>    <span class="keyword">for</span> (NotesStore.Note n : s.list(<span class="string">""</span>)) s.delete(n);
+<span class="lineno"> 616 </span>    <span class="keyword">for</span> (File f : s.drafts()) <span class="keyword">if</span> (f.exists() &amp;&amp; !f.delete()) <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"draft"</span>);
+<span class="caretline"><span class="lineno"> 617 </span>    PetStore.prefs(<span class="keyword">this</span>).edit().clear().<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 618 </span>    ReminderScheduler.reschedule(<span class="keyword">this</span>);
+<span class="lineno"> 619 </span>    message(<span class="string">"本机数据已删除"</span>);
+<span class="lineno"> 620 </span>    show();
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java">../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java</a>:439</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 436 </span>          .putLong(<span class="string">"note_draft_id"</span>, editingId)
+<span class="lineno"> 437 </span>          .putString(<span class="string">"note_draft_title"</span>, title.getText().toString())
+<span class="lineno"> 438 </span>          .putString(<span class="string">"note_draft_body"</span>, body.getText().toString())
+<span class="caretline"><span class="lineno"> 439 </span>          .<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 440 </span>    recording.stop(<span class="keyword">false</span>, <span class="string">"界面已离开，录音已结束"</span>);
+<span class="lineno"> 441 </span>    <span class="keyword">if</span> (preview != <span class="keyword">null</span>) savePreview(title == <span class="keyword">null</span> ? <span class="string">"中断保存的录音"</span> : title.getText().toString());
+<span class="lineno"> 442 </span>    stopPlayback();
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java">../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java</a>:439</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 436 </span>          .putLong(<span class="string">"note_draft_id"</span>, editingId)
+<span class="lineno"> 437 </span>          .putString(<span class="string">"note_draft_title"</span>, title.getText().toString())
+<span class="lineno"> 438 </span>          .putString(<span class="string">"note_draft_body"</span>, body.getText().toString())
+<span class="caretline"><span class="lineno"> 439 </span>          .<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 440 </span>    recording.stop(<span class="keyword">false</span>, <span class="string">"界面已离开，录音已结束"</span>);
+<span class="lineno"> 441 </span>    <span class="keyword">if</span> (preview != <span class="keyword">null</span>) savePreview(title == <span class="keyword">null</span> ? <span class="string">"中断保存的录音"</span> : title.getText().toString());
+<span class="lineno"> 442 </span>    stopPlayback();
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderReceiver.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderReceiver.java</a>:67</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno">  64 </span>      || p.getLong(k + <span class="string">"due"</span>, <span class="number">0</span>) != due
+<span class="lineno">  65 </span>      || p.getLong(k + <span class="string">"delivered"</span>, <span class="number">0</span>) == due
+<span class="lineno">  66 </span>      || intent.getLongExtra(<span class="string">"revision"</span>, -<span class="number">1</span>) != p.getLong(k + <span class="string">"revision"</span>, <span class="number">0</span>)) <span class="keyword">return</span>;
+<span class="caretline"><span class="lineno">  67 </span>  p.edit().putLong(k + <span class="string">"delivered"</span>, due).remove(k + <span class="string">"snooze_due"</span>).remove(k + <span class="string">"due"</span>).<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  68 </span>  <span class="comment">// Drop obsolete alarms rather than replaying a backlog after sleep or a clock jump.</span>
+<span class="lineno">  69 </span>  <span class="keyword">if</span> (ReminderRules.fresh(due, now)
+<span class="lineno">  70 </span>      &amp;&amp; ReminderRules.allowed(r, Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()))) {
+</pre>
+
+<button class="mdl-button mdl-js-button mdl-button--primary" id="ApplySharedPrefDivLink" onclick="reveal('ApplySharedPrefDiv');" />+ 11 More Occurrences...</button>
+<div id="ApplySharedPrefDiv" style="display: none">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderReceiver.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderReceiver.java</a>:67</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno">  64 </span>      || p.getLong(k + <span class="string">"due"</span>, <span class="number">0</span>) != due
+<span class="lineno">  65 </span>      || p.getLong(k + <span class="string">"delivered"</span>, <span class="number">0</span>) == due
+<span class="lineno">  66 </span>      || intent.getLongExtra(<span class="string">"revision"</span>, -<span class="number">1</span>) != p.getLong(k + <span class="string">"revision"</span>, <span class="number">0</span>)) <span class="keyword">return</span>;
+<span class="caretline"><span class="lineno">  67 </span>  p.edit().putLong(k + <span class="string">"delivered"</span>, due).remove(k + <span class="string">"snooze_due"</span>).remove(k + <span class="string">"due"</span>).<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  68 </span>  <span class="comment">// Drop obsolete alarms rather than replaying a backlog after sleep or a clock jump.</span>
+<span class="lineno">  69 </span>  <span class="keyword">if</span> (ReminderRules.fresh(due, now)
+<span class="lineno">  70 </span>      &amp;&amp; ReminderRules.allowed(r, Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()))) {
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:57</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno">  54 </span>        .remove(k + <span class="string">"pending"</span>)
+<span class="lineno">  55 </span>        .remove(k + <span class="string">"snooze_due"</span>)
+<span class="lineno">  56 </span>        .putLong(k + <span class="string">"revision"</span>, java.util.UUID.randomUUID().getMostSignificantBits())
+<span class="caretline"><span class="lineno">  57 </span>        .<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  58 </span>    cancelNotification(c, kind);
+<span class="lineno">  59 </span>    schedule(c, kind, <span class="keyword">false</span>);
+<span class="lineno">  60 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:57</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno">  54 </span>        .remove(k + <span class="string">"pending"</span>)
+<span class="lineno">  55 </span>        .remove(k + <span class="string">"snooze_due"</span>)
+<span class="lineno">  56 </span>        .putLong(k + <span class="string">"revision"</span>, java.util.UUID.randomUUID().getMostSignificantBits())
+<span class="caretline"><span class="lineno">  57 </span>        .<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  58 </span>    cancelNotification(c, kind);
+<span class="lineno">  59 </span>    schedule(c, kind, <span class="keyword">false</span>);
+<span class="lineno">  60 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:113</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 110 </span>          .putLong(k + <span class="string">"revision"</span>, java.util.UUID.randomUUID().getMostSignificantBits());
+<span class="lineno"> 111 </span>      cancelNotification(c, kind);
+<span class="lineno"> 112 </span>    }
+<span class="caretline"><span class="lineno"> 113 </span>    edit.<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 114 </span>    reschedule(c);
+<span class="lineno"> 115 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:113</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 110 </span>          .putLong(k + <span class="string">"revision"</span>, java.util.UUID.randomUUID().getMostSignificantBits());
+<span class="lineno"> 111 </span>      cancelNotification(c, kind);
+<span class="lineno"> 112 </span>    }
+<span class="caretline"><span class="lineno"> 113 </span>    edit.<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 114 </span>    reschedule(c);
+<span class="lineno"> 115 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:158</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 155 </span>          .putLong(k + <span class="string">"pending"</span>, previous)
+<span class="lineno"> 156 </span>          .putLong(k + <span class="string">"delivered"</span>, previous)
+<span class="lineno"> 157 </span>          .remove(k + <span class="string">"snooze_due"</span>)
+<span class="caretline"><span class="lineno"> 158 </span>          .<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 159 </span>    }
+<span class="lineno"> 160 </span>    <span class="keyword">long</span> snooze = p.getLong(k + <span class="string">"snooze_due"</span>, <span class="number">0</span>);
+<span class="lineno"> 161 </span>    <span class="keyword">long</span> due =
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:158</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 155 </span>          .putLong(k + <span class="string">"pending"</span>, previous)
+<span class="lineno"> 156 </span>          .putLong(k + <span class="string">"delivered"</span>, previous)
+<span class="lineno"> 157 </span>          .remove(k + <span class="string">"snooze_due"</span>)
+<span class="caretline"><span class="lineno"> 158 </span>          .<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 159 </span>    }
+<span class="lineno"> 160 </span>    <span class="keyword">long</span> snooze = p.getLong(k + <span class="string">"snooze_due"</span>, <span class="number">0</span>);
+<span class="lineno"> 161 </span>    <span class="keyword">long</span> due =
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:168</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 165 </span>      p.edit().remove(k + <span class="string">"due"</span>).apply();
+<span class="lineno"> 166 </span>      <span class="keyword">return</span>;
+<span class="lineno"> 167 </span>    }
+<span class="caretline"><span class="lineno"> 168 </span>    p.edit().putLong(k + <span class="string">"due"</span>, due).<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 169 </span>    <span class="comment">// Inexact alarm, no special exact-alarm access, and no background service start.</span>
+<span class="lineno"> 170 </span>    am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, due, alarm(c, kind, due));
+<span class="lineno"> 171 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:168</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 165 </span>      p.edit().remove(k + <span class="string">"due"</span>).apply();
+<span class="lineno"> 166 </span>      <span class="keyword">return</span>;
+<span class="lineno"> 167 </span>    }
+<span class="caretline"><span class="lineno"> 168 </span>    p.edit().putLong(k + <span class="string">"due"</span>, due).<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 169 </span>    <span class="comment">// Inexact alarm, no special exact-alarm access, and no background service start.</span>
+<span class="lineno"> 170 </span>    am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, due, alarm(c, kind, due));
+<span class="lineno"> 171 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:196</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 193 </span>              config(c, kind), System.currentTimeMillis(), ZoneId.systemDefault()));
+<span class="lineno"> 194 </span>    <span class="keyword">else</span> e.remove(k + <span class="string">"snooze_due"</span>);
+<span class="lineno"> 195 </span>    <span class="keyword">if</span> (<span class="string">"today"</span>.equals(action)) e.putString(k + <span class="string">"skip"</span>, java.time.LocalDate.now().toString());
+<span class="caretline"><span class="lineno"> 196 </span>    e.remove(k + <span class="string">"due"</span>).<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 197 </span>    cancelNotification(c, kind);
+<span class="lineno"> 198 </span>    schedule(c, kind, <span class="keyword">false</span>);
+<span class="lineno"> 199 </span>    FeaturePreferences.feedback(
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java">../../src/main/java/com/maowu/gravitypet/gengpet/ReminderScheduler.java</a>:196</span>: <span class="message">Consider using <code>apply()</code> instead; <code>commit</code> writes its data to persistent storage immediately, whereas <code>apply</code> will handle it in the background</span><br /><pre class="errorlines">
+<span class="lineno"> 193 </span>              config(c, kind), System.currentTimeMillis(), ZoneId.systemDefault()));
+<span class="lineno"> 194 </span>    <span class="keyword">else</span> e.remove(k + <span class="string">"snooze_due"</span>);
+<span class="lineno"> 195 </span>    <span class="keyword">if</span> (<span class="string">"today"</span>.equals(action)) e.putString(k + <span class="string">"skip"</span>, java.time.LocalDate.now().toString());
+<span class="caretline"><span class="lineno"> 196 </span>    e.remove(k + <span class="string">"due"</span>).<span class="warning">commit()</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 197 </span>    cancelNotification(c, kind);
+<span class="lineno"> 198 </span>    schedule(c, kind, <span class="keyword">false</span>);
+<span class="lineno"> 199 </span>    FeaturePreferences.feedback(
+</pre>
+
+</div>
+</div>
+<div class="metadata"><div class="explanation" id="explanationApplySharedPref" style="display: none;">
+Consider using <code>apply()</code> instead of <code>commit</code> on shared preferences. Whereas <code>commit</code> blocks and writes its data to persistent storage immediately, <code>apply</code> will handle it in the background.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+To suppress this error, use the issue id "ApplySharedPref" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">ApplySharedPref</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Correctness</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 6/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationApplySharedPrefLink" onclick="reveal('explanationApplySharedPref');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="ApplySharedPrefCardLink" onclick="hideid('ApplySharedPrefCard');">
+Dismiss</button>            </div>
+            </div>
+          </section><a name="InlinedApi"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="InlinedApiCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Using inlined constants on older versions</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/OverlayPetService.java">../../src/main/java/com/maowu/gravitypet/OverlayPetService.java</a>:970</span>: <span class="message">Field requires API level 30 (current min is 29): <code>android.content.pm.ServiceInfo#FOREGROUND_SERVICE_TYPE_MICROPHONE</code></span><br /><pre class="errorlines">
+<span class="lineno">  967 </span>            startForeground(NOTIFICATION_ID, buildNotification(), type);
+<span class="lineno">  968 </span>        } <span class="keyword">else</span> <span class="keyword">if</span> (withMicrophone &amp;&amp; Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+<span class="lineno">  969 </span>            startForeground(NOTIFICATION_ID, buildNotification(),
+<span class="caretline"><span class="lineno">  970 </span>                    <span class="warning">ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  971 </span>        } <span class="keyword">else</span> {
+<span class="lineno">  972 </span>            startForeground(NOTIFICATION_ID, buildNotification());
+<span class="lineno">  973 </span>        }
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationInlinedApi" style="display: none;">
+This check scans through all the Android API field references in the application and flags certain constants, such as static final integers and Strings, which were introduced in later versions. These will actually be copied into the class files rather than being referenced, which means that the value is available even when running on older devices. In some cases that's fine, and in other cases it can result in a runtime crash or incorrect behavior. It depends on the context, so consider the code carefully and decide whether it's safe and can be suppressed or whether the code needs to be guarded.<br/>
+<br/>
+If you really want to use this API and don't need to support older devices just set the <code>minSdkVersion</code> in your <code>build.gradle</code> or <code>AndroidManifest.xml</code> files.<br/>
+<br/>
+If your code is <b>deliberately</b> accessing newer APIs, and you have ensured (e.g. with conditional execution) that this code will only ever be called on a supported platform, then you can annotate your class or method with the <code>@TargetApi</code> annotation specifying the local minimum SDK to apply, such as <code>@TargetApi(11)</code>, such that this check considers 11 rather than your manifest file's minimum SDK as the required API level.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+To suppress this error, use the issue id "InlinedApi" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">InlinedApi</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Correctness</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 6/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationInlinedApiLink" onclick="reveal('explanationInlinedApi');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="InlinedApiCardLink" onclick="hideid('InlinedApiCard');">
+Dismiss</button>            </div>
+            </div>
+          </section><a name="DiscouragedApi"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="DiscouragedApiCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Using discouraged APIs</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java</a>:618</span>: <span class="message">Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. <code>R.foo.bar</code>) than by name (e.g. <code>getIdentifier("bar", "foo", null)</code>).</span><br /><pre class="errorlines">
+<span class="lineno">  615 </span>  }
+<span class="lineno">  616 </span>
+<span class="lineno">  617 </span>  <span class="keyword">private</span> <span class="keyword">int</span> resourceDimension(String name) {
+<span class="caretline"><span class="lineno">  618 </span>    <span class="keyword">int</span> id = getResources().<span class="warning">getIdentifier</span>(name, <span class="string">"dimen"</span>, <span class="string">"android"</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  619 </span>    <span class="keyword">return</span> id == <span class="number">0</span> ? <span class="number">0</span> : getResources().getDimensionPixelSize(id);
+<span class="lineno">  620 </span>  }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java</a>:618</span>: <span class="message">Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. <code>R.foo.bar</code>) than by name (e.g. <code>getIdentifier("bar", "foo", null)</code>).</span><br /><pre class="errorlines">
+<span class="lineno">  615 </span>  }
+<span class="lineno">  616 </span>
+<span class="lineno">  617 </span>  <span class="keyword">private</span> <span class="keyword">int</span> resourceDimension(String name) {
+<span class="caretline"><span class="lineno">  618 </span>    <span class="keyword">int</span> id = getResources().<span class="warning">getIdentifier</span>(name, <span class="string">"dimen"</span>, <span class="string">"android"</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  619 </span>    <span class="keyword">return</span> id == <span class="number">0</span> ? <span class="number">0</span> : getResources().getDimensionPixelSize(id);
+<span class="lineno">  620 </span>  }
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationDiscouragedApi" style="display: none;">
+Discouraged APIs are allowed and are not deprecated, but they may be unfit for common use (e.g. due to slow performance or subtle behavior).<br/>To suppress this error, use the issue id "DiscouragedApi" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">DiscouragedApi</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Correctness</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 2/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationDiscouragedApiLink" onclick="reveal('explanationDiscouragedApi');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="DiscouragedApiCardLink" onclick="hideid('DiscouragedApiCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Security"></a>
+<a name="DataExtractionRules"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="DataExtractionRulesCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Missing data extraction rules</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/AndroidManifest.xml">../../src/main/AndroidManifest.xml</a>:10</span>: <span class="message">The attribute <code>android:dataExtractionRules</code> only applies for Android 12 and higher; since <code>minSdkVersion</code> is API 26 you should also set <code>android:fullBackupContent</code></span><br /><pre class="errorlines">
+<span class="lineno">  7 </span>  <span class="tag">&lt;uses-permission</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.permission.RECORD_AUDIO"</span> />
+<span class="lineno">  8 </span>  <span class="tag">&lt;uses-permission</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.permission.RECEIVE_BOOT_COMPLETED"</span> />
+<span class="lineno">  9 </span>  <span class="tag">&lt;uses-feature</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">"android.hardware.microphone"</span> <span class="prefix">android:</span><span class="attribute">required</span>=<span class="value">"false"</span> />
+<span class="caretline"><span class="lineno"> 10 </span>  <span class="tag">&lt;application</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">allowBackup</span>=<span class="value">"false"</span> <span class="prefix">android:</span><span class="attribute">dataExtractionRules</span>=<span class="value">"</span><span class="warning"><span class="value">@xml/data_extraction_rules</span></span><span class="value">"</span> <span class="prefix">android:</span><span class="attribute">icon</span>=<span class="value">"@drawable/gengpet_icon"</span></span>
+<span class="lineno"> 11 </span>      <span class="prefix">android:</span><span class="attribute">label</span>=<span class="value">"@string/app_name"</span> <span class="prefix">android:</span><span class="attribute">supportsRtl</span>=<span class="value">"true"</span> <span class="prefix">android:</span><span class="attribute">theme</span>=<span class="value">"@style/Theme.GengPet"</span>>
+<span class="lineno"> 12 </span>      <span class="tag">&lt;activity</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">name</span>=<span class="value">".gengpet.GengMainActivity"</span> <span class="prefix">android:</span><span class="attribute">exported</span>=<span class="value">"true"</span> <span class="prefix">android:</span><span class="attribute">windowSoftInputMode</span>=<span class="value">"adjustResize"</span>>
+<span class="lineno"> 13 </span>          <span class="tag">&lt;intent-filter></span></pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationDataExtractionRules" style="display: none;">
+Before Android 12, the attributes <code>android:allowBackup</code> and <code>android:fullBackupContent</code> were used to configure all forms of backup, including cloud backups, device-to-device transfers and adb backup.<br/>
+<br/>
+In Android 12 and higher, these attributes have been deprecated and will only apply to cloud backups. You should instead use the attribute <code>android:dataExtractionRules</code>, specifying an <code>@xml</code> resource that configures which files to back up, for cloud backups and for device-to-device transfers, separately. If your <code>minSdkVersion</code> supports older versions, you'll still want to specify an <code>android:fullBackupContent</code> resource if the default behavior is not right for your app.<br/><div class="moreinfo">More info: <ul><li><a href="https://developer.android.com/about/versions/12/backup-restore#xml-changes">https://developer.android.com/about/versions/12/backup-restore#xml-changes</a>
+<li><a href="https://goo.gle/DataExtractionRules">https://goo.gle/DataExtractionRules</a>
+</ul></div>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+To suppress this error, use the issue id "DataExtractionRules" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">DataExtractionRules</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Security</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 3/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationDataExtractionRulesLink" onclick="reveal('explanationDataExtractionRules');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="DataExtractionRulesCardLink" onclick="hideid('DataExtractionRulesCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Performance"></a>
+<a name="DrawAllocation"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="DrawAllocationCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Memory allocations within drawing code</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/MainActivity.java">../../src/main/java/com/maowu/gravitypet/MainActivity.java</a>:1221</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 1218 </span>
+<span class="lineno"> 1219 </span>        <span class="annotation">@Override</span>
+<span class="lineno"> 1220 </span>        <span class="keyword">protected</span> <span class="keyword">void</span> onDraw(Canvas canvas) {
+<span class="caretline"><span class="lineno"> 1221 </span>            paint.setShader(<span class="warning"><span class="keyword">new</span> LinearGradient(<span class="number">0f</span>, <span class="number">0f</span>, <span class="number">0f</span>, getHeight(),</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1222 </span>                    Color.rgb(<span class="number">173</span>, <span class="number">214</span>, <span class="number">243</span>), Color.rgb(<span class="number">204</span>, <span class="number">231</span>, <span class="number">248</span>),
+<span class="lineno"> 1223 </span>                    Shader.TileMode.CLAMP));
+<span class="lineno"> 1224 </span>            canvas.drawRect(<span class="number">0f</span>, <span class="number">0f</span>, getWidth(), getHeight(), paint);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/MainActivity.java">../../src/main/java/com/maowu/gravitypet/MainActivity.java</a>:1463</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 1460 </span>             paint.setStyle(Paint.Style.STROKE);
+<span class="lineno"> 1461 </span>             paint.setStrokeWidth(Math.max(<span class="number">3f</span>, getHeight() * <span class="number">0.025f</span>));
+<span class="lineno"> 1462 </span>             paint.setColor(style == STYLE_LAUNCH ? <span class="number">0xFFF4F7FA</span> : <span class="number">0xFF347ED6</span>);
+<span class="caretline"><span class="lineno"> 1463 </span>             paint.setPathEffect(<span class="warning"><span class="keyword">new</span> DashPathEffect(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1464 </span>                     <span class="keyword">new</span> <span class="keyword">float</span>[]{getHeight() * <span class="number">0.10f</span>, getHeight() * <span class="number">0.055f</span>}, <span class="number">0f</span>));
+<span class="lineno"> 1465 </span>             <span class="keyword">float</span> borderInset = inset + getHeight() * <span class="number">0.07f</span>;
+<span class="lineno"> 1466 </span>             RectF border = <span class="keyword">new</span> RectF(borderInset, borderInset,
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/MainActivity.java">../../src/main/java/com/maowu/gravitypet/MainActivity.java</a>:1464</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 1461 </span>             paint.setStrokeWidth(Math.max(<span class="number">3f</span>, getHeight() * <span class="number">0.025f</span>));
+<span class="lineno"> 1462 </span>             paint.setColor(style == STYLE_LAUNCH ? <span class="number">0xFFF4F7FA</span> : <span class="number">0xFF347ED6</span>);
+<span class="lineno"> 1463 </span>             paint.setPathEffect(<span class="keyword">new</span> DashPathEffect(
+<span class="caretline"><span class="lineno"> 1464 </span>                     <span class="warning"><span class="keyword">new</span> <span class="keyword">float</span>[]{getHeight() * <span class="number">0.10f</span>, getHeight() * <span class="number">0.055f</span>}</span>, <span class="number">0f</span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1465 </span>             <span class="keyword">float</span> borderInset = inset + getHeight() * <span class="number">0.07f</span>;
+<span class="lineno"> 1466 </span>             RectF border = <span class="keyword">new</span> RectF(borderInset, borderInset,
+<span class="lineno"> 1467 </span>                     getWidth() - borderInset, rect.bottom - getHeight() * <span class="number">0.07f</span>);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/MainActivity.java">../../src/main/java/com/maowu/gravitypet/MainActivity.java</a>:1466</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 1463 </span>  paint.setPathEffect(<span class="keyword">new</span> DashPathEffect(
+<span class="lineno"> 1464 </span>          <span class="keyword">new</span> <span class="keyword">float</span>[]{getHeight() * <span class="number">0.10f</span>, getHeight() * <span class="number">0.055f</span>}, <span class="number">0f</span>));
+<span class="lineno"> 1465 </span>  <span class="keyword">float</span> borderInset = inset + getHeight() * <span class="number">0.07f</span>;
+<span class="caretline"><span class="lineno"> 1466 </span>  RectF border = <span class="warning"><span class="keyword">new</span> RectF(borderInset, borderInset,</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1467 </span>          getWidth() - borderInset, rect.bottom - getHeight() * <span class="number">0.07f</span>);
+<span class="lineno"> 1468 </span>  canvas.drawRoundRect(border, border.height() * <span class="number">0.34f</span>, border.height() * <span class="number">0.34f</span>, paint);
+<span class="lineno"> 1469 </span>  paint.setPathEffect(<span class="keyword">null</span>);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java">../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java</a>:601</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  598 </span>
+<span class="lineno">  599 </span>       paint.setStyle(Paint.Style.FILL);
+<span class="lineno">  600 </span>       paint.setShader(<span class="keyword">null</span>);
+<span class="caretline"><span class="lineno">  601 </span>       paint.setColor(Color.HSVToColor(<span class="warning"><span class="keyword">new</span> <span class="keyword">float</span>[]{hue, <span class="number">1f</span>, <span class="number">1f</span>}</span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  602 </span>       canvas.drawRoundRect(saturationValueRect, <span class="number">10f</span> * density, <span class="number">10f</span> * density, paint);
+<span class="lineno">  603 </span>
+<span class="lineno">  604 </span>       paint.setShader(<span class="keyword">new</span> LinearGradient(
+</pre>
+
+<button class="mdl-button mdl-js-button mdl-button--primary" id="DrawAllocationDivLink" onclick="reveal('DrawAllocationDiv');" />+ 9 More Occurrences...</button>
+<div id="DrawAllocationDiv" style="display: none">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java">../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java</a>:604</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  601 </span>       paint.setColor(Color.HSVToColor(<span class="keyword">new</span> <span class="keyword">float</span>[]{hue, <span class="number">1f</span>, <span class="number">1f</span>}));
+<span class="lineno">  602 </span>       canvas.drawRoundRect(saturationValueRect, <span class="number">10f</span> * density, <span class="number">10f</span> * density, paint);
+<span class="lineno">  603 </span>
+<span class="caretline"><span class="lineno">  604 </span>       paint.setShader(<span class="warning"><span class="keyword">new</span> LinearGradient(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  605 </span>               saturationValueRect.left, <span class="number">0f</span>, saturationValueRect.right, <span class="number">0f</span>,
+<span class="lineno">  606 </span>               Color.WHITE, <span class="number">0x00FFFFFF</span>, Shader.TileMode.CLAMP));
+<span class="lineno">  607 </span>       canvas.drawRoundRect(saturationValueRect, <span class="number">10f</span> * density, <span class="number">10f</span> * density, paint);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java">../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java</a>:608</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  605 </span>               saturationValueRect.left, <span class="number">0f</span>, saturationValueRect.right, <span class="number">0f</span>,
+<span class="lineno">  606 </span>               Color.WHITE, <span class="number">0x00FFFFFF</span>, Shader.TileMode.CLAMP));
+<span class="lineno">  607 </span>       canvas.drawRoundRect(saturationValueRect, <span class="number">10f</span> * density, <span class="number">10f</span> * density, paint);
+<span class="caretline"><span class="lineno">  608 </span>       paint.setShader(<span class="warning"><span class="keyword">new</span> LinearGradient(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  609 </span>               <span class="number">0f</span>, saturationValueRect.top, <span class="number">0f</span>, saturationValueRect.bottom,
+<span class="lineno">  610 </span>               <span class="number">0x00000000</span>, Color.BLACK, Shader.TileMode.CLAMP));
+<span class="lineno">  611 </span>       canvas.drawRoundRect(saturationValueRect, <span class="number">10f</span> * density, <span class="number">10f</span> * density, paint);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java">../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java</a>:617</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  614 </span>                    <span class="number">0xFFFF0000</span>, <span class="number">0xFFFFFF00</span>, <span class="number">0xFF00FF00</span>, <span class="number">0xFF00FFFF</span>,
+<span class="lineno">  615 </span>                    <span class="number">0xFF0000FF</span>, <span class="number">0xFFFF00FF</span>, <span class="number">0xFFFF0000</span>
+<span class="lineno">  616 </span>            };
+<span class="caretline"><span class="lineno">  617 </span>            paint.setShader(<span class="warning"><span class="keyword">new</span> LinearGradient(<span class="number">0f</span>, hueRect.top, <span class="number">0f</span>, hueRect.bottom,</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  618 </span>                    hueColors, <span class="keyword">null</span>, Shader.TileMode.CLAMP));
+<span class="lineno">  619 </span>            canvas.drawRoundRect(hueRect, hueWidth * <span class="number">0.5f</span>, hueWidth * <span class="number">0.5f</span>, paint);
+<span class="lineno">  620 </span>            paint.setShader(<span class="keyword">null</span>);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java">../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java</a>:190</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 187 </span>    canvas.drawBitmap(
+<span class="lineno"> 188 </span>        bitmap,
+<span class="lineno"> 189 </span>        <span class="keyword">null</span>,
+<span class="caretline"><span class="lineno"> 190 </span>        <span class="warning"><span class="keyword">new</span> RectF(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 191 </span>            artRect.centerX() - w / <span class="number">2</span>,
+<span class="lineno"> 192 </span>            artRect.centerY() - h / <span class="number">2</span>,
+<span class="lineno"> 193 </span>            artRect.centerX() + w / <span class="number">2</span>,
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java">../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java</a>:190</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno"> 187 </span>    canvas.drawBitmap(
+<span class="lineno"> 188 </span>        bitmap,
+<span class="lineno"> 189 </span>        <span class="keyword">null</span>,
+<span class="caretline"><span class="lineno"> 190 </span>        <span class="warning"><span class="keyword">new</span> RectF(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 191 </span>            artRect.centerX() - w / <span class="number">2</span>,
+<span class="lineno"> 192 </span>            artRect.centerY() - h / <span class="number">2</span>,
+<span class="lineno"> 193 </span>            artRect.centerX() + w / <span class="number">2</span>,
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetView.java">../../src/main/java/com/maowu/gravitypet/PetView.java</a>:960</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  957 </span>        <span class="keyword">super</span>.onDraw(canvas);
+<span class="lineno">  958 </span>        <span class="keyword">if</span> (dismissZoneAlpha > <span class="number">0.002f</span>) {
+<span class="lineno">  959 </span>            <span class="keyword">float</span> startX = getWidth() * <span class="number">0.68f</span>;
+<span class="caretline"><span class="lineno">  960 </span>            dismissZonePaint.setShader(<span class="warning"><span class="keyword">new</span> LinearGradient(</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  961 </span>                    startX, <span class="number">0f</span>, getWidth(), <span class="number">0f</span>,
+<span class="lineno">  962 </span>                    <span class="keyword">new</span> <span class="keyword">int</span>[]{Color.TRANSPARENT, <span class="number">0x44FF2929</span>, <span class="number">0xB8D90000</span>},
+<span class="lineno">  963 </span>                    <span class="keyword">new</span> <span class="keyword">float</span>[]{<span class="number">0f</span>, <span class="number">0.55f</span>, <span class="number">1f</span>}, Shader.TileMode.CLAMP));
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetView.java">../../src/main/java/com/maowu/gravitypet/PetView.java</a>:962</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  959 </span>            <span class="keyword">float</span> startX = getWidth() * <span class="number">0.68f</span>;
+<span class="lineno">  960 </span>            dismissZonePaint.setShader(<span class="keyword">new</span> LinearGradient(
+<span class="lineno">  961 </span>                    startX, <span class="number">0f</span>, getWidth(), <span class="number">0f</span>,
+<span class="caretline"><span class="lineno">  962 </span>                    <span class="warning"><span class="keyword">new</span> <span class="keyword">int</span>[]{Color.TRANSPARENT, <span class="number">0x44FF2929</span>, <span class="number">0xB8D90000</span>}</span>,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  963 </span>                    <span class="keyword">new</span> <span class="keyword">float</span>[]{<span class="number">0f</span>, <span class="number">0.55f</span>, <span class="number">1f</span>}, Shader.TileMode.CLAMP));
+<span class="lineno">  964 </span>            dismissZonePaint.setAlpha(Math.round(<span class="number">255f</span> * dismissZoneAlpha));
+<span class="lineno">  965 </span>            canvas.drawRect(startX, <span class="number">0f</span>, getWidth(), getHeight(), dismissZonePaint);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetView.java">../../src/main/java/com/maowu/gravitypet/PetView.java</a>:963</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  960 </span>            dismissZonePaint.setShader(<span class="keyword">new</span> LinearGradient(
+<span class="lineno">  961 </span>                    startX, <span class="number">0f</span>, getWidth(), <span class="number">0f</span>,
+<span class="lineno">  962 </span>                    <span class="keyword">new</span> <span class="keyword">int</span>[]{Color.TRANSPARENT, <span class="number">0x44FF2929</span>, <span class="number">0xB8D90000</span>},
+<span class="caretline"><span class="lineno">  963 </span>                    <span class="warning"><span class="keyword">new</span> <span class="keyword">float</span>[]{<span class="number">0f</span>, <span class="number">0.55f</span>, <span class="number">1f</span>}</span>, Shader.TileMode.CLAMP));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  964 </span>            dismissZonePaint.setAlpha(Math.round(<span class="number">255f</span> * dismissZoneAlpha));
+<span class="lineno">  965 </span>            canvas.drawRect(startX, <span class="number">0f</span>, getWidth(), getHeight(), dismissZonePaint);
+<span class="lineno">  966 </span>            dismissZonePaint.setShader(<span class="keyword">null</span>);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetView.java">../../src/main/java/com/maowu/gravitypet/PetView.java</a>:982</span>: <span class="message">Avoid object allocations during draw/layout operations (preallocate and reuse instead)</span><br /><pre class="errorlines">
+<span class="lineno">  979 </span>        canvas.rotate((<span class="keyword">float</span>) Math.toDegrees(rotationAngle));
+<span class="lineno">  980 </span>
+<span class="lineno">  981 </span>        <span class="keyword">if</span> (skinBitmap != <span class="keyword">null</span>) {
+<span class="caretline"><span class="lineno">  982 </span>            RectF body = <span class="warning"><span class="keyword">new</span> RectF(-radius, -radius, radius, radius)</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  983 </span>            skinPaint.setAlpha(<span class="number">255</span>);
+<span class="lineno">  984 </span>            canvas.drawBitmap(skinBitmap, <span class="keyword">null</span>, body, skinPaint);
+<span class="lineno">  985 </span>        } <span class="keyword">else</span> {
+</pre>
+
+</div>
+</div>
+<div class="metadata"><div class="explanation" id="explanationDrawAllocation" style="display: none;">
+You should avoid allocating objects during a drawing or layout operation. These are called frequently, so a smooth UI can be interrupted by garbage collection pauses caused by the object allocations.<br/>
+<br/>
+The way this is generally handled is to allocate the needed objects up front and to reuse them for each drawing operation.<br/>
+<br/>
+Some methods allocate memory on your behalf (such as <code>Bitmap.create</code>), and these should be handled in the same way.<br/>To suppress this error, use the issue id "DrawAllocation" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">DrawAllocation</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Performance</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 9/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationDrawAllocationLink" onclick="reveal('explanationDrawAllocation');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="DrawAllocationCardLink" onclick="hideid('DrawAllocationCard');">
+Dismiss</button>            </div>
+            </div>
+          </section><a name="UsableSpace"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="UsableSpaceCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Using getUsableSpace()</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/LocalRecording.java">../../src/main/java/com/maowu/gravitypet/gengpet/LocalRecording.java</a>:57</span>: <span class="message">Consider also using <code>StorageManager#getAllocatableBytes</code> and <code>allocateBytes</code> which will consider clearable cached data</span><br /><pre class="errorlines">
+<span class="lineno">  54 </span>
+<span class="lineno">  55 </span>  <span class="keyword">void</span> start(File file) <span class="keyword">throws</span> IOException {
+<span class="lineno">  56 </span>    <span class="keyword">if</span> (active()) <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"已有录音正在进行"</span>);
+<span class="caretline"><span class="lineno">  57 </span>    <span class="keyword">if</span> (file.getParentFile().<span class="warning">getUsableSpace</span>() &lt; <span class="number">8</span> * <span class="number">1024</span> * <span class="number">1024L</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  58 </span>      <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"空间不足，请先清理至少 8 MB 空间"</span>);
+<span class="lineno">  59 </span>    AudioManager audio = context.getSystemService(AudioManager.<span class="keyword">class</span>);
+<span class="lineno">  60 </span>    focus =
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/LocalRecording.java">../../src/main/java/com/maowu/gravitypet/gengpet/LocalRecording.java</a>:57</span>: <span class="message">Consider also using <code>StorageManager#getAllocatableBytes</code> and <code>allocateBytes</code> which will consider clearable cached data</span><br /><pre class="errorlines">
+<span class="lineno">  54 </span>
+<span class="lineno">  55 </span>  <span class="keyword">void</span> start(File file) <span class="keyword">throws</span> IOException {
+<span class="lineno">  56 </span>    <span class="keyword">if</span> (active()) <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"已有录音正在进行"</span>);
+<span class="caretline"><span class="lineno">  57 </span>    <span class="keyword">if</span> (file.getParentFile().<span class="warning">getUsableSpace</span>() &lt; <span class="number">8</span> * <span class="number">1024</span> * <span class="number">1024L</span>)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  58 </span>      <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"空间不足，请先清理至少 8 MB 空间"</span>);
+<span class="lineno">  59 </span>    AudioManager audio = context.getSystemService(AudioManager.<span class="keyword">class</span>);
+<span class="lineno">  60 </span>    focus =
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationUsableSpace" style="display: none;">
+When you need to allocate disk space for large files, consider using the new <code>allocateBytes(FileDescriptor, long)</code> API, which will automatically clear cached files belonging to other apps (as needed) to meet your request.<br/>
+<br/>
+When deciding if the device has enough disk space to hold your new data, call <code>getAllocatableBytes(UUID)</code> instead of using <code>getUsableSpace()</code>, since the former will consider any cached data that the system is willing to clear on your behalf.<br/>
+<br/>
+Note that these methods require API level 26. If your app is running on older devices, you will probably need to use both APIs, conditionally switching on <code>Build.VERSION.SDK_INT</code>. Lint only looks in the same compilation unit to see if you are already using both APIs, so if it warns even though you are already using the new API, consider moving the calls to the same file or suppressing the warning.<br/>To suppress this error, use the issue id "UsableSpace" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">UsableSpace</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Performance</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 3/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationUsableSpaceLink" onclick="reveal('explanationUsableSpace');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="UsableSpaceCardLink" onclick="hideid('UsableSpaceCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Usability"></a>
+<a name="ViewConstructor"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="ViewConstructorCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Missing View constructors for XML inflation</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/ConversationBackView.java">../../src/main/java/com/maowu/gravitypet/ConversationBackView.java</a>:11</span>: <span class="message">Custom view <code>ConversationBackView</code> is missing constructor used by tools: <code>(Context)</code> or <code>(Context,AttributeSet)</code> or <code>(Context,AttributeSet,int)</code></span><br /><pre class="errorlines">
+<span class="lineno">  8 </span><span class="keyword">import</span> android.window.OnBackInvokedDispatcher;
+<span class="lineno">  9 </span>
+<span class="lineno"> 10 </span><span class="javadoc">/** A one-pixel, non-touchable overlay that owns only the system back action. */</span>
+<span class="caretline"><span class="lineno"> 11 </span><span class="keyword">final</span> <span class="keyword">class</span> <span class="warning">ConversationBackView</span> <span class="keyword">extends</span> View {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 12 </span>    <span class="keyword">private</span> <span class="keyword">final</span> Runnable onBack;
+<span class="lineno"> 13 </span>    <span class="keyword">private</span> OnBackInvokedDispatcher backDispatcher;
+<span class="lineno"> 14 </span>    <span class="keyword">private</span> OnBackInvokedCallback backCallback;
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/DragHandleView.java">../../src/main/java/com/maowu/gravitypet/DragHandleView.java</a>:11</span>: <span class="message">Custom view <code>DragHandleView</code> is missing constructor used by tools: <code>(Context)</code> or <code>(Context,AttributeSet)</code> or <code>(Context,AttributeSet,int)</code></span><br /><pre class="errorlines">
+<span class="lineno">   8 </span><span class="keyword">import</span> android.view.ViewConfiguration;
+<span class="lineno">   9 </span>
+<span class="lineno">  10 </span><span class="javadoc">/** A small transparent overlay that captures touches only around the visible pet. */</span>
+<span class="caretline"><span class="lineno">  11 </span><span class="keyword">public</span> <span class="keyword">class</span> <span class="warning">DragHandleView</span> <span class="keyword">extends</span> View {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  12 </span>    <span class="keyword">public</span> <span class="keyword">interface</span> DoubleTapListener {
+<span class="lineno">  13 </span>        <span class="keyword">void</span> onDoubleTap();
+<span class="lineno">  14 </span>    }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java">../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java</a>:16</span>: <span class="message">Custom view <code>PetSpriteView</code> is missing constructor used by tools: <code>(Context)</code> or <code>(Context,AttributeSet)</code> or <code>(Context,AttributeSet,int)</code></span><br /><pre class="errorlines">
+<span class="lineno">  13 </span><span class="keyword">import</span> android.view.ViewConfiguration;
+<span class="lineno">  14 </span>
+<span class="lineno">  15 </span><span class="javadoc">/** A local-coordinate sprite and mutually exclusive tap/hold/drag state machine. */</span>
+<span class="caretline"><span class="lineno">  16 </span><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="warning">PetSpriteView</span> <span class="keyword">extends</span> View {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  17 </span>  <span class="keyword">public</span> <span class="keyword">interface</span> Interaction {
+<span class="lineno">  18 </span>    <span class="keyword">void</span> press(PetSpriteView view);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java">../../src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java</a>:16</span>: <span class="message">Custom view <code>PetSpriteView</code> is missing constructor used by tools: <code>(Context)</code> or <code>(Context,AttributeSet)</code> or <code>(Context,AttributeSet,int)</code></span><br /><pre class="errorlines">
+<span class="lineno">  13 </span><span class="keyword">import</span> android.view.ViewConfiguration;
+<span class="lineno">  14 </span>
+<span class="lineno">  15 </span><span class="javadoc">/** A local-coordinate sprite and mutually exclusive tap/hold/drag state machine. */</span>
+<span class="caretline"><span class="lineno">  16 </span><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="warning">PetSpriteView</span> <span class="keyword">extends</span> View {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  17 </span>  <span class="keyword">public</span> <span class="keyword">interface</span> Interaction {
+<span class="lineno">  18 </span>    <span class="keyword">void</span> press(PetSpriteView view);
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationViewConstructor" style="display: none;">
+Some layout tools (such as the Android layout editor) need to find a constructor with one of the following signatures:<br/>
+* <code>View(Context context)</code><br/>
+* <code>View(Context context, AttributeSet attrs)</code><br/>
+* <code>View(Context context, AttributeSet attrs, int defStyle)</code><br/>
+<br/>
+If your custom view needs to perform initialization which does not apply when used in a layout editor, you can surround the given code with a check to see if <code>View#isInEditMode()</code> is false, since that method will return <code>false</code> at runtime but true within a user interface editor.<br/>To suppress this error, use the issue id "ViewConstructor" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">ViewConstructor</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Usability</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 3/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationViewConstructorLink" onclick="reveal('explanationViewConstructor');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="ViewConstructorCardLink" onclick="hideid('ViewConstructorCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Accessibility"></a>
+<a name="ClickableViewAccessibility"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="ClickableViewAccessibilityCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Accessibility in Custom Views</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/MainActivity.java">../../src/main/java/com/maowu/gravitypet/MainActivity.java</a>:1059</span>: <span class="message">Custom view <code>PullParallaxLayout</code> overrides <code>onTouchEvent</code> but not <code>performClick</code></span><br /><pre class="errorlines">
+<span class="lineno"> 1056 </span>        }
+<span class="lineno"> 1057 </span>
+<span class="lineno"> 1058 </span>        <span class="annotation">@Override</span>
+<span class="caretline"><span class="lineno"> 1059 </span>        <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="warning">onTouchEvent</span>(MotionEvent event) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 1060 </span>            obtainVelocityTracker(event);
+<span class="lineno"> 1061 </span>            <span class="keyword">switch</span> (event.getActionMasked()) {
+<span class="lineno"> 1062 </span>                <span class="keyword">case</span> MotionEvent.ACTION_DOWN:
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java">../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java</a>:649</span>: <span class="message">Custom view <code>HsvColorPickerView</code> overrides <code>onTouchEvent</code> but not <code>performClick</code></span><br /><pre class="errorlines">
+<span class="lineno">  646 </span>        }
+<span class="lineno">  647 </span>
+<span class="lineno">  648 </span>        <span class="annotation">@Override</span>
+<span class="caretline"><span class="lineno">  649 </span>        <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="warning">onTouchEvent</span>(MotionEvent event) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  650 </span>            <span class="keyword">int</span> action = event.getActionMasked();
+<span class="lineno">  651 </span>            <span class="keyword">if</span> (action == MotionEvent.ACTION_DOWN) {
+<span class="lineno">  652 </span>                getParent().requestDisallowInterceptTouchEvent(<span class="keyword">true</span>);
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java">../../src/main/java/com/maowu/gravitypet/PetMakerActivity.java</a>:843</span>: <span class="message">Custom view <code>MakerCanvasView</code> overrides <code>onTouchEvent</code> but not <code>performClick</code></span><br /><pre class="errorlines">
+<span class="lineno">  840 </span>        }
+<span class="lineno">  841 </span>
+<span class="lineno">  842 </span>        <span class="annotation">@Override</span>
+<span class="caretline"><span class="lineno">  843 </span>        <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="warning">onTouchEvent</span>(MotionEvent event) {&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  844 </span>            <span class="keyword">int</span> action = event.getActionMasked();
+<span class="lineno">  845 </span>            <span class="keyword">if</span> (action == MotionEvent.ACTION_DOWN) {
+<span class="lineno">  846 </span>                getParent().requestDisallowInterceptTouchEvent(<span class="keyword">true</span>);
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationClickableViewAccessibility" style="display: none;">
+If a <code>View</code> that overrides <code>onTouchEvent</code> or uses an <code>OnTouchListener</code> does not also implement <code>performClick</code> and call it when clicks are detected, the <code>View</code> may not handle accessibility actions properly. Logic handling the click actions should ideally be placed in <code>View#performClick</code> as some accessibility services invoke <code>performClick</code> when a click action should occur.<br/>To suppress this error, use the issue id "ClickableViewAccessibility" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">ClickableViewAccessibility</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Accessibility</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 6/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationClickableViewAccessibilityLink" onclick="reveal('explanationClickableViewAccessibility');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="ClickableViewAccessibilityCardLink" onclick="hideid('ClickableViewAccessibilityCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Internationalization"></a>
+<a name="SetTextI18n"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="SetTextI18nCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">TextView Internationalization</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/AiSettingsActivity.java">../../src/main/java/com/maowu/gravitypet/AiSettingsActivity.java</a>:75</span>: <span class="message">String literal in <code>setText</code> can not be translated. Use Android resources instead.</span><br /><pre class="errorlines">
+<span class="lineno">  72 </span>        } <span class="keyword">catch</span> (Exception ignored) {}
+<span class="lineno">  73 </span>
+<span class="lineno">  74 </span>        Button save = <span class="keyword">new</span> Button(<span class="keyword">this</span>);
+<span class="caretline"><span class="lineno">  75 </span>        save.setText(<span class="warning"><span class="string">"保存 AI 设置"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  76 </span>        AppVisualStyle.stylePrimary(save, getResources().getDisplayMetrics().density);
+<span class="lineno">  77 </span>        save.setOnClickListener(v -> saveSettings());
+<span class="lineno">  78 </span>        LinearLayout.LayoutParams saveParams = <span class="keyword">new</span> LinearLayout.LayoutParams(
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:239</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 236 </span>                    (picker, h, m) -> {
+<span class="lineno"> 237 </span>                      minute[<span class="number">0</span>] = h * <span class="number">60</span> + m;
+<span class="lineno"> 238 </span>                      value.set(minute[<span class="number">0</span>]);
+<span class="caretline"><span class="lineno"> 239 </span>                      b.setText(<span class="warning">label + <span class="string">" · "</span> + time(minute[<span class="number">0</span>])</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 240 </span>                    },
+<span class="lineno"> 241 </span>                    minute[<span class="number">0</span>] / <span class="number">60</span>,
+<span class="lineno"> 242 </span>                    minute[<span class="number">0</span>] % <span class="number">60</span>,
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:239</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 236 </span>                    (picker, h, m) -> {
+<span class="lineno"> 237 </span>                      minute[<span class="number">0</span>] = h * <span class="number">60</span> + m;
+<span class="lineno"> 238 </span>                      value.set(minute[<span class="number">0</span>]);
+<span class="caretline"><span class="lineno"> 239 </span>                      b.setText(<span class="warning">label + <span class="string">" · "</span> + time(minute[<span class="number">0</span>])</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 240 </span>                    },
+<span class="lineno"> 241 </span>                    minute[<span class="number">0</span>] / <span class="number">60</span>,
+<span class="lineno"> 242 </span>                    minute[<span class="number">0</span>] % <span class="number">60</span>,
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:303</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 300 </span>    bar.setProgressTintList(ColorStateList.valueOf(UiKit.ACCENT));
+<span class="lineno"> 301 </span>    bar.setThumbTintList(ColorStateList.valueOf(UiKit.INK));
+<span class="lineno"> 302 </span>    content.addView(bar);
+<span class="caretline"><span class="lineno"> 303 </span>    t.setText(<span class="warning">label + <span class="string">" "</span> + bar.getProgress() + <span class="string">"%"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 304 </span>    bar.setOnSeekBarChangeListener(
+<span class="lineno"> 305 </span>        <span class="keyword">new</span> SeekBar.OnSeekBarChangeListener() {
+<span class="lineno"> 306 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onStartTrackingTouch(SeekBar b) {}
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:303</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 300 </span>    bar.setProgressTintList(ColorStateList.valueOf(UiKit.ACCENT));
+<span class="lineno"> 301 </span>    bar.setThumbTintList(ColorStateList.valueOf(UiKit.INK));
+<span class="lineno"> 302 </span>    content.addView(bar);
+<span class="caretline"><span class="lineno"> 303 </span>    t.setText(<span class="warning">label + <span class="string">" "</span> + bar.getProgress() + <span class="string">"%"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 304 </span>    bar.setOnSeekBarChangeListener(
+<span class="lineno"> 305 </span>        <span class="keyword">new</span> SeekBar.OnSeekBarChangeListener() {
+<span class="lineno"> 306 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onStartTrackingTouch(SeekBar b) {}
+</pre>
+
+<button class="mdl-button mdl-js-button mdl-button--primary" id="SetTextI18nDivLink" onclick="reveal('SetTextI18nDiv');" />+ 10 More Occurrences...</button>
+<div id="SetTextI18nDiv" style="display: none">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:311</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 308 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onStopTrackingTouch(SeekBar b) {}
+<span class="lineno"> 309 </span>
+<span class="lineno"> 310 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onProgressChanged(SeekBar b, <span class="keyword">int</span> value, <span class="keyword">boolean</span> user) {
+<span class="caretline"><span class="lineno"> 311 </span>            t.setText(<span class="warning">label + <span class="string">" "</span> + value + <span class="string">"%"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 312 </span>            <span class="keyword">if</span> (user) {
+<span class="lineno"> 313 </span>              FeaturePreferences.prefs(FeatureActivity.<span class="keyword">this</span>)
+<span class="lineno"> 314 </span>                  .edit()
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:311</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 308 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onStopTrackingTouch(SeekBar b) {}
+<span class="lineno"> 309 </span>
+<span class="lineno"> 310 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onProgressChanged(SeekBar b, <span class="keyword">int</span> value, <span class="keyword">boolean</span> user) {
+<span class="caretline"><span class="lineno"> 311 </span>            t.setText(<span class="warning">label + <span class="string">" "</span> + value + <span class="string">"%"</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 312 </span>            <span class="keyword">if</span> (user) {
+<span class="lineno"> 313 </span>              FeaturePreferences.prefs(FeatureActivity.<span class="keyword">this</span>)
+<span class="lineno"> 314 </span>                  .edit()
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:367</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 364 </span>          FeaturePreferences.MOOD_NAMES[i],
+<span class="lineno"> 365 </span>          () -> {
+<span class="lineno"> 366 </span>            selectedMood = mood;
+<span class="caretline"><span class="lineno"> 367 </span>            label.setText(<span class="warning"><span class="string">"当前："</span> + moodName(mood)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 368 </span>            persistMood(moodText.getText().toString());
+<span class="lineno"> 369 </span>          });
+<span class="lineno"> 370 </span>    }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/FeatureActivity.java</a>:367</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 364 </span>          FeaturePreferences.MOOD_NAMES[i],
+<span class="lineno"> 365 </span>          () -> {
+<span class="lineno"> 366 </span>            selectedMood = mood;
+<span class="caretline"><span class="lineno"> 367 </span>            label.setText(<span class="warning"><span class="string">"当前："</span> + moodName(mood)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 368 </span>            persistMood(moodText.getText().toString());
+<span class="lineno"> 369 </span>          });
+<span class="lineno"> 370 </span>    }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java</a>:680</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 677 </span>    s.setOnSeekBarChangeListener(
+<span class="lineno"> 678 </span>        <span class="keyword">new</span> SeekBar.OnSeekBarChangeListener() {
+<span class="lineno"> 679 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onProgressChanged(SeekBar b, <span class="keyword">int</span> n, <span class="keyword">boolean</span> user) {
+<span class="caretline"><span class="lineno"> 680 </span>            t.setText(<span class="warning">label + <span class="string">" · "</span> + (n + min)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 681 </span>            fn.set(n + min);
+<span class="lineno"> 682 </span>          }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java</a>:680</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 677 </span>    s.setOnSeekBarChangeListener(
+<span class="lineno"> 678 </span>        <span class="keyword">new</span> SeekBar.OnSeekBarChangeListener() {
+<span class="lineno"> 679 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onProgressChanged(SeekBar b, <span class="keyword">int</span> n, <span class="keyword">boolean</span> user) {
+<span class="caretline"><span class="lineno"> 680 </span>            t.setText(<span class="warning">label + <span class="string">" · "</span> + (n + min)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 681 </span>            fn.set(n + min);
+<span class="lineno"> 682 </span>          }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java</a>:680</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 677 </span>    s.setOnSeekBarChangeListener(
+<span class="lineno"> 678 </span>        <span class="keyword">new</span> SeekBar.OnSeekBarChangeListener() {
+<span class="lineno"> 679 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onProgressChanged(SeekBar b, <span class="keyword">int</span> n, <span class="keyword">boolean</span> user) {
+<span class="caretline"><span class="lineno"> 680 </span>            t.setText(label + <span class="string">" · "</span> + (<span class="warning">n + min</span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 681 </span>            fn.set(n + min);
+<span class="lineno"> 682 </span>          }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengMainActivity.java</a>:680</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno"> 677 </span>    s.setOnSeekBarChangeListener(
+<span class="lineno"> 678 </span>        <span class="keyword">new</span> SeekBar.OnSeekBarChangeListener() {
+<span class="lineno"> 679 </span>          <span class="keyword">public</span> <span class="keyword">void</span> onProgressChanged(SeekBar b, <span class="keyword">int</span> n, <span class="keyword">boolean</span> user) {
+<span class="caretline"><span class="lineno"> 680 </span>            t.setText(label + <span class="string">" · "</span> + (<span class="warning">n + min</span>));&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 681 </span>            fn.set(n + min);
+<span class="lineno"> 682 </span>          }
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java">../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java</a>:42</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno">  39 </span>       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Math.min(<span class="number">10</span>, amplitude / <span class="number">3277</span>); i++) meter.append(<span class="string">'▮'</span>);
+<span class="lineno">  40 </span>       <span class="keyword">if</span> (recordStatus != <span class="keyword">null</span>)
+<span class="lineno">  41 </span>         recordStatus.setText(
+<span class="caretline"><span class="lineno">  42 </span>             <span class="warning"><span class="string">"正在录音 "</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  43 </span>                 + seconds(millis)
+<span class="lineno">  44 </span>                 + <span class="string">" / 5:00\n音量 "</span>
+<span class="lineno">  45 </span>                 + meter
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java">../../src/main/java/com/maowu/gravitypet/gengpet/NotesPanel.java</a>:42</span>: <span class="message">Do not concatenate text displayed with <code>setText</code>. Use resource string with placeholders.</span><br /><pre class="errorlines">
+<span class="lineno">  39 </span>       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Math.min(<span class="number">10</span>, amplitude / <span class="number">3277</span>); i++) meter.append(<span class="string">'▮'</span>);
+<span class="lineno">  40 </span>       <span class="keyword">if</span> (recordStatus != <span class="keyword">null</span>)
+<span class="lineno">  41 </span>         recordStatus.setText(
+<span class="caretline"><span class="lineno">  42 </span>             <span class="warning"><span class="string">"正在录音 "</span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  43 </span>                 + seconds(millis)
+<span class="lineno">  44 </span>                 + <span class="string">" / 5:00\n音量 "</span>
+<span class="lineno">  45 </span>                 + meter
+</pre>
+
+</div>
+</div>
+<div class="metadata"><div class="explanation" id="explanationSetTextI18n" style="display: none;">
+When calling <code>TextView#setText</code><br/>
+* Never call <code>Number#toString()</code> to format numbers; it will not handle fraction separators and locale-specific digits properly. Consider using <code>String#format</code> with proper format specifications (<code>%d</code> or <code>%f</code>) instead.<br/>
+* Do not pass a string literal (e.g. "Hello") to display text. Hardcoded text can not be properly translated to other languages. Consider using Android resource strings instead.<br/>
+* Do not build messages by concatenating text chunks. Such messages can not be properly translated.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/guide/topics/resources/localization.html">https://developer.android.com/guide/topics/resources/localization.html</a>
+</div>To suppress this error, use the issue id "SetTextI18n" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">SetTextI18n</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Internationalization</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 6/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationSetTextI18nLink" onclick="reveal('explanationSetTextI18n');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="SetTextI18nCardLink" onclick="hideid('SetTextI18nCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="Internationalization:Bidirectional Text"></a>
+<a name="RtlHardcoded"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="RtlHardcodedCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Using left/right instead of start/end attributes</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+<div class="issue">
+<div class="warningslist">
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java</a>:639</span>: <span class="message">Use "<code>Gravity.START</code>" instead of "<code>Gravity.LEFT</code>" to ensure correct behavior in right-to-left locales</span><br /><pre class="errorlines">
+<span class="lineno">  636 </span>            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+<span class="lineno">  637 </span>            flags,
+<span class="lineno">  638 </span>            PixelFormat.TRANSLUCENT);
+<span class="caretline"><span class="lineno">  639 </span>    p.gravity = Gravity.TOP | Gravity.<span class="warning">LEFT</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  640 </span>    <span class="comment">// Bubble is removed before dragging/recycle. At most one .35 UI window and</span>
+<span class="lineno">  641 </span>    <span class="comment">// one .6 edge cue overlap: combined opacity 1 - .65 * .4 = .74 &lt; .8.</span>
+<span class="lineno">  642 </span>    p.alpha = touchable ? <span class="number">1</span> : .<span class="number">35f</span>;
+</pre>
+
+<span class="location"><a href="../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java">../../src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java</a>:639</span>: <span class="message">Use "<code>Gravity.START</code>" instead of "<code>Gravity.LEFT</code>" to ensure correct behavior in right-to-left locales</span><br /><pre class="errorlines">
+<span class="lineno">  636 </span>            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+<span class="lineno">  637 </span>            flags,
+<span class="lineno">  638 </span>            PixelFormat.TRANSLUCENT);
+<span class="caretline"><span class="lineno">  639 </span>    p.gravity = Gravity.TOP | Gravity.<span class="warning">LEFT</span>;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno">  640 </span>    <span class="comment">// Bubble is removed before dragging/recycle. At most one .35 UI window and</span>
+<span class="lineno">  641 </span>    <span class="comment">// one .6 edge cue overlap: combined opacity 1 - .65 * .4 = .74 &lt; .8.</span>
+<span class="lineno">  642 </span>    p.alpha = touchable ? <span class="number">1</span> : .<span class="number">35f</span>;
+</pre>
+
+</div>
+<div class="metadata"><div class="explanation" id="explanationRtlHardcoded" style="display: none;">
+Using <code>Gravity#LEFT</code> and <code>Gravity#RIGHT</code> can lead to problems when a layout is rendered in locales where text flows from right to left. Use <code>Gravity#START</code> and <code>Gravity#END</code> instead. Similarly, in XML <code>gravity</code> and <code>layout_gravity</code> attributes, use <code>start</code> rather than <code>left</code>.<br/>
+<br/>
+For XML attributes such as paddingLeft and <code>layout_marginLeft</code>, use <code>paddingStart</code> and <code>layout_marginStart</code>. <b>NOTE</b>: If your <code>minSdkVersion</code> is less than 17, you should add <b>both</b> the older left/right attributes <b>as well as</b> the new start/end attributes. On older platforms, where RTL is not supported and the start/end attributes are unknown and therefore ignored, you need the older left/right attributes. There is a separate lint check which catches that type of error.<br/>
+<br/>
+(Note: For <code>Gravity#LEFT</code> and <code>Gravity#START</code>, you can use these constants even when targeting older platforms, because the <code>start</code> bitmask is a superset of the <code>left</code> bitmask. Therefore, you can use <code>gravity="start"</code> rather than <code>gravity="left|start"</code>.)<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+To suppress this error, use the issue id "RtlHardcoded" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
+<br/></div>
+</div>
+</div>
+<div class="chips">
+<span class="mdl-chip">
+    <span class="mdl-chip__text">RtlHardcoded</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Bidirectional Text</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Internationalization</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Warning</span>
+</span>
+<span class="mdl-chip">
+    <span class="mdl-chip__text">Priority 5/10</span>
+</span>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationRtlHardcodedLink" onclick="reveal('explanationRtlHardcoded');">
+Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="RtlHardcodedCardLink" onclick="hideid('RtlHardcodedCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="MissingIssues"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="MissingIssuesCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Disabled Checks</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+One or more issues were not run by lint, either
+because the check is not enabled by default, or because
+it was disabled with a command line flag or via one or
+more <code>lint.xml</code> configuration files in the project directories.
+<div id="SuppressedIssues" style="display: none;"><br/><br/><div class="issue">
+<div class="id">AppCompatMethod<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+When using the appcompat library, there are some methods you should be calling instead of the normal ones; for example, <code>getSupportActionBar()</code> instead of <code>getActionBar()</code>. This lint check looks for calls to the wrong method.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/topic/libraries/support-library/">https://developer.android.com/topic/libraries/support-library/</a>
+</div>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">AppLinksAutoVerify<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Ensures that app links are correctly set and associated with website.<br/><div class="moreinfo">More info: <a href="https://g.co/appindexing/applinks">https://g.co/appindexing/applinks</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">BackButton<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+According to the Android Design Guide,<br/>
+<br/>
+"Other platforms use an explicit back button with label to allow the user to navigate up the application's hierarchy. Instead, Android uses the main action bar's app icon for hierarchical navigation and the navigation bar's back button for temporal navigation."<br/>
+<br/>
+This check is not very sophisticated (it just looks for buttons with the label "Back"), so it is disabled by default to not trigger on common scenarios like pairs of Back/Next buttons to paginate through screens.<br/><div class="moreinfo">More info: <a href="https://d.android.com/r/studio-ui/designer/material/design">https://d.android.com/r/studio-ui/designer/material/design</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">ConvertToWebp<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+The WebP format is typically more compact than PNG and JPEG. As of Android 4.2.1 it supports transparency and lossless conversion as well. Note that there is a quickfix in the IDE which lets you perform conversion.<br/>
+<br/>
+Previously, launcher icons were required to be in the PNG format but that restriction is no longer there, so lint now flags these.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">DalvikOverride<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+The Dalvik virtual machine will treat a package private method in one class as overriding a package private method in its super class, even if they are in separate packages.<br/>
+<br/>
+If you really did intend for this method to override the other, make the method <code>protected</code> instead.<br/>
+<br/>
+If you did <b>not</b> intend the override, consider making the method private, or changing its name or signature.<br/>
+<br/>
+Note that this check is disabled be default, because ART (the successor to Dalvik) no longer has this behavior.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">DefaultEncoding<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Some APIs will implicitly use the default system character encoding instead of UTF-8 when converting to or from bytes, such as when creating a default <code>FileReader</code>.<br/>
+<br/>
+This is <i>usually</i> not correct; you only want to do this if you need to read files created by other programs where they have deliberately written in the same encoding. The default encoding varies from platform to platform and can vary from locale to locale, so this makes it difficult to interpret files containing non-ASCII characters.<br/>
+<br/>
+We recommend using UTF-8 everywhere.<br/>
+<br/>
+Note that on Android, the default file encoding is always UTF-8 (see <a href="https://developer.android.com/reference/java/nio/charset/Charset#defaultCharset(">https://developer.android.com/reference/java/nio/charset/Charset#defaultCharset(</a>) for more), so this lint check deliberately does not flag any problems in Android code, since it is always safe to rely on the default character encoding there.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">DuplicateStrings<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Duplicate strings can make applications larger unnecessarily.<br/>
+<br/>
+This lint check looks for duplicate strings, including differences for strings where the only difference is in capitalization. Title casing and all uppercase can all be adjusted in the layout or in code.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/reference/android/widget/TextView.html#attr_android:inputType">https://developer.android.com/reference/android/widget/TextView.html#attr_android:inputType</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">EasterEgg<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+An "easter egg" is code deliberately hidden in the code, both from potential users and even from other developers. This lint check looks for code which looks like it may be hidden from sight.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">ExpensiveAssertion<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+In Kotlin, assertions are not handled the same way as from the Java programming language. In particular, they're just implemented as a library call, and inside the library call the error is only thrown if assertions are enabled.<br/>
+<br/>
+This means that the arguments to the <code>assert</code> call will <b>always</b> be evaluated. If you're doing any computation in the expression being asserted, that computation will unconditionally be performed whether or not assertions are turned on. This typically turns into wasted work in release builds.<br/>
+<br/>
+This check looks for cases where the assertion condition is nontrivial, e.g. it is performing method calls or doing more work than simple comparisons on local variables or fields.<br/>
+<br/>
+You can work around this by writing your own inline assert method instead:<br/>
+
+<pre>
+@Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
+inline fun assert(condition: () -> Boolean) {
+    if (_Assertions.ENABLED &amp;&amp; !condition()) {
+        throw AssertionError()
+    }
+}
+</pre>
+<br/>
+In Android, because assertions are not enforced at runtime, instead use this:<br/>
+
+<pre>
+inline fun assert(condition: () -> Boolean) {
+    if (BuildConfig.DEBUG &amp;&amp; !condition()) {
+        throw AssertionError()
+    }
+}
+</pre>
+<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">IconExpectedSize<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+There are predefined sizes (for each density) for launcher icons. You should follow these conventions to make sure your icons fit in with the overall look of the platform.<br/><div class="moreinfo">More info: <a href="https://d.android.com/r/studio-ui/designer/material/iconography">https://d.android.com/r/studio-ui/designer/material/iconography</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">InvalidPackage<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+This check scans through libraries looking for calls to APIs that are not included in Android.<br/>
+<br/>
+When you create Android projects, the classpath is set up such that you can only access classes in the API packages that are included in Android. However, if you add other projects to your libs/ folder, there is no guarantee that those .jar files were built with an Android specific classpath, and in particular, they could be accessing unsupported APIs such as java.applet.<br/>
+<br/>
+This check scans through library jars and looks for references to API packages that are not included in Android and flags these. This is only an error if your code calls one of the library classes which wind up referencing the unsupported package.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">KotlinPropertyAccess<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+For a method to be represented as a property in Kotlin, strict &#8220;bean&#8221;-style prefixing must be used.<br/>
+<br/>
+Accessor methods require a <code>get</code> prefix or for boolean-returning methods an <code>is</code> prefix can be used.<br/><div class="moreinfo">More info: <a href="https://android.github.io/kotlin-guides/interop.html#property-prefixes">https://android.github.io/kotlin-guides/interop.html#property-prefixes</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">KotlincFE10<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+K2, the new version of Kotlin compiler, which encompasses the new frontend, is coming. Try to avoid using internal APIs from the old frontend if possible.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">LambdaLast<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+To improve calling this code from Kotlin, parameter types eligible for SAM conversion should be last.<br/><div class="moreinfo">More info: <a href="https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last">https://android.github.io/kotlin-guides/interop.html#lambda-parameters-last</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">LintDocExample<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Lint's tool for generating documentation for each issue has special support for including a code example which shows how to trigger the report. It will pick the first unit test it can find and pick out the source file referenced from the error message, but you can instead designate a unit test to be the documentation example, and in that case, all the files are included.<br/>
+<br/>
+To designate a unit test as the documentation example for an issue, name the test <code>testDocumentationExample</code>, or if your detector reports multiple issues, <code>testDocumentationExample</code>&lt;Id>, such as <code>testDocumentationExampleMyId</code>.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">LintImplPsiEquals<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+You should never compare two PSI elements for equality with <code>equals</code>; use <code>PsiEquivalenceUtil.areElementsEquivalent(PsiElement, PsiElement)</code> instead.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">LintImplUnexpectedDomain<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+This checks flags URLs to domains that have not been explicitly allowed for use as a documentation source.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">LogConditional<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+The <code>BuildConfig</code> class provides a constant, <code>DEBUG</code>, which indicates whether the code is being built in release mode or in debug mode. In release mode, you typically want to strip out all the logging calls. Since the compiler will automatically remove all code which is inside a <code>if (false)</code> check, surrounding your logging calls with a check for <code>BuildConfig.DEBUG</code> is a good idea.<br/>
+<br/>
+If you <b>really</b> intend for the logging to be present in release mode, you can suppress this warning with a <code>@SuppressLint</code> annotation for the intentional logging calls.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">MangledCRLF<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+On Windows, line endings are typically recorded as carriage return plus newline: \r\n.<br/>
+<br/>
+This detector looks for invalid line endings with repeated carriage return characters (without newlines). Previous versions of the ADT plugin could accidentally introduce these into the file, and when editing the file, the editor could produce confusing visual artifacts.<br/><div class="moreinfo">More info: <a href="https://bugs.eclipse.org/bugs/show_bug.cgi?id=375421">https://bugs.eclipse.org/bugs/show_bug.cgi?id=375421</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">MinSdkTooLow<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+The value of the <code>minSdkVersion</code> property is too low and can be incremented without noticeably reducing the number of supported devices.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">NegativeMargin<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Margin values should be positive. Negative values are generally a sign that you are making assumptions about views surrounding the current one, or may be tempted to turn off child clipping to allow a view to escape its parent. Turning off child clipping to do this not only leads to poor graphical performance, it also results in wrong touch event handling since touch events are based strictly on a chain of parent-rect hit tests. Finally, making assumptions about the size of strings can lead to localization problems.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">NewerVersionAvailable<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+This detector checks with a central repository to see if there are newer versions available for the dependencies used by this project. This is similar to the <code>GradleDependency</code> check, which checks for newer versions available in the Android SDK tools and libraries, but this works with any MavenCentral dependency, and connects to the library every time, which makes it more flexible but also <b>much</b> slower.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">NoHardKeywords<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Do not use Kotlin&#8217;s hard keywords as the name of methods or fields. These require the use of backticks to escape when calling from Kotlin. Soft keywords, modifier keywords, and special identifiers are allowed.<br/>
+<br/>
+For example, ActionEvent's <code>getWhen()</code> method requires backticks when used from Kotlin:
+<pre>
+val timestamp = event.`when`
+</pre>
+<br/><div class="moreinfo">More info: <a href="https://android.github.io/kotlin-guides/interop.html#no-hard-keywords">https://android.github.io/kotlin-guides/interop.html#no-hard-keywords</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">NoOp<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+This check looks for code which looks like it's a no-op -- usually leftover expressions from interactive debugging, but in some cases bugs where you had intended to do something with the expression such as assign it to a field.<br/><br/>
+This check can be configured via the following options:<br/><br/>
+<div class="options">
+<b>pure-getters</b> (default is false):<br/>
+Whether to assume methods with getter-names have no side effects.<br/>
+<br/>
+Getter methods (where names start with <code>get</code> or <code>is</code>, and have non-void return types, and no arguments) should not have side effects. With this option turned on, lint will assume that is the case and will list any getter calls whose results are ignored as suspicious code.<br/>
+<br/>
+To configure this option, use a `lint.xml` file in the project or source folder using an <code>&lt;option&gt;</code> block like the following:
+<pre class="errorlines">
+<span class="lineno"> 1 </span><span class="tag">&lt;lint></span>
+<span class="lineno"> 2 </span>    <span class="tag">&lt;issue</span><span class="attribute"> id</span>=<span class="value">"NoOp"</span>>
+<span class="caretline"><span class="lineno"> 3 </span>        <span class="tag">&lt;option</span><span class="attribute"> name</span>=<span class="warning"><span class="value">"pure-getters"</span> <span class="attribute">value</span>=<span class="value">"false"</span></span> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 4 </span>    <span class="tag">&lt;/issue></span>
+<span class="lineno"> 5 </span><span class="tag">&lt;/lint></span>
+</pre>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">PermissionNamingConvention<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Permissions should be prefixed with an app's package name, using reverse-domain-style naming. This prefix should be followed by <code>.permission.</code>, and then a description of the capability that the permission represents, in upper SNAKE_CASE. For example, <code>com.example.myapp.permission.ENGAGE_HYPERSPACE</code>.<br/>
+<br/>
+Following this recommendation avoids naming collisions, and helps clearly identify the owner and intention of a custom permission.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">PrivacySandboxBlockedCall<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Many APIs are unavailable in the Privacy Sandbox, depending on the <code>targetSdk</code>.<br/>
+<br/>
+If your code is designed to run in the sandbox (and never outside the sandbox) then you should remove the blocked calls to avoid exceptions at runtime.<br/>
+<br/>
+If your code is part of a library that can be executed both inside and outside the sandbox, surround the code with <code>if (!Process.isSdkSandbox()) { ... }</code> (or use your own field or method annotated with <code>@ChecksRestrictedEnvironment</code>) to avoid executing blocked calls when in the sandbox. Or, add the <code>@RestrictedForEnvironment</code> annotation to the containing method if the entire method should not be called when in the sandbox.<br/>
+<br/>
+This check is disabled by default, and should only be enabled in modules that may execute in the Privacy Sandbox.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">Registered<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Activities, services and content providers should be registered in the <code>AndroidManifest.xml</code> file using <code>&lt;activity></code>, <code>&lt;service></code> and <code>&lt;provider></code> tags.<br/>
+<br/>
+If your activity is simply a parent class intended to be subclassed by other "real" activities, make it an abstract class.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/guide/topics/manifest/manifest-intro.html">https://developer.android.com/guide/topics/manifest/manifest-intro.html</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">RequiredSize<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+All views must specify an explicit <code>layout_width</code> and <code>layout_height</code> attribute. There is a runtime check for this, so if you fail to specify a size, an exception is thrown at runtime.<br/>
+<br/>
+It's possible to specify these widths via styles as well. GridLayout, as a special case, does not require you to specify a size.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">SelectableText<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+If a <code>&lt;TextView></code> is used to display data, the user might want to copy that data and paste it elsewhere. To allow this, the <code>&lt;TextView></code> should specify <code>android:textIsSelectable="true"</code>.<br/>
+<br/>
+This lint check looks for TextViews which are likely to be displaying data: views whose text is set dynamically.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">StopShip<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Using the comment <code>// STOPSHIP</code> can be used to flag code that is incomplete but checked in. This comment marker can be used to indicate that the code should not be shipped until the issue is addressed, and lint will look for these. In Gradle projects, this is only checked for non-debug (release) builds.<br/>
+<br/>
+In Kotlin, the <code>TODO()</code> method is also treated as a stop ship marker; you can use it to make incomplete code compile, but it will throw an exception at runtime and therefore should be fixed before shipping releases.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">StringFormatTrivial<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Every call to <code>String.format</code> creates a new <code>Formatter</code> instance, which will decrease the performance of your app. <code>String.format</code> should only be used when necessary--if the formatted string contains only trivial conversions (e.g. <code>b</code>, <code>s</code>, <code>c</code>) and there are no translation concerns, it will be more efficient to replace them and concatenate with <code>+</code>.<br/><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">SyntheticAccessor<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+A private inner class which is accessed from the outer class will force the compiler to insert a synthetic accessor; this means that you are causing extra overhead. This is not important in small projects, but is important for large apps running up against the 64K method handle limit, and especially for <b>libraries</b> where you want to make sure your library is as small as possible for the cases where your library is used in an app running up against the 64K limit.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">TypographyQuotes<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Straight single quotes and double quotes, when used as a pair, can be replaced by "curvy quotes" (or directional quotes). Use the right single quotation mark for apostrophes. Never use generic quotes ", ' or free-standing accents `, ´ for quotation marks, apostrophes, or primes. This can make the text more readable.<br/><div class="moreinfo">More info: <a href="https://en.wikipedia.org/wiki/Quotation_mark">https://en.wikipedia.org/wiki/Quotation_mark</a>
+</div>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">UnknownNullness<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+To improve referencing this code from Kotlin, consider adding explicit nullness information here with either <code>@NonNull</code> or <code>@Nullable</code>.<br/><br/>
+This check can be configured via the following options:<br/><br/>
+<div class="options">
+<b>ignore-deprecated</b> (default is false):<br/>
+Whether to ignore classes and members that have been annotated with <code>@Deprecated</code>.<br/>
+<br/>
+Normally this lint check will flag all unannotated elements, but by setting this option to <code>true</code> it will skip any deprecated elements.<br/>
+<br/>
+To configure this option, use a `lint.xml` file in the project or source folder using an <code>&lt;option&gt;</code> block like the following:
+<pre class="errorlines">
+<span class="lineno"> 1 </span><span class="tag">&lt;lint></span>
+<span class="lineno"> 2 </span>    <span class="tag">&lt;issue</span><span class="attribute"> id</span>=<span class="value">"UnknownNullness"</span>>
+<span class="caretline"><span class="lineno"> 3 </span>        <span class="tag">&lt;option</span><span class="attribute"> name</span>=<span class="warning"><span class="value">"ignore-deprecated"</span> <span class="attribute">value</span>=<span class="value">"false"</span></span> />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 4 </span>    <span class="tag">&lt;/issue></span>
+<span class="lineno"> 5 </span><span class="tag">&lt;/lint></span>
+</pre>
+</div><div class="moreinfo">More info: <a href="https://developer.android.com/kotlin/interop#nullability_annotations">https://developer.android.com/kotlin/interop#nullability_annotations</a>
+</div>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">UnsupportedChromeOsHardware<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+The <code>&lt;uses-feature></code> element should not require this unsupported large screen hardware feature. Any &lt;uses-feature> not explicitly marked with <code>required="false"</code> is necessary on the device to be installed on. Ensure that any features that might prevent it from being installed on a ChromeOS, large screen, or foldable device are reviewed and marked as not required in the manifest.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/topic/arc/manifest.html#incompat-entries">https://developer.android.com/topic/arc/manifest.html#incompat-entries</a>
+</div>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">UnusedIds<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+This resource id definition appears not to be needed since it is not referenced from anywhere. Having id definitions, even if unused, is not necessarily a bad idea since they make working on layouts and menus easier, so there is not a strong reason to delete these.<br/>
+<br/>
+<br/>
+The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.<br/>
+<br/>
+You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests =true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests =true.<br/>
+<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">ValidActionsXml<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Ensures that an actions XML file is properly formed<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
+<br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">VulnerableCordovaVersion<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+The version of Cordova used in the app is vulnerable to security issues. Please update to the latest Apache Cordova version.<br/><div class="moreinfo">More info: <a href="https://cordova.apache.org/announcements/2015/11/20/security.html">https://cordova.apache.org/announcements/2015/11/20/security.html</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+<div class="issue">
+<div class="id">WrongThreadInterprocedural<div class="issueSeparator"></div>
+</div>
+<div class="metadata">Disabled By: Default<br/>
+<div class="explanation">
+Searches for interprocedural call paths that violate thread annotations in the program. Tracks the flow of instantiated types and lambda expressions to increase accuracy across method boundaries.<br/><div class="moreinfo">More info: <a href="https://developer.android.com/guide/components/processes-and-threads.html#Threads">https://developer.android.com/guide/components/processes-and-threads.html#Threads</a>
+</div><br/>
+<br/></div>
+</div>
+</div>
+</div>
+              </div>
+              <div class="mdl-card__actions mdl-card--border">
+<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="SuppressedIssuesLink" onclick="reveal('SuppressedIssues');">
+List Missing Issues</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="MissingIssuesCardLink" onclick="hideid('MissingIssuesCard');">
+Dismiss</button>            </div>
+            </div>
+          </section>
+<a name="SuppressInfo"></a>
+<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="SuppressCard" style="display: block;">
+            <div class="mdl-card mdl-cell mdl-cell--12-col">
+  <div class="mdl-card__title">
+    <h2 class="mdl-card__title-text">Suppressing Warnings and Errors</h2>
+  </div>
+              <div class="mdl-card__supporting-text">
+Lint errors can be suppressed in a variety of ways:<br/>
+<br/>
+1. With a <code>@SuppressLint</code> annotation in the Java code<br/>
+2. With a <code>tools:ignore</code> attribute in the XML file<br/>
+3. With a //noinspection comment in the source code<br/>
+4. With ignore flags specified in the <code>build.gradle</code> file, as explained below<br/>
+5. With a <code>lint.xml</code> configuration file in the project<br/>
+6. With a <code>lint.xml</code> configuration file passed to lint via the --config flag<br/>
+7. With the --ignore flag passed to lint.<br/>
+<br/>
+To suppress a lint warning with an annotation, add a <code>@SuppressLint("id")</code> annotation on the class, method or variable declaration closest to the warning instance you want to disable. The id can be one or more issue id's, such as <code>"UnusedResources"</code> or <code>{"UnusedResources","UnusedIds"}</code>, or it can be <code>"all"</code> to suppress all lint warnings in the given scope.<br/>
+<br/>
+To suppress a lint warning with a comment, add a <code>//noinspection id</code> comment on the line before the statement with the error.<br/>
+<br/>
+To suppress a lint warning in an XML file, add a <code>tools:ignore="id"</code> attribute on the element containing the error, or one of its surrounding elements. You also need to define the namespace for the tools prefix on the root element in your document, next to the <code>xmlns:android</code> declaration:<br/>
+<code>xmlns:tools="http://schemas.android.com/tools"</code><br/>
+<br/>
+To suppress a lint warning in a <code>build.gradle</code> file, add a section like this:<br/>
+
+<pre>
+android {
+    lintOptions {
+        disable 'TypographyFractions','TypographyQuotes'
+    }
+}
+</pre>
+<br/>
+Here we specify a comma separated list of issue id's after the disable command. You can also use <code>warning</code> or <code>error</code> instead of <code>disable</code> to change the severity of issues.<br/>
+<br/>
+To suppress lint warnings with a configuration XML file, create a file named <code>lint.xml</code> and place it at the root directory of the module in which it applies.<br/>
+<br/>
+The format of the <code>lint.xml</code> file is something like the following:<br/>
+
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;lint>
+    &lt;!-- Ignore everything in the test source set -->
+    &lt;issue id="all">
+        &lt;ignore path="\*/test/\*" />
+    &lt;/issue>
+
+    &lt;!-- Disable this given check in this project -->
+    &lt;issue id="IconMissingDensityFolder" severity="ignore" />
+
+    &lt;!-- Ignore the ObsoleteLayoutParam issue in the given files -->
+    &lt;issue id="ObsoleteLayoutParam">
+        &lt;ignore path="res/layout/activation.xml" />
+        &lt;ignore path="res/layout-xlarge/activation.xml" />
+        &lt;ignore regexp="(foo|bar)\.java" />
+    &lt;/issue>
+
+    &lt;!-- Ignore the UselessLeaf issue in the given file -->
+    &lt;issue id="UselessLeaf">
+        &lt;ignore path="res/layout/main.xml" />
+    &lt;/issue>
+
+    &lt;!-- Change the severity of hardcoded strings to "error" -->
+    &lt;issue id="HardcodedText" severity="error" />
+&lt;/lint>
+</pre>
+<br/>
+To suppress lint checks from the command line, pass the --ignore flag with a comma separated list of ids to be suppressed, such as:<br/>
+<code>$ lint --ignore UnusedResources,UselessLeaf /my/project/path</code><br/>
+<br/>
+For more information, see <a href="https://developer.android.com/studio/write/lint.html#config">https://developer.android.com/studio/write/lint.html#config</a><br/>
+
+            </div>
+            </div>
+          </section>    </div>
+  </main>
+</div>
+</body>
+</html>

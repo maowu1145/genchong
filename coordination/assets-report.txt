@@ -1,0 +1,57 @@
+Asset/catalog task — COMPLETE within assigned six-character scope — 2026-10-26
+
+Only SIX completed characters are registered, never 36. The remaining 30 candidates are pending production and excluded from the runtime catalog.
+
+Written files:
+- app/src/main/java/com/maowu/gravitypet/gengpet/PetCatalog.java
+- app/src/main/assets/pets/catalog.json
+- app/src/main/assets/pets/<six core IDs>/: 29 static-state PNGs, 16 animation PNGs.
+- coordination/assets/source-to-runtime.json: all 45 source paths, SHA-256, original crop/preparation provenance, anchors, Alpha and bounds.
+- coordination/assets/technical-validation.json and validate_assets.py: reproducible payload validation.
+- coordination/assets/pending-30.json and pending-30.txt: 30 stable IDs, batches, reference/production statuses, remaining steps; excluded from runtime catalog.
+- coordination/assets/preview-light.png, preview-gray.png, preview-dark.png: all 45 sprites at 88px for visual review; not included in APK assets.
+- coordination/assets/compile-validation.json: standalone Java/API compilation evidence.
+
+Core API exactly matches COORDINATION.txt. Entry fields are public final and collections immutable.
+feature values retained from source: reminders, quick_notes, ride_comfort, mood, kinship, thursday.
+States: doro idle/water/fruit/remind/satisfied; grudge_panda idle/opening/writing/recording/saved/tearing; spinning_cat idle/calm; sweat_emoji sweating/happy/sad/angry/speechless/sleepy/shy/shocked; kinship_ride idle/calculating/result; thursday_bucket_cat idle/peek/excited/crazy/calm.
+Sweat emoji idle path points to sweating.png (no synthetic idle PNG and no extra character count).
+
+Renderer integration:
+- entry.anchorX/Y and entry.stateAnchors preserve static anchors: X=.5,Y=.890625 on 512x512 canvases.
+- spinning_cat animation: 8 accepted v4 PNGs, 256x256, 40ms/frame, 320ms cycle; animationAnchorX=.5,animationAnchorY=.84375.
+- kinship_ride animation: 8 retained v1 PNGs, 256x256, 100ms/frame, 800ms cycle; animationAnchorX=.5,animationAnchorY=.8984375.
+- Additional animationLoop, animationStates, animationWidth/Height, canvasWidth/Height. All are parsed, no extra dependencies.
+- entry.statePath(state) falls back to idle. entry.stateAnchor(state) returns normalized static anchor. entry.animationFrame(elapsedMs) provides wrapping/clamped path; entry.animatesState(state) marks idle for spin and idle/calculating for ride.
+- Renderer must suppress animation while paused/comfort mode/tools open. Use calm static image in comfort mode. Keep stable body collider; do not collide against blur tails. Ride baked frames already rock; do not add a second rock transform.
+- Map the appropriate normalized anchor to the same renderer foot point when switching static/animation. The image canvases have different anchors; do not reuse .890625 for animated frames.
+- PetCatalog.preload(Context,Entry,Runnable) warms images away from UI. Repeated callers subscribe to the same per-entry request; every valid invocation with a callback is notified once on the main thread after the load attempt. Fully cached entries post the callback immediately (asynchronously, never inline during a View constructor). Returns false ONLY for invalid/unregistered entries. Completion also occurs on image failure, so caller can stop its loading indicator and handle bitmap()==null.
+- A single drain processes an ordered pending map (at most 64 distinct catalog entries), avoiding executor-queue growth for repeated views. Executor rejection retains all subscribers and starts one background recovery drain. Cache-read checks use LruCache's own synchronization, not the long-held decoder I/O lock. One subscriber's RuntimeException does not suppress later subscribers.
+
+Memory/Alpha:
+- bitmap() keeps native RGBA resolution, ARGB_8888, no density scaling, no Alpha thresholding.
+- Bounded 40 MiB LRU, current complete decoded sprite set is 33 MiB (34,603,008 bytes); cache hits avoid per-frame decode.
+- Decoder bounds guard rejects dimensions above 512. Only paths in catalog can load. Missing/invalid paths are negatively cached. Views must not recycle or mutate shared Bitmaps.
+- clearBitmapCache() can be called after rendering stops/on memory pressure; eviction never recycles bitmaps still held by views.
+
+Actual verification:
+- python coordination/assets/validate_assets.py: PASS. Exact 6 IDs, expected 29 state paths, 16 correctly ordered animation paths, no extras, 30 pending candidates excluded, durations/anchors/canvas sizes checked.
+- All 45 source/destination SHA-256 match; every image is RGBA with Alpha 0/255 AND partial Alpha, totaling 2,843,376 semitransparent pixels; all outer borders transparent.
+- PNG payload 4,910,948 bytes. Complete native ARGB_8888 allocation 34,603,008 bytes (33 MiB), below 41,943,040-byte (40 MiB) cache cap. These are file-based calculations, not device memory measurements.
+- Spinning cat source's Alpha>=128 solid bottoms are [215,215,215,216,215,216,216,216]; the approved fixed anchor is y=216/256. This 1px raster rounding was already present in accepted v4 and was not altered.
+- Ride Alpha>=128 bottom is 229px in all 8 frames; source anchor is 230/256. RGBA pixels in the base-only y>=190 band are identical across all frames.
+- All 45 sprites visually inspected at 88px on light, gray and dark backgrounds: white body/eye/page areas remain, transparent outside, no obvious cropped parts or unrelated sheet fragments. Spinning blur is intentionally retained. Static and animated art are different source renderings; aligned feet do not promise identical pose/proportions at the transition.
+- Standalone PetCatalog.java compiled successfully with javac 11.0.14.1, --release 11 -Xlint:all, against installed Android API35 android.jar; exit 0, no warnings. First --release17 attempt was rejected because that installed compiler is Java11; no source failure. This verifies available API signatures/syntax, NOT the requested Java17/API36 full-app build.
+- Read the concurrently supplied PetSpriteView.java: it already uses stateAnchor(), animationAnchorX/Y, animatesState() and animationFrame(). No edits to that owned file.
+
+Source artwork unchanged. No masks, generated references, source sheets, atlases, GIFs or unused split layers in pets assets.
+Not tested here: final Java17/API36 build/APK packaging, Android/device rendering, actual frame rate, cache behavior/heap usage on device, screen-density appearance, full-app animation transitions. Main owns all Gradle/APK builds. No Gradle run was started in this task.
+Remaining art scope: ONLY SIX completed characters. The 30 B–F candidates have no finished assets, no registered entries and no claimed visual approval. Existing reference cards' releaseReview remains pending.
+No Manifest, permission or Gradle dependency additions are required. No main-owned files edited; no Git mutations performed.
+
+Follow-up fix: preload callback loss (2026-10-26)
+- Reproduced the lifecycle cause in code: the former WARMING Set returned false for a second same-character view and discarded its callback. Replaced it with subscriber queues as described above. GengMainActivity and other main-owned files were not edited.
+- Latest PetCatalog.java standalone compile: JDK17.0.20.1+1, --release17 -Xlint:all against Android36/android.jar, PASS with no warnings. This supersedes the earlier Java11/API35-only limitation for this file; full APK still main-owned.
+- Executed regression harness against the actual PetCatalog.java with small Android/JSON test doubles (NOT on-device Android tests): duplicate views during blocked decode; 12-character burst; subscriptions do not wait for another image's decoder lock; callback exception isolation; main-loop dispatch; cached new-view callback; nested/reentrant subscriptions; cache clear/reload; missing-image notification; an actually full executor queue and recovery; invalid entry rejection; pending-map cleanup. PASS, 21 normal subscriber callbacks delivered exactly once.
+- Harness log: coordination/assets/preload-regression-result.txt. Reproduction script is C:\Users\STG-ARTIST2\Documents\Codex\2026-10-26\gengpet-assets\work\test_preload.py. It compiles production PetCatalog.java plus test doubles using the isolated JDK17, without Gradle or changing app dependencies.
+- Main must still verify real Activity recreate/resume/detail rendering on Android; host-side test doubles do not establish Android view behavior or real bitmap decoding performance.

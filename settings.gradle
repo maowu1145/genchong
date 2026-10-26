@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GravityPet"
+rootProject.name = "GengPet"
 include(":app")

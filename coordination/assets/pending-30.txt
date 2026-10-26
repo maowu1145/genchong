@@ -1,0 +1,47 @@
+梗宠其余 30 款候选待制作清单
+日期：2026-10-26
+
+当前仅完成并接入六个核心角色。下列全部为候选、未制作、缺已锁定参考，未进入 APK 角色目录。
+黄豆八表情只算一款；不把占位、同角色不同表情或重复文件计入完成数。
+各项统一待办：确认参考 → 参考卡 → 批次母版 → 透明裁切 → 小尺寸检查 → 角色目录接入。
+参考卡还须记录：不可改识别点、可简化细节、默认表情、图层方案、来源、使用状态。
+
+B 猫梗
+[待制作/needs_reference] 1. Popcat (popcat)：锁定张嘴与闭嘴的同一只猫
+[待制作/needs_reference] 2. Huh 猫 (huh_cat)：锁定具体视频猫与疑惑神态
+[待制作/needs_reference] 3. 香蕉猫 (banana_cat)：保留香蕉外壳与猫脸
+[待制作/needs_reference] 4. Happy 猫 (happy_cat)：锁定具体猫、姿态和花纹
+[待制作/needs_reference] 5. Chipi Chapa 猫 (chipi_chapa_cat)：歌曲名不能替代角色参考
+[待制作/needs_reference] 6. Bongo Cat (bongo_cat)：锁定白猫与敲击前爪；道具另规划
+
+C 猫脸
+[待制作/needs_reference] 1. 新鲜哥 (xinxian_ge)：先锁定名称对应的猫和面部特征
+[待制作/needs_reference] 2. 波仔 (bozai)：先锁定具体参考版本和花纹
+[待制作/needs_reference] 3. 咣当 (guangdang)：先锁定具体参考版本和姿势
+[待制作/needs_reference] 4. 耄耋猫 (maodie_cat)：保留参考中的眼形与表情
+[待制作/needs_reference] 5. 外星绿猫 (alien_green_cat)：锁定绿色猫版本、耳形和脸形
+[待制作/needs_reference] 6. Grumpy Cat (grumpy_cat)：保留辨识面部花纹与不悦神态
+
+D 动物
+[待制作/needs_reference] 1. Smudge 餐桌白猫 (smudge_cat)：锁定白猫疑惑脸；桌子可独立叠加
+[待制作/needs_reference] 2. Nyan Cat 彩虹猫 (nyan_cat)：锁定身体轮廓；彩虹可独立叠加
+[待制作/needs_reference] 3. Doge (doge)：使用独立参考，不与 Cheems 混用
+[待制作/needs_reference] 4. Cheems (cheems)：使用独立参考，不与 Doge 混用
+[待制作/needs_reference] 5. 卡皮巴拉 (capybara)：锁定具体梗姿态，保留长口鼻轮廓
+[待制作/needs_reference] 6. 尖叫土拨鼠 (screaming_marmot)：锁定站姿和张嘴轮廓
+
+E 动画与动物
+[待制作/needs_reference] 1. 旋转海豹 (spinning_seal)：锁定具体海豹与旋转姿态
+[待制作/needs_reference] 2. Pingu (pingu)：锁定版本、喙形和默认表情
+[待制作/needs_reference] 3. 可达鸭 (psyduck)：锁定抱头姿态与头顶细节
+[待制作/needs_reference] 4. 惊讶皮卡丘 (surprised_pikachu)：保留惊讶嘴形与耳部特征
+[待制作/needs_reference] 5. 乌萨奇 (usagi)：锁定长耳轮廓与默认表情
+[待制作/needs_reference] 6. 小八 (hachiware)：锁定蓝色花纹与默认表情
+
+F 不同轮廓
+[待制作/needs_reference] 1. 吉伊 (chiikawa)：锁定圆耳轮廓与默认表情
+[待制作/needs_reference] 2. Loopy (loopy)：锁定具体版本、鼻子和面部轮廓
+[待制作/needs_reference] 3. 奶龙 (nailong)：锁定体形与黄色身体特征
+[待制作/needs_reference] 4. 疯狂戴夫 (crazy_dave)：锁定帽子与胡须；缩小后仍可辨认
+[待制作/needs_reference] 5. 桌面大鹅 (desktop_goose)：锁定具体白鹅姿态与身体轮廓
+[待制作/needs_reference] 6. 猫猫虫咖波 (capoo)：锁定蓝色身体与多足轮廓

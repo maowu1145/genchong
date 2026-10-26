@@ -1,0 +1,317 @@
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengMainActivity.java:617: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+            PetStore.prefs(this).edit().clear().commit();
+                                                ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengMainActivity.java:617: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+            PetStore.prefs(this).edit().clear().commit();
+                                                ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\NotesPanel.java:439: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+          .commit();
+           ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\NotesPanel.java:439: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+          .commit();
+           ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderReceiver.java:67: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    p.edit().putLong(k + "delivered", due).remove(k + "snooze_due").remove(k + "due").commit();
+                                                                                      ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderReceiver.java:67: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    p.edit().putLong(k + "delivered", due).remove(k + "snooze_due").remove(k + "due").commit();
+                                                                                      ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:57: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+        .commit();
+         ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:57: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+        .commit();
+         ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:113: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    edit.commit();
+         ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:113: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    edit.commit();
+         ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:158: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+          .commit();
+           ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:158: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+          .commit();
+           ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:168: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    p.edit().putLong(k + "due", due).commit();
+                                     ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:168: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    p.edit().putLong(k + "due", due).commit();
+                                     ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:196: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    e.remove(k + "due").commit();
+                        ~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\ReminderScheduler.java:196: Warning: Consider using apply() instead; commit writes its data to persistent storage immediately, whereas apply will handle it in the background [ApplySharedPref]
+    e.remove(k + "due").commit();
+                        ~~~~~~~~
+
+   Explanation for issues of type "ApplySharedPref":
+   Consider using apply() instead of commit on shared preferences. Whereas
+   commit blocks and writes its data to persistent storage immediately, apply
+   will handle it in the background.
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\OverlayPetService.java:970: Warning: Field requires API level 30 (current min is 29): android.content.pm.ServiceInfo#FOREGROUND_SERVICE_TYPE_MICROPHONE [InlinedApi]
+                        ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE);
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "InlinedApi":
+   This check scans through all the Android API field references in the
+   application and flags certain constants, such as static final integers and
+   Strings, which were introduced in later versions. These will actually be
+   copied into the class files rather than being referenced, which means that
+   the value is available even when running on older devices. In some cases
+   that's fine, and in other cases it can result in a runtime crash or
+   incorrect behavior. It depends on the context, so consider the code
+   carefully and decide whether it's safe and can be suppressed or whether the
+   code needs to be guarded.
+
+   If you really want to use this API and don't need to support older devices
+   just set the minSdkVersion in your build.gradle or AndroidManifest.xml
+   files.
+
+   If your code is deliberately accessing newer APIs, and you have ensured
+   (e.g. with conditional execution) that this code will only ever be called
+   on a supported platform, then you can annotate your class or method with
+   the @TargetApi annotation specifying the local minimum SDK to apply, such
+   as @TargetApi(11), such that this check considers 11 rather than your
+   manifest file's minimum SDK as the required API level.
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengOverlayService.java:618: Warning: Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. R.foo.bar) than by name (e.g. getIdentifier("bar", "foo", null)). [DiscouragedApi]
+    int id = getResources().getIdentifier(name, "dimen", "android");
+                            ~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengOverlayService.java:618: Warning: Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. R.foo.bar) than by name (e.g. getIdentifier("bar", "foo", null)). [DiscouragedApi]
+    int id = getResources().getIdentifier(name, "dimen", "android");
+                            ~~~~~~~~~~~~~
+
+   Explanation for issues of type "DiscouragedApi":
+   Discouraged APIs are allowed and are not deprecated, but they may be unfit
+   for common use (e.g. due to slow performance or subtle behavior).
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\AndroidManifest.xml:10: Warning: The attribute android:dataExtractionRules only applies for Android 12 and higher; since minSdkVersion is API 26 you should also set android:fullBackupContent [DataExtractionRules]
+    <application android:allowBackup="false" android:dataExtractionRules="@xml/data_extraction_rules" android:icon="@drawable/gengpet_icon"
+                                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "DataExtractionRules":
+   Before Android 12, the attributes android:allowBackup and
+   android:fullBackupContent were used to configure all forms of backup,
+   including cloud backups, device-to-device transfers and adb backup.
+
+   In Android 12 and higher, these attributes have been deprecated and will
+   only apply to cloud backups. You should instead use the attribute
+   android:dataExtractionRules, specifying an @xml resource that configures
+   which files to back up, for cloud backups and for device-to-device
+   transfers, separately. If your minSdkVersion supports older versions,
+   you'll still want to specify an android:fullBackupContent resource if the
+   default behavior is not right for your app.
+
+   https://developer.android.com/about/versions/12/backup-restore#xml-changes
+   https://goo.gle/DataExtractionRules
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\MainActivity.java:1221: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            paint.setShader(new LinearGradient(0f, 0f, 0f, getHeight(),
+                            ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\MainActivity.java:1463: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+                paint.setPathEffect(new DashPathEffect(
+                                    ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\MainActivity.java:1464: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+                        new float[]{getHeight() * 0.10f, getHeight() * 0.055f}, 0f));
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\MainActivity.java:1466: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+                RectF border = new RectF(borderInset, borderInset,
+                               ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetMakerActivity.java:601: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            paint.setColor(Color.HSVToColor(new float[]{hue, 1f, 1f}));
+                                            ~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetMakerActivity.java:604: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            paint.setShader(new LinearGradient(
+                            ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetMakerActivity.java:608: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            paint.setShader(new LinearGradient(
+                            ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetMakerActivity.java:617: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            paint.setShader(new LinearGradient(0f, hueRect.top, 0f, hueRect.bottom,
+                            ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\PetSpriteView.java:190: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+        new RectF(
+        ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\PetSpriteView.java:190: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+        new RectF(
+        ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetView.java:960: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            dismissZonePaint.setShader(new LinearGradient(
+                                       ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetView.java:962: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+                    new int[]{Color.TRANSPARENT, 0x44FF2929, 0xB8D90000},
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetView.java:963: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+                    new float[]{0f, 0.55f, 1f}, Shader.TileMode.CLAMP));
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetView.java:982: Warning: Avoid object allocations during draw/layout operations (preallocate and reuse instead) [DrawAllocation]
+            RectF body = new RectF(-radius, -radius, radius, radius);
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Explanation for issues of type "DrawAllocation":
+   You should avoid allocating objects during a drawing or layout operation.
+   These are called frequently, so a smooth UI can be interrupted by garbage
+   collection pauses caused by the object allocations.
+
+   The way this is generally handled is to allocate the needed objects up
+   front and to reuse them for each drawing operation.
+
+   Some methods allocate memory on your behalf (such as Bitmap.create), and
+   these should be handled in the same way.
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\LocalRecording.java:57: Warning: Consider also using StorageManager#getAllocatableBytes and allocateBytes which will consider clearable cached data [UsableSpace]
+    if (file.getParentFile().getUsableSpace() < 8 * 1024 * 1024L)
+                             ~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\LocalRecording.java:57: Warning: Consider also using StorageManager#getAllocatableBytes and allocateBytes which will consider clearable cached data [UsableSpace]
+    if (file.getParentFile().getUsableSpace() < 8 * 1024 * 1024L)
+                             ~~~~~~~~~~~~~~
+
+   Explanation for issues of type "UsableSpace":
+   When you need to allocate disk space for large files, consider using the
+   new allocateBytes(FileDescriptor, long) API, which will automatically clear
+   cached files belonging to other apps (as needed) to meet your request.
+
+   When deciding if the device has enough disk space to hold your new data,
+   call getAllocatableBytes(UUID) instead of using getUsableSpace(), since the
+   former will consider any cached data that the system is willing to clear on
+   your behalf.
+
+   Note that these methods require API level 26. If your app is running on
+   older devices, you will probably need to use both APIs, conditionally
+   switching on Build.VERSION.SDK_INT. Lint only looks in the same compilation
+   unit to see if you are already using both APIs, so if it warns even though
+   you are already using the new API, consider moving the calls to the same
+   file or suppressing the warning.
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\ConversationBackView.java:11: Warning: Custom view ConversationBackView is missing constructor used by tools: (Context) or (Context,AttributeSet) or (Context,AttributeSet,int) [ViewConstructor]
+final class ConversationBackView extends View {
+            ~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\DragHandleView.java:11: Warning: Custom view DragHandleView is missing constructor used by tools: (Context) or (Context,AttributeSet) or (Context,AttributeSet,int) [ViewConstructor]
+public class DragHandleView extends View {
+             ~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\PetSpriteView.java:16: Warning: Custom view PetSpriteView is missing constructor used by tools: (Context) or (Context,AttributeSet) or (Context,AttributeSet,int) [ViewConstructor]
+public final class PetSpriteView extends View {
+                   ~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\PetSpriteView.java:16: Warning: Custom view PetSpriteView is missing constructor used by tools: (Context) or (Context,AttributeSet) or (Context,AttributeSet,int) [ViewConstructor]
+public final class PetSpriteView extends View {
+                   ~~~~~~~~~~~~~
+
+   Explanation for issues of type "ViewConstructor":
+   Some layout tools (such as the Android layout editor) need to find a
+   constructor with one of the following signatures:
+   * View(Context context)
+   * View(Context context, AttributeSet attrs)
+   * View(Context context, AttributeSet attrs, int defStyle)
+
+   If your custom view needs to perform initialization which does not apply
+   when used in a layout editor, you can surround the given code with a check
+   to see if View#isInEditMode() is false, since that method will return false
+   at runtime but true within a user interface editor.
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\MainActivity.java:1059: Warning: Custom view PullParallaxLayout overrides onTouchEvent but not performClick [ClickableViewAccessibility]
+        public boolean onTouchEvent(MotionEvent event) {
+                       ~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetMakerActivity.java:649: Warning: Custom view HsvColorPickerView overrides onTouchEvent but not performClick [ClickableViewAccessibility]
+        public boolean onTouchEvent(MotionEvent event) {
+                       ~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\PetMakerActivity.java:843: Warning: Custom view MakerCanvasView overrides onTouchEvent but not performClick [ClickableViewAccessibility]
+        public boolean onTouchEvent(MotionEvent event) {
+                       ~~~~~~~~~~~~
+
+   Explanation for issues of type "ClickableViewAccessibility":
+   If a View that overrides onTouchEvent or uses an OnTouchListener does not
+   also implement performClick and call it when clicks are detected, the View
+   may not handle accessibility actions properly. Logic handling the click
+   actions should ideally be placed in View#performClick as some accessibility
+   services invoke performClick when a click action should occur.
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\AiSettingsActivity.java:75: Warning: String literal in setText can not be translated. Use Android resources instead. [SetTextI18n]
+        save.setText("保存 AI 设置");
+                     ~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:239: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                      b.setText(label + " · " + time(minute[0]));
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:239: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                      b.setText(label + " · " + time(minute[0]));
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:303: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+    t.setText(label + " " + bar.getProgress() + "%");
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:303: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+    t.setText(label + " " + bar.getProgress() + "%");
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:311: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            t.setText(label + " " + value + "%");
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:311: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            t.setText(label + " " + value + "%");
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:367: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            label.setText("当前：" + moodName(mood));
+                          ~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\FeatureActivity.java:367: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            label.setText("当前：" + moodName(mood));
+                          ~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengMainActivity.java:680: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            t.setText(label + " · " + (n + min));
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengMainActivity.java:680: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            t.setText(label + " · " + (n + min));
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengMainActivity.java:680: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            t.setText(label + " · " + (n + min));
+                                       ~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengMainActivity.java:680: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+            t.setText(label + " · " + (n + min));
+                                       ~~~~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\NotesPanel.java:42: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                      "正在录音 "
+                      ^
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\NotesPanel.java:42: Warning: Do not concatenate text displayed with setText. Use resource string with placeholders. [SetTextI18n]
+                      "正在录音 "
+                      ^
+
+   Explanation for issues of type "SetTextI18n":
+   When calling TextView#setText
+   * Never call Number#toString() to format numbers; it will not handle
+   fraction separators and locale-specific digits properly. Consider using
+   String#format with proper format specifications (%d or %f) instead.
+   * Do not pass a string literal (e.g. "Hello") to display text. Hardcoded
+   text can not be properly translated to other languages. Consider using
+   Android resource strings instead.
+   * Do not build messages by concatenating text chunks. Such messages can not
+   be properly translated.
+
+   https://developer.android.com/guide/topics/resources/localization.html
+
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengOverlayService.java:639: Warning: Use "Gravity.START" instead of "Gravity.LEFT" to ensure correct behavior in right-to-left locales [RtlHardcoded]
+    p.gravity = Gravity.TOP | Gravity.LEFT;
+                                      ~~~~
+C:\Users\STG-ARTIST2\.codex\.chatgpt-projects\g-p-6adee59199608191adb40cf4bf7dcd61\app-project\app\src\main\java\com\maowu\gravitypet\gengpet\GengOverlayService.java:639: Warning: Use "Gravity.START" instead of "Gravity.LEFT" to ensure correct behavior in right-to-left locales [RtlHardcoded]
+    p.gravity = Gravity.TOP | Gravity.LEFT;
+                                      ~~~~
+
+   Explanation for issues of type "RtlHardcoded":
+   Using Gravity#LEFT and Gravity#RIGHT can lead to problems when a layout is
+   rendered in locales where text flows from right to left. Use Gravity#START
+   and Gravity#END instead. Similarly, in XML gravity and layout_gravity
+   attributes, use start rather than left.
+
+   For XML attributes such as paddingLeft and layout_marginLeft, use
+   paddingStart and layout_marginStart. NOTE: If your minSdkVersion is less
+   than 17, you should add both the older left/right attributes as well as the
+   new start/end attributes. On older platforms, where RTL is not supported
+   and the start/end attributes are unknown and therefore ignored, you need
+   the older left/right attributes. There is a separate lint check which
+   catches that type of error.
+
+   (Note: For Gravity#LEFT and Gravity#START, you can use these constants even
+   when targeting older platforms, because the start bitmask is a superset of
+   the left bitmask. Therefore, you can use gravity="start" rather than
+   gravity="left|start".)
+
+0 errors, 60 warnings

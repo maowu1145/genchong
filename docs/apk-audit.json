@@ -1,0 +1,15 @@
+{
+  "result": "PASS",
+  "apkBytes": 5303113,
+  "apkSha256": "61d8abc8cdd2b42b3f39825af23c3f3d52664921ba8e56b317de4cc71e0a0adc",
+  "characters": 6,
+  "runtimePngs": 45,
+  "pngBytesMatchSource": true,
+  "newEntryPointsPresent": true,
+  "legacyCloudEntryPointsExcluded": true,
+  "legacySkinsExcluded": true,
+  "lintErrors": 0,
+  "lintWarnings": 60,
+  "signature": "APK v2 debug signature verified with apksigner",
+  "deviceRun": "NOT RUN: adb devices empty; no emulator configured"
+}

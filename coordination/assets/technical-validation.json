@@ -1,0 +1,56 @@
+{
+  "result": "PASS",
+  "method": "Python/Pillow file and metadata checks; no Android/device claims",
+  "completedCharacters": 6,
+  "pendingCharacters": 30,
+  "staticStatePngs": 29,
+  "animationPngs": 16,
+  "totalPngs": 45,
+  "pngBytes": 4910948,
+  "argb8888DecodedBytes": 34603008,
+  "bitmapCacheLimitBytes": 41943040,
+  "sourceHashesMatch": true,
+  "exactRegisteredPayload": true,
+  "rgbaAndSoftAlpha": true,
+  "semitransparentPixels": 2843376,
+  "transparentBorders": true,
+  "animationChecks": [
+    {
+      "id": "spinning_cat",
+      "frameCount": 8,
+      "cycleMs": 320,
+      "solidAlphaBottoms": [
+        215,
+        215,
+        215,
+        216,
+        215,
+        216,
+        216,
+        216
+      ],
+      "stableBaseBand": null
+    },
+    {
+      "id": "kinship_ride",
+      "frameCount": 8,
+      "cycleMs": 800,
+      "solidAlphaBottoms": [
+        229,
+        229,
+        229,
+        229,
+        229,
+        229,
+        229,
+        229
+      ],
+      "stableBaseBand": true
+    }
+  ],
+  "exclusions": [
+    "No Android device rendering or memory measurement",
+    "No APK build in delegated task",
+    "Reference/art release status remains pending; technical pass is not release clearance"
+  ]
+}

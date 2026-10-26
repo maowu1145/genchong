@@ -1,0 +1,185 @@
+Overlay task — implementation complete, integration/device validation pending — 2026-10-26
+
+FOLLOW-UP REVIEW completed 2026-10-26 (supersedes original compile status below):
+- Pending reminder delivery now queues ReminderScheduler.deliverPendingFeedback(this) after
+  reload/render and after actual View attachment. Screen wake / USER_PRESENT / RESUME /
+  settings reload / initial restore all reach it. The call requires screen-on, unpaused,
+  running service and an attached visible Doro. It does NOT invoke reschedule(), startService
+  or startForegroundService; stopped services are never created by this path.
+- Added public static canReceiveFeedback(String characterId), a read-only immutable snapshot
+  of currently attached visible character windows. Cleared on screen-off, pause reload,
+  stopping and destruction. Multiple Doro instances still lead to one business delivery;
+  scheduler's existing timestamp marker provides deduplication.
+- CROSS-MODULE GUARD NOW INTEGRATED: During the review, identified that the scheduler's old
+  isRunning()/isPaused() guard let its other callers consume reminders without a Doro.
+  Final read-only check confirmed the shared ReminderScheduler.java has concurrently been
+  updated by its owner to `if(!GengOverlayService.canReceiveFeedback("doro"))return;`
+  before writing reminder_latest_feedback (line 44 at verification). The real-source compile
+  below includes that updated helper. This task did not edit the tools-owned source.
+- Added explicit stopping state: STOP, last-instance recall, display removal and window/
+  permission failure immediately invalidate readiness and block queued reload/frame/window
+  creation while stopSelf awaits onDestroy. Timers/sensors/transient windows are stopped.
+- Fixed delayed addView attachment: configure before add, then force initial LayoutParams
+  update after attachment. This prevents an initially pinned/settled pet from retaining the
+  temporary 1px window when earlier update calls ran before isAttachedToWindow became true.
+- A single gesture owner now cancels the previous pet's gesture when another pet is touched;
+  raw drag offsets and recycling state cannot be overwritten by simultaneous window touches.
+- Recycle hit testing uses the exact displayed rectangle and the final UP position, not a
+  larger invisible strip or stale last-MOVE point. Cancellation resets state before callback
+  invocation, and accessibility long click enters the same exclusive LONG_PRESS branch.
+- Added failed-tool-launch recovery: if no FeatureActivity lifecycle callback arrives after
+  2 seconds (e.g. silent ROM launch rejection), release toolOpen and restore movement with
+  a route back to the app. Actual Activity start cancels this fallback by state/generation.
+- Pausing also clears existing bubble; delayed feedback redraws do not render while screen
+  is off. Real main Activity and PetStore source were reviewed; no main/tool files edited.
+
+FOLLOW-UP ACTUAL validation:
+- All 22 currently present gengpet/*.java REAL sources (including GengMainActivity, UiKit,
+  PetStore, FeatureActivity, ReminderScheduler and the four overlay files) compiled together
+  with javac 17.0.20.1 against installed Android API36 android.jar, exit 0; no interface
+  stubs in this follow-up compile. Deprecation notes only. Output: work/overlay-review-api36.
+- Read-only call-site search confirmed the overlay pending-delivery path contains no service
+  start calls and only runs from already-created service callbacks after readiness checks.
+- No Gradle run. This still does not constitute APK build/install or Android lifecycle,
+  gesture, delayed attachment, reminder delivery, or foreground-service runtime tests.
+- PhysicsWorld was unchanged in this follow-up; earlier 61 assertions remain the recorded
+  physics result, not a new Android test claim. Device test needs: pending reminder while
+  screen off -> wake once; paused -> resume once; stopped -> reload broadcast stays stopped;
+  no Doro -> add Doro later; two Doro -> one bubble; STOP racing reload; initial pinned pet;
+  two-finger cross-window drag; release just outside/inside recycle; denied Activity launch.
+
+Owned files added:
+- app/src/main/java/com/maowu/gravitypet/gengpet/GengOverlayService.java
+- app/src/main/java/com/maowu/gravitypet/gengpet/PhysicsWorld.java
+- app/src/main/java/com/maowu/gravitypet/gengpet/PetSpriteView.java
+- app/src/main/java/com/maowu/gravitypet/gengpet/MotionSensor.java
+- coordination/tests/PhysicsWorldTest.java
+- coordination/tests/run-physics-tests.ps1
+- this report
+Temporary javac output/API stubs are in work/overlay-physics-test, work/overlay-api-check,
+work/overlay-api-stubs. Do not package or commit those scratch directories.
+No main-owned sources, old Java sources, build files or Manifest were edited. No Gradle,
+Git reset/checkout/commit/push, new chats or sub-agents were run/created.
+
+Implemented:
+- All specified service actions/extras and static isRunning/isPaused/count APIs.
+- Stable instance IDs; repeated characters allowed; maximum six active bodies and windows.
+- One tightly bounded TYPE_APPLICATION_OVERLAY window per pet; no fullscreen drawing/input
+  window. Transform-aware local sprite bounds include compression/stretch/rotation; drawing
+  uses world center minus window origin. Physics has separate screen bounds, main-body
+  circle collision shapes and artwork edge extents. Thin decorative tails are not colliders.
+- Shared fixed 1/120s physics, max four substeps, three all-pairs contact passes. Gravity,
+  limited throws, restitution, tangent friction/rotation, held/fixed/tool-open kinematic
+  bodies, collision-normal spring compression and near-area-preserving stretch remain real.
+- Softness maps continuously: stiffness 420..100, damping 24..12, compression .18..42;
+  midpoint exactly restores old stiffness=260 and damping=18. Render deformation is a
+  whole-texture spring, not mesh/local soft-body deformation.
+- Main-thread render scheduling: normal render target 30fps, drag target 60fps, low-power
+  rendering target 15fps; shared physics ticks independently. Timing is bounded, not a
+  measured fps claim. Settled nonanimated bodies stop frame callbacks. Gravity change,
+  removal of support, drag/throw and size/settings changes wake the world.
+- Screen-off/paused stops frame loop and sensor listeners, cancels gestures and removes
+  transient UI/cues; no wake lock. Minute-scale quiet-hour check only while awake/unpaused.
+- Accelerometer low-pass gravity, fallback TYPE_GRAVITY, fallback fixed downward gravity
+  with user notice when absent. Rotation mapping follows upstream. Comfort uses separate
+  TYPE_LINEAR_ACCELERATION or raw-minus-filtered residual, dead zone, damping and limits.
+- Comfort: two 16dp narrow, bounded non-touchable edge windows; intensity/opacity and
+  comfort_reset_token honored; immediate off removes windows. Damps gravity, bounce,
+  throws/deformation and suppresses sprite loops. No health efficacy claim.
+- Non-touchable bubble/recycle alpha .35 and cue alpha <=.6 at WINDOW level. Bubble is
+  removed before drag and new feedback never opens one during recycling, keeping maximum
+  non-touchable overlap .74 (=1-.65*.4), below Android's documented .8 limit. Pet and menu
+  rectangles remain touchable inside their bounds; transparent corners are not pixelwise
+  pass-through. All-window touch behavior still needs Android 12+ device verification.
+- Raw-coordinate VelocityTracker avoids false velocity from moving overlay origins.
+  PENDING / DRAGGING / LONG_PRESS / IDLE branches are exclusive; system slop cancels hold;
+  long-press release cannot throw/tap/delete; multi-touch/CANCEL aborts; recycle only during
+  drag and only recalls on release inside the visible drop area.
+- Tap menu: tools, pin/unpin, sizes 56/88/112/144dp, recall, pause/resume all, close;
+  scrollable in short/landscape displays and closes after 15s. Long press opens tools.
+  Visible FeatureActivity lifecycle pauses that instance and restores it when stopped.
+- Positions merge into freshly loaded instances on drag end, stop, screen off, task remove,
+  settle and 5s checkpoints, preserving concurrent mood/settings updates. STOP retains saved
+  instances for explicit later restoration; REMOVE deletes that instance. START_NOT_STICKY
+  avoids automatic resurrection after a user/system stop; no background forced start.
+- Display/configuration updates rescale normalized placement and clamp bounds. System bars,
+  cutout, API30+ delivered IME insets constrain positions; no focus-stealing pet windows.
+- Permission revoke uses AppOps watcher plus runtime checks; teardown removes windows,
+  receivers, callbacks and sensors. Notification opens GengMainActivity and stops all.
+- Explicit-package dynamic FEEDBACK / RELOAD_SETTINGS broadcasts update only running service;
+  character-wide feedback selects only one instance. Temporary images plus bounded bubble.
+- Original alpha untouched. PetCatalog async preload used; static and animation foot anchors
+  aligned; loops honor animationStates/animationLoop. Tool-open/paused/comfort suppress loops.
+  Tools emit mood 'wronged', artwork calls it 'sad': renderer explicitly aliases those keys.
+- ThursdayRules.state() drives resting art. First daily claim uses existing shared rule and
+  gives one instance an 8s crazy image/small motion; date/timezone/resume rechecks. Quiet,
+  comfort and low-motion modes suppress exaggerated movement; no automatic sound playback.
+
+Exact upstream reuse/adaptation (baseline files were read, not overwritten):
+- OverlayPetService.java runPetWorld (~119-165): fixed clock, 4-step cap, 3 contact passes
+  -> PhysicsWorld.advance()/step(). Every body integrates before pair resolution.
+- PetView.java stepPhysics/applyContactFriction/applyCoulombFriction (~723-795, 885-916):
+  gravity/air drag=.84, wall restitution=.55, min bounce=70, static friction=.45,
+  kinetic friction=.30 -> PhysicsWorld.boundaries()/friction(). Coordinates no longer use
+  View.getWidth()/getHeight(); world bounds are passed explicitly.
+- PetView.resolveCollisionWith (~398-499): inverse-radius-squared mass, kinematic dragging,
+  position slop=.8 and correction=.62, pair restitution=.48, tangent impulse and torque
+  -> PhysicsWorld.collide(). Main-body circles replace expensive silhouette supports;
+  deformation is visual and not a full deformable contact mesh, as allowed by the spec.
+- PetView.updateCrowdContact (~503-545): contact damping/sleep and significant-impact wake
+  -> time-based .3s settle, wake-on-support-removal and gravity change in PhysicsWorld.
+- PetView.applyCollisionImpulse/stepDeformation/onDraw (~873-882, 933-987): strain rate
+  impulse speed/radius*.34, unit-mass damped spring, capped compression, normal-axis scale
+  and reciprocal tangential scale -> PhysicsWorld.deform()/spring() and PetSpriteView.
+- OverlayPetService.onSensorChanged (~386-435): accelerometer-first low pass and four-way
+  screen mapping -> MotionSensor, with time-based filter and separate comfort signal.
+- Old DragHandleView behavior was deliberately replaced by the exclusive gesture state
+  machine; no old long-press delete or double-tap cloud chat is attached.
+
+ACTUAL verification performed:
+1. Java 17.0.20.1 standalone PhysicsWorld + PhysicsWorldTest compilation/run: PASS,
+   61 assertions. Covers downward/tilt gravity, wall bounce, visible bounded compression,
+   return-to-neutral spring, persistent single sleep, six-body stack settlement and pair
+   separation, equal-mass collision/momentum, held push, fixed/tool-open freeze, capped
+   throws/comfort motion, support removal wake, resized bounds, 4-step long-frame limit,
+   clock reset and finite-input handling. Run coordination/tests/run-physics-tests.ps1.
+2. Standalone javac 17 API-signature/syntax compilation: PASS for all four overlay sources
+   plus real PetCatalog, FeaturePreferences, ThursdayRules, ThursdayCalendar against local
+   Android API35 android.jar. Temporary PetStore/UiKit/GengMainActivity/FeatureActivity
+   interface stubs were used because main-owned classes were not yet present. Deprecation
+   notes only. A first compile caught a blank-final lambda initialization, which was fixed
+   before the successful run. This is NOT a full app build or Android runtime validation.
+3. Manual source integration check against actual asset catalog and tools sources:
+   comfort keys/reset token, feedback actions/extras, eight mood mappings, Thursday helpers,
+   anchors and frame selection inspected. No mock API or geometry replaces final artwork.
+
+Main integrator required changes (owned by main):
+- Manifest permission SYSTEM_ALERT_WINDOW, FOREGROUND_SERVICE,
+  FOREGROUND_SERVICE_SPECIAL_USE. Existing permissions may already cover this.
+- Declare .gengpet.GengOverlayService exported=false, foregroundServiceType="specialUse",
+  property android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE explaining user-controlled desktop
+  pet overlay responding to gravity. No microphone type for this service.
+- Declare FeatureActivity/GengMainActivity according to tools/main ownership. Main explicit
+  user action starts this service via startForegroundService and supplied action constants.
+- Retain Java17/min26 and complete main-owned API36 build/package validation.
+
+Known limitations / NOT tested or claimed passed:
+- No emulator/phone run or Gradle build here. Main must validate target36 foreground start,
+  notification denied, permission revoked, Android12+ pass-through outside ALL pet/menu/cue
+  windows, underlying app scroll/back gesture, and teardown/no leaks over 30 minutes.
+- Rotation/insets and keyboard behavior are implemented but ROM-specific delivery to
+  NOT_FOCUSABLE overlays is not guaranteed. API26-29 uses system-bar dimension fallback;
+  third-party keyboards/multiwindow require device checks. No fullscreen inset probe added.
+- Tilt direction, sensor delay/noise, comfort low-motion experience/efficacy unmeasured.
+- Main-body circle collision is an intentional approximation, not contour-perfect collision;
+  overlapping thin decorations can occur. Six-body pure-physics test passed, but transformed
+  artwork, frame pacing, battery and contact appearance need device verification/tuning.
+- UI gesture paths were source-reviewed; actual touch injection/accessibility/long-press/
+  long-press release/CANCEL/recycle tests have not run on Android.
+- No audio playback implemented by overlay (default muted; tools handle recording).
+- Only the six catalog characters are loaded; remaining 30 artwork candidates are outside
+  this delegated runtime task and are not claimed complete.
+
+Android references checked during implementation:
+https://developer.android.com/reference/android/view/WindowManager.LayoutParams#FLAG_NOT_TOUCHABLE
+https://developer.android.com/develop/background-work/services/fgs/service-types#special-use

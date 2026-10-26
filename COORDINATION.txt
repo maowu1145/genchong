@@ -1,0 +1,43 @@
+梗宠 Android development coordination — 2026-10-26
+
+Goal: implement the attached Android desktop pet plan in this cloned repo, preserving upstream history. Branch codex/gengpet-native, baseline 9f2e32eeb916dd5e27f4bc42f2355944fe648e4c.
+Primary spec (read only): C:/Users/STG-ARTIST2/Desktop/安卓热梗桌宠策划_AI开发版.txt
+Workspace root: C:/Users/STG-ARTIST2/.codex/.chatgpt-projects/g-p-6adee59199608191adb40cf4bf7dcd61
+New Java package: com.maowu.gravitypet.gengpet
+Java directory: app/src/main/java/com/maowu/gravitypet/gengpet/
+Main integrator owns build files, AndroidManifest.xml, GengMainActivity.java, PetStore.java, UiKit.java and integration fixes. Do not modify those files in delegated tasks.
+Do not overwrite or delete old Java sources. Reuse/read upstream PetView physics and OverlayPetService lifecycle, create isolated new classes for new UI/runtime.
+Keep native Java17, minSdk26; main upgrades target/compile to36 and toolchain.
+All contributors share this checkout. Only edit your assigned files. Do not git checkout/reset/commit/push or run Gradle concurrently. Record manifest/build requests in your report. Main performs builds and commits.
+
+Shared contracts (main implements PetStore and UiKit):
+PetStore.prefs(Context) -> SharedPreferences named gengpet.
+PetStore.Instance public fields: String uid,characterId,mood="sweating",moodText=""; float x=.5f,y=.35f,sizeDp=88f,softness=.5f; boolean gravity=true,pinned=false,muted=true. x/y are normalized screen CENTER coordinates in [0,1].
+PetStore.loadInstances(Context) -> ArrayList<Instance>; saveInstances(Context,List<Instance>); find(Context,String uid) -> Instance or null; add(Context,String characterId) -> Instance (null if six limit); update(Context,Instance); remove(Context,String uid); clear(Context).
+PetStore.saveInstances persists full instance list, so reload before mutations to avoid overwriting another component's edits. UI and service run on main thread in same process.
+UiKit.BG=0xFFF6F0E7, INK=0xFF302A27, ACCENT=0xFFA8B8A2. UI chrome uses these three colors; pet artwork exempt.
+UiKit.dp(Context,float)->int. UiKit.text(Context,String,float sp)->TextView. UiKit.button(Context,String,Runnable)->Button. UiKit.column(Context,int paddingDp)->LinearLayout. UiKit.card(Context)->GradientDrawable. Other UI can use plain Android controls with the same colors.
+
+Asset/catalog task owns PetCatalog.java and asset payload:
+PetCatalog.Entry public fields String id,name,description,feature,idle; Map<String,String> states; List<String> animationFrames; int frameDurationMs; float animationAnchorY; boolean functional=true.
+PetCatalog.all(Context)->List<Entry>; get(Context,String id)->Entry or null; bitmap(Context,String assetRelativePath)->Bitmap or null (cached, preserve alpha). Optional helpers allowed.
+Manifest at assets/pets/catalog.json (own schema, catalog parses it). Paths relative to assets root.
+Core IDs: doro,grudge_panda,spinning_cat,sweat_emoji,kinship_ride,thursday_bucket_cat.
+Source states: ../output/pet-assets-v1/pets/; accepted spinning cat: ../output/spinning-cat-v4/frames (8 frames,40ms,256px); retained ride: ../output/kinship-ride-animation-v1/frames (8 frames,100ms,256px). User said ride should rock fore/aft/up/down but then explicitly accepted current version; do not redo.
+No need to include masks/raw source sheets in APK. Register only actual existing validated assets. Pending 30 candidates must not be counted as finished or replaced by geometric placeholders.
+
+Overlay task owns GengOverlayService.java, PhysicsWorld.java, PetSpriteView.java, MotionSensor.java and related overlay-only classes:
+public static final String action values ACTION_SHOW="gengpet.SHOW", ACTION_REMOVE="gengpet.REMOVE", ACTION_PAUSE="gengpet.PAUSE", ACTION_RESUME="gengpet.RESUME", ACTION_STOP="gengpet.STOP", ACTION_RELOAD="gengpet.RELOAD", ACTION_COMFORT="gengpet.COMFORT".
+Intent extras "characterId" for SHOW (service adds instance), "instanceId" for REMOVE, "enabled" boolean for COMFORT. Context.startForegroundService explicit intents from visible user action.
+public static boolean isRunning(); isPaused(); count().
+Small bounded per-pet overlay windows only; no fullscreen blocking/drawing layer. Shared physics clock based on upstream; alpha preserved; six instance maximum, repeat IDs allowed; persist positions on stop/drag end; mutually exclusive tap/long press/drag/throw; recycling UI during drag. Long press opens FeatureActivity.open(Context,characterId,instanceId); click short feedback/menu; menu must include tools/pin/recall. Helpers cannot assume main Activity is always available.
+Listen to broadcast ACTION_FEEDBACK="com.maowu.gengpet.FEEDBACK" (explicit setPackage), extras "characterId","instanceId","state","text". Display bounded bubble and temporary state. Listen to ACTION_RELOAD_SETTINGS="com.maowu.gengpet.RELOAD_SETTINGS"; refresh persistence without adding pets or restarting stopped service.
+Comfort mode preferences: comfort_enabled boolean, comfort_strength float default .35, comfort_opacity float default .35. Damped edge cues in two narrow non-touchable bounded windows; no health-effect promise. UI toggle feature task sends ACTION_RELOAD_SETTINGS broadcast; service reads prefs. No forced service start from background.
+Global preferences paused boolean, low_power boolean, quiet_start minutes default1320, quiet_end minutes default480. Screen off pauses rendering/sensors. Rotation/display changes and permissions revoke handled. Service notification opens GengMainActivity and includes stop.
+
+Tools task owns FeatureActivity.java, NotesStore.java, RecordingService.java (if needed), ReminderScheduler.java, ReminderReceiver.java, KinshipEngine.java, ThursdayRules.java, FeaturePreferences.java and tools-specific classes/tests:
+FeatureActivity.open(Context,String characterId,String instanceId) static method. Intent extras same names; empty instanceId supports tools launched from main app.
+Implement all six real tools per spec: independent water/fruit schedules with quiet/snooze, persistent editable notes and local recording/playback/share, comfort controls, per-instance 8 moods and optional text, kinship relationship chain/calculator with >=30 meaningful pure Java tests, local Thursday status and quiet mode.
+ReminderScheduler.reschedule(Context) must be public, used after reboot/update and main startup if enabled. Notifications opt-in; reject permissions gracefully. No exact-alarm permission. Any AlarmManager receiver background work must respect platform constraints and never start overlay automatically. Send foreground overlay feedback via explicit-package broadcast. Save pending feedback if helpful, no duplicates across instances.
+Use new package's classes only. Can rely on PetCatalog/PetStore/UiKit shared interfaces above. If list instances load-save, avoid stale writes. Input/recording in visible Activity; do not start microphone from an invisible overlay. Record actual audio locally; cancellations clean temporary files; no cloud or API keys.
+Reports go to coordination/overlay-report.txt, tools-report.txt, assets-report.txt respectively and include changed files, actual verification, limitations, and manifest declarations main must add. Do not message unrelated chats or create more chats. Main reads these reports and your chat status.

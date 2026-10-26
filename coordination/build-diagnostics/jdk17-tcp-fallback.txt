@@ -1,0 +1,40 @@
+java.version=17.0.20.1
+java.vendor=Eclipse Adoptium
+java.home=C:\Users\STG-ARTIST2\AppData\Local\jdk17\jdk-17.0.20.1+1
+os.name=Windows 11
+os.version=10.0
+os.arch=amd64
+java.io.tmpdir=C:\Users\STG-AR~1\AppData\Local\Temp\
+jdk.net.unixdomain.tmpdir=C:\Users\STG-ARTIST2\Documents\Codex\2026-10-26\gengpet-assets\work\NioProbe.java
+java.nio.channels.spi.SelectorProvider=null
+java.net.preferIPv4Stack=null
+provider=sun.nio.ch.WEPollSelectorProvider
+PASS legacy TCP IPv4 14ms
+PASS legacy TCP IPv6 0ms
+PASS NIO IPv4 1ms
+PASS NIO IPv6 0ms
+UDS cleanup warning: java.nio.file.FileSystemException: C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-probe\nio-25760.sock: ϵͳ�޷����ʴ��ļ���
+FAIL NIO UNIX C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-probe\nio-25760.sock
+java.util.concurrent.ExecutionException: java.util.concurrent.CompletionException: java.net.SocketException: Invalid argument: connect
+	at java.base/java.util.concurrent.FutureTask.report(FutureTask.java:122)
+	at java.base/java.util.concurrent.FutureTask.get(FutureTask.java:205)
+	at NioProbe.test(NioProbe.java:14)
+	at NioProbe.main(NioProbe.java:59)
+Caused by: java.util.concurrent.CompletionException: java.net.SocketException: Invalid argument: connect
+	at NioProbe.lambda$test$1(NioProbe.java:14)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.net.SocketException: Invalid argument: connect
+	at java.base/sun.nio.ch.UnixDomainSockets.connect0(Native Method)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:148)
+	at java.base/sun.nio.ch.UnixDomainSockets.connect(UnixDomainSockets.java:144)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:851)
+	at NioProbe.nio(NioProbe.java:40)
+	at NioProbe.lambda$main$6(NioProbe.java:59)
+	... 6 more
+PASS Pipe.open data 41ms
+PASS Selector.open wakeup 1ms
+FAILED=1

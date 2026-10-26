@@ -1,0 +1,360 @@
+{
+  "schemaVersion": 1,
+  "completedCharacterCount": 6,
+  "characters": [
+    {
+      "id": "doro",
+      "name": "Doro",
+      "description": "喝水和水果分开提醒，轻点打开专属工具。",
+      "feature": "reminders",
+      "functional": true,
+      "idle": "pets/doro/idle.png",
+      "states": {
+        "idle": "pets/doro/idle.png",
+        "water": "pets/doro/water.png",
+        "fruit": "pets/doro/fruit.png",
+        "remind": "pets/doro/remind.png",
+        "satisfied": "pets/doro/satisfied.png"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "stateAnchors": {
+        "idle": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "water": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "fruit": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "remind": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "satisfied": {
+          "x": 0.5,
+          "y": 0.890625
+        }
+      },
+      "canvas": {
+        "width": 512,
+        "height": 512
+      },
+      "defaultWidthDp": 88,
+      "assetVersion": 1,
+      "animationFrames": [],
+      "frameDurationMs": 100,
+      "animationAnchorX": 0.5,
+      "animationAnchorY": 0.890625,
+      "animationLoop": false,
+      "animationStates": [],
+      "releaseReview": "pending"
+    },
+    {
+      "id": "grudge_panda",
+      "name": "记仇熊猫头",
+      "description": "长按记下文字或录音，本地保存随时回看。",
+      "feature": "quick_notes",
+      "functional": true,
+      "idle": "pets/grudge_panda/idle.png",
+      "states": {
+        "idle": "pets/grudge_panda/idle.png",
+        "opening": "pets/grudge_panda/opening.png",
+        "writing": "pets/grudge_panda/writing.png",
+        "recording": "pets/grudge_panda/recording.png",
+        "saved": "pets/grudge_panda/saved.png",
+        "tearing": "pets/grudge_panda/tearing.png"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "stateAnchors": {
+        "idle": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "opening": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "writing": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "recording": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "saved": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "tearing": {
+          "x": 0.5,
+          "y": 0.890625
+        }
+      },
+      "canvas": {
+        "width": 512,
+        "height": 512
+      },
+      "defaultWidthDp": 88,
+      "assetVersion": 1,
+      "animationFrames": [],
+      "frameDurationMs": 100,
+      "animationAnchorX": 0.5,
+      "animationAnchorY": 0.890625,
+      "animationLoop": false,
+      "animationStates": [],
+      "releaseReview": "pending"
+    },
+    {
+      "id": "spinning_cat",
+      "name": "旋转猫",
+      "description": "转一圈陪你玩，也能打开乘车舒适辅助。",
+      "feature": "ride_comfort",
+      "functional": true,
+      "idle": "pets/spinning_cat/idle.png",
+      "states": {
+        "idle": "pets/spinning_cat/idle.png",
+        "calm": "pets/spinning_cat/calm.png"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "stateAnchors": {
+        "idle": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "calm": {
+          "x": 0.5,
+          "y": 0.890625
+        }
+      },
+      "canvas": {
+        "width": 512,
+        "height": 512
+      },
+      "defaultWidthDp": 88,
+      "assetVersion": 1,
+      "animationFrames": [
+        "pets/spinning_cat/animation/spin_00.png",
+        "pets/spinning_cat/animation/spin_01.png",
+        "pets/spinning_cat/animation/spin_02.png",
+        "pets/spinning_cat/animation/spin_03.png",
+        "pets/spinning_cat/animation/spin_04.png",
+        "pets/spinning_cat/animation/spin_05.png",
+        "pets/spinning_cat/animation/spin_06.png",
+        "pets/spinning_cat/animation/spin_07.png"
+      ],
+      "frameDurationMs": 40,
+      "animationAnchorX": 0.5,
+      "animationAnchorY": 0.84375,
+      "animationLoop": true,
+      "animationStates": [
+        "idle"
+      ],
+      "releaseReview": "pending",
+      "animationCanvas": {
+        "width": 256,
+        "height": 256
+      },
+      "animationVersion": 4,
+      "animationId": "spin"
+    },
+    {
+      "id": "sweat_emoji",
+      "name": "流汗黄豆",
+      "description": "八种表情随心切换，长按写下此刻心情。",
+      "feature": "mood",
+      "functional": true,
+      "idle": "pets/sweat_emoji/sweating.png",
+      "states": {
+        "sweating": "pets/sweat_emoji/sweating.png",
+        "happy": "pets/sweat_emoji/happy.png",
+        "sad": "pets/sweat_emoji/sad.png",
+        "angry": "pets/sweat_emoji/angry.png",
+        "speechless": "pets/sweat_emoji/speechless.png",
+        "sleepy": "pets/sweat_emoji/sleepy.png",
+        "shy": "pets/sweat_emoji/shy.png",
+        "shocked": "pets/sweat_emoji/shocked.png"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "stateAnchors": {
+        "sweating": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "happy": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "sad": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "angry": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "speechless": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "sleepy": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "shy": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "shocked": {
+          "x": 0.5,
+          "y": 0.890625
+        }
+      },
+      "canvas": {
+        "width": 512,
+        "height": 512
+      },
+      "defaultWidthDp": 88,
+      "assetVersion": 1,
+      "animationFrames": [],
+      "frameDurationMs": 100,
+      "animationAnchorX": 0.5,
+      "animationAnchorY": 0.890625,
+      "animationLoop": false,
+      "animationStates": [],
+      "releaseReview": "pending"
+    },
+    {
+      "id": "kinship_ride",
+      "name": "摇摇车",
+      "description": "选择亲属关系，一步一步算出怎么称呼。",
+      "feature": "kinship",
+      "functional": true,
+      "idle": "pets/kinship_ride/idle.png",
+      "states": {
+        "idle": "pets/kinship_ride/idle.png",
+        "calculating": "pets/kinship_ride/calculating.png",
+        "result": "pets/kinship_ride/result.png"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "stateAnchors": {
+        "idle": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "calculating": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "result": {
+          "x": 0.5,
+          "y": 0.890625
+        }
+      },
+      "canvas": {
+        "width": 512,
+        "height": 512
+      },
+      "defaultWidthDp": 88,
+      "assetVersion": 1,
+      "animationFrames": [
+        "pets/kinship_ride/animation/rock_00.png",
+        "pets/kinship_ride/animation/rock_01.png",
+        "pets/kinship_ride/animation/rock_02.png",
+        "pets/kinship_ride/animation/rock_03.png",
+        "pets/kinship_ride/animation/rock_04.png",
+        "pets/kinship_ride/animation/rock_05.png",
+        "pets/kinship_ride/animation/rock_06.png",
+        "pets/kinship_ride/animation/rock_07.png"
+      ],
+      "frameDurationMs": 100,
+      "animationAnchorX": 0.5,
+      "animationAnchorY": 0.8984375,
+      "animationLoop": true,
+      "animationStates": [
+        "idle",
+        "calculating"
+      ],
+      "releaseReview": "pending",
+      "animationCanvas": {
+        "width": 256,
+        "height": 256
+      },
+      "animationVersion": 1,
+      "animationId": "rocking"
+    },
+    {
+      "id": "thursday_bucket_cat",
+      "name": "全家桶小猫",
+      "description": "平日安静陪伴，星期四换上兴奋表情。",
+      "feature": "thursday",
+      "functional": true,
+      "idle": "pets/thursday_bucket_cat/idle.png",
+      "states": {
+        "idle": "pets/thursday_bucket_cat/idle.png",
+        "peek": "pets/thursday_bucket_cat/peek.png",
+        "excited": "pets/thursday_bucket_cat/excited.png",
+        "crazy": "pets/thursday_bucket_cat/crazy.png",
+        "calm": "pets/thursday_bucket_cat/calm.png"
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.890625
+      },
+      "stateAnchors": {
+        "idle": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "peek": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "excited": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "crazy": {
+          "x": 0.5,
+          "y": 0.890625
+        },
+        "calm": {
+          "x": 0.5,
+          "y": 0.890625
+        }
+      },
+      "canvas": {
+        "width": 512,
+        "height": 512
+      },
+      "defaultWidthDp": 88,
+      "assetVersion": 1,
+      "animationFrames": [],
+      "frameDurationMs": 100,
+      "animationAnchorX": 0.5,
+      "animationAnchorY": 0.890625,
+      "animationLoop": false,
+      "animationStates": [],
+      "releaseReview": "pending"
+    }
+  ]
+}

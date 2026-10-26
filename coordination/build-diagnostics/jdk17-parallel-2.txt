@@ -1,0 +1,21 @@
+Picked up JAVA_TOOL_OPTIONS: -Djdk.net.unixdomain.tmpdir=C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-tools\uds-disabled
+java.version=17.0.20.1
+java.vendor=Eclipse Adoptium
+java.home=C:\Users\STG-ARTIST2\AppData\Local\jdk17\jdk-17.0.20.1+1
+os.name=Windows 11
+os.version=10.0
+os.arch=amd64
+java.io.tmpdir=C:\Users\STG-AR~1\AppData\Local\Temp\
+jdk.net.unixdomain.tmpdir=C:\Users\STG-ARTIST2\AppData\Local\codex-jdk-tools\uds-disabled
+java.nio.channels.spi.SelectorProvider=null
+java.net.preferIPv4Stack=null
+provider=sun.nio.ch.WEPollSelectorProvider
+PASS legacy TCP IPv4 14ms
+PASS legacy TCP IPv6 0ms
+PASS NIO IPv4 1ms
+PASS NIO IPv6 0ms
+PASS Pipe.open data 78ms
+PASS Selector.open wakeup 2ms
+PASS Selector TCP read readiness 2ms
+PASS 100 Pipe+Selector+TCP cycles 183ms
+FAILED=0

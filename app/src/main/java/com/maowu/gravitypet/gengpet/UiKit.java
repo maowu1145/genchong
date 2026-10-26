@@ -6,6 +6,9 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.RippleDrawable;
+import android.graphics.drawable.LayerDrawable;
+import android.view.View;
+import android.os.Build;
 import android.view.Gravity;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -14,7 +17,7 @@ import android.widget.TextView;
 
 /** Small, native design system shared by the gallery, tools and overlay menus. */
 public final class UiKit {
-  public static final int BG=0xFFF7F8FA, INK=0xFF252A34, ACCENT=0xFF5B50D6;
+  public static final int BG=0xFFF3F1FA, INK=0xFF29243B, ACCENT=0xFF6650CB;
   public static final int SURFACE=0xFFFFFFFF, MUTED=0xFF626B78, SOFT=0xFFEEECFC, LINE=0xFFE8EAF0;
   public static final int DANGER=0xFFB23B4B;
   private UiKit() {}
@@ -34,7 +37,18 @@ public final class UiKit {
     GradientDrawable d=new GradientDrawable(); d.setColor(color); d.setCornerRadius(dp(c,radius)); return d;
   }
   public static GradientDrawable card(Context c) {
-    GradientDrawable d=rounded(c,SURFACE,20); d.setStroke(dp(c,1),LINE); return d;
+    GradientDrawable d=gradient(c,0xFFFFFFFF,0xFFFCFBFF,22); d.setStroke(dp(c,1),0xCCFFFFFF); return d;
+  }
+  public static GradientDrawable gradient(Context c,int top,int bottom,float radius) {
+    GradientDrawable d=new GradientDrawable(GradientDrawable.Orientation.TL_BR,new int[]{top,bottom});
+    d.setCornerRadius(dp(c,radius)); return d;
+  }
+  public static void lift(View v,float elevation) {
+    v.setElevation(dp(v.getContext(),elevation));
+    if(Build.VERSION.SDK_INT>=28) {
+      v.setOutlineAmbientShadowColor(0x88513F81);
+      v.setOutlineSpotShadowColor(0x99513F81);
+    }
   }
   public static RippleDrawable ripple(Context c,int color,float radius) {
     return new RippleDrawable(ColorStateList.valueOf(0x225B50D6),rounded(c,color,radius),rounded(c,SURFACE,radius));
@@ -46,7 +60,13 @@ public final class UiKit {
     b.setTextColor(primary?SURFACE:ACCENT); b.setTypeface(Typeface.create("sans-serif-medium",Typeface.NORMAL));
     b.setMinHeight(dp(c,48)); b.setMinimumHeight(dp(c,48)); b.setMinWidth(0); b.setMinimumWidth(0);
     b.setGravity(Gravity.CENTER); b.setPadding(dp(c,12),dp(c,8),dp(c,12),dp(c,8));
-    b.setBackground(ripple(c,primary?ACCENT:SOFT,14)); b.setStateListAnimator(null);
+    if(primary) {
+      LayerDrawable face=new LayerDrawable(new Drawable[]{rounded(c,0xFF443091,15),gradient(c,0xFF795BD4,0xFF6550CB,15)});
+      face.setLayerInset(1,0,0,0,dp(c,3));
+      b.setBackground(new RippleDrawable(ColorStateList.valueOf(0x33FFFFFF),face,rounded(c,SURFACE,15)));
+      lift(b,2);
+    } else b.setBackground(ripple(c,SOFT,14));
+    b.setStateListAnimator(null);
     b.setOnClickListener(v->action.run());
     LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-1,-2); p.topMargin=dp(c,6); p.bottomMargin=dp(c,6);
     b.setLayoutParams(p); return b;

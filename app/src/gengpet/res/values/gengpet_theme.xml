@@ -2,16 +2,16 @@
 <resources>
     <style name="Theme.GengPetBase" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#5B50D6</item>
-        <item name="android:colorControlNormal">#252A34</item>
-        <item name="android:colorControlActivated">#5B50D6</item>
-        <item name="android:colorButtonNormal">#5B50D6</item>
-        <item name="android:textColorPrimary">#252A34</item>
+        <item name="android:colorAccent">#6650CB</item>
+        <item name="android:colorControlNormal">#29243B</item>
+        <item name="android:colorControlActivated">#6650CB</item>
+        <item name="android:colorButtonNormal">#6650CB</item>
+        <item name="android:textColorPrimary">#29243B</item>
         <item name="android:textColorSecondary">#626B78</item>
-        <item name="android:colorBackground">#F7F8FA</item>
-        <item name="android:windowBackground">#F7F8FA</item>
-        <item name="android:navigationBarColor">#F7F8FA</item>
-        <item name="android:statusBarColor">#F7F8FA</item>
+        <item name="android:colorBackground">#F3F1FA</item>
+        <item name="android:windowBackground">#F3F1FA</item>
+        <item name="android:navigationBarColor">#F3F1FA</item>
+        <item name="android:statusBarColor">#F3F1FA</item>
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:windowActionModeOverlay">true</item>

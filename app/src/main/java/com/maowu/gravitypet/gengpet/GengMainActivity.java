@@ -99,7 +99,8 @@ public final class GengMainActivity extends Activity {
   private void show() {
     if (pageScroll != null) scrollPositions[tab] = pageScroll.getScrollY();
     outer = UiKit.column(this, 0);
-    outer.setBackgroundColor(UiKit.BG);
+    outer.setBackground(new SceneBackdrop(SceneBackdrop.PAGE, 0, 0));
+    outer.setClipChildren(true);
     setContentView(outer);
     outer.setOnApplyWindowInsetsListener((v, insets) -> {
       v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
@@ -109,19 +110,21 @@ public final class GengMainActivity extends Activity {
     pageScroll = new ScrollView(this);
     pageScroll.setFillViewport(true);
     pageScroll.setClipToPadding(false);
+    pageScroll.setOutlineProvider(android.view.ViewOutlineProvider.BOUNDS);
+    pageScroll.setClipToOutline(true);
     pageScroll.setVerticalScrollBarEnabled(false);
     outer.addView(pageScroll, new LinearLayout.LayoutParams(-1, 0, 1));
     body = UiKit.column(this, 16);
+    body.setClipChildren(false); body.setClipToPadding(false);
     pageScroll.addView(body);
     cards = null;
     if (tab == 0) gallery(); else if (tab == 1) tools(); else settings();
     space(body, 8);
-    View divider = new View(this); divider.setBackgroundColor(UiKit.LINE);
-    outer.addView(divider, new LinearLayout.LayoutParams(-1, dp(1)));
     LinearLayout nav = row(outer);
-    nav.setBackgroundColor(UiKit.SURFACE);
-    nav.setPadding(dp(16), dp(5), dp(16), dp(5));
-    nav.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(52 + 18 * getResources().getConfiguration().fontScale)));
+    nav.setBackground(UiKit.card(this)); UiKit.lift(nav, 10);
+    nav.setPadding(dp(8), dp(3), dp(8), dp(3));
+    LinearLayout.LayoutParams navParams = new LinearLayout.LayoutParams(-1, dp(50 + 18 * getResources().getConfiguration().fontScale));
+    navParams.setMargins(dp(16), dp(4), dp(16), dp(10)); nav.setLayoutParams(navParams);
     String[] labels = {"角色", "工具", "设置"};
     String[] icons = {"pets", "widgets", "settings"};
     for (int i = 0; i < labels.length; i++) {
@@ -131,9 +134,9 @@ public final class GengMainActivity extends Activity {
       item.setContentDescription(labels[i]); item.setSelected(i == tab);
       item.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
       ImageView icon = new ImageView(this);
-      icon.setImageDrawable(UiKit.icon(this, icons[i] + (i == tab ? "_filled" : ""), i == tab ? UiKit.ACCENT : UiKit.MUTED));
+      icon.setImageDrawable(UiKit.icon(this, icons[i] + (i == tab ? "_filled" : ""), i == tab ? UiKit.SURFACE : UiKit.MUTED));
       icon.setPadding(dp(16), dp(4), dp(16), dp(4));
-      if (i == tab) icon.setBackground(UiKit.rounded(this, UiKit.SOFT, 16));
+      if (i == tab) { icon.setBackground(UiKit.gradient(this, 0xFF8C70E5, UiKit.ACCENT, 16)); UiKit.lift(icon, 3); }
       item.addView(icon, new LinearLayout.LayoutParams(dp(60), dp(32)));
       TextView label = UiKit.heading(this, labels[i], 12);
       label.setGravity(Gravity.CENTER);
@@ -156,7 +159,7 @@ public final class GengMainActivity extends Activity {
     line.addView(UiKit.heading(this, heading, 26), new LinearLayout.LayoutParams(0, -2, 1));
     TextView badge = UiKit.text(this, eyebrow, 12);
     badge.setTextColor(UiKit.ACCENT); badge.setPadding(dp(10), dp(5), dp(10), dp(5));
-    badge.setBackground(UiKit.rounded(this, UiKit.SOFT, 12)); line.addView(badge);
+    badge.setBackground(UiKit.rounded(this, UiKit.SURFACE, 12)); UiKit.lift(badge,2); line.addView(badge);
     if (!detail.isEmpty()) {
       TextView subtitle = UiKit.text(this, detail, 14); subtitle.setTextColor(UiKit.MUTED);
       subtitle.setPadding(0, dp(5), 0, 0); body.addView(subtitle);
@@ -165,39 +168,35 @@ public final class GengMainActivity extends Activity {
   }
 
   private void gallery() {
-    title("6 位伙伴", "梗宠", "一点小陪伴，随时在身边。");
+    title("陪伴日常", "梗宠", "");
+    hero();
     ArrayList<PetStore.Instance> active = PetStore.loadInstances(this);
     LinearLayout status = card(body);
+    status.setPadding(dp(12), dp(8), dp(8), dp(8));
     LinearLayout top = row(status);
+    PetCatalog.Entry first = active.isEmpty() ? null : PetCatalog.get(this,active.get(0).characterId);
+    if(first != null) {
+      PetThumb avatar = new PetThumb(this,first); avatar.animate=false;
+      avatar.setBackground(UiKit.rounded(this,tint(first.id),14));
+      avatar.setContentDescription("调节"+first.name);
+      avatar.setOnClickListener(v -> detail(first,active.get(0).uid));
+      LinearLayout.LayoutParams ap=new LinearLayout.LayoutParams(dp(48),dp(48)); ap.rightMargin=dp(10); top.addView(avatar,ap);
+    }
     LinearLayout copy = UiKit.column(this, 0);
     top.addView(copy, new LinearLayout.LayoutParams(0, -2, 1));
     boolean running = GengOverlayService.isRunning();
-    copy.addView(UiKit.heading(this, running ? "屏幕上的伙伴 · " + active.size() : "准备好，认识新伙伴", 16));
-    String state = !Settings.canDrawOverlays(this) ? "允许悬浮窗后，就能召唤到桌面"
-        : active.isEmpty() ? "选一只喜欢的，点击下方召唤"
-        : !running ? "已收起 " + active.size() + " 只 · 可在管理中恢复"
-        : GengOverlayService.isPaused() ? "已暂停 · 位置保留" : "正在陪伴你 · 点头像调节";
-    TextView stateText = UiKit.text(this, state, 12); stateText.setTextColor(UiKit.MUTED); copy.addView(stateText);
+    copy.addView(UiKit.heading(this, running ? "陪伴中 · " + active.size() + " 位伙伴" : active.isEmpty() ? "你的桌面，还差一点热闹" : "伙伴已收起 · " + active.size() + " 位", 14));
+    String state = !Settings.canDrawOverlays(this) ? "开启悬浮窗，开始陪伴"
+        : active.isEmpty() ? "挑一只喜欢的，点击召唤"
+        : !running ? "点右侧管理，恢复这组伙伴"
+        : GengOverlayService.isPaused() ? "已暂停 · 位置保留" : "点头像调节，点右侧管理全部";
+    TextView stateText = UiKit.text(this, state, 11); stateText.setTextColor(UiKit.MUTED); copy.addView(stateText);
     top.addView(UiKit.iconButton(this, "tune", "管理屏幕上的伙伴", this::managePets), new LinearLayout.LayoutParams(dp(48), dp(48)));
     if (!Settings.canDrawOverlays(this)) status.addView(UiKit.secondaryButton(this, "开启悬浮窗", () -> requestOverlay(null)));
-    else if (!active.isEmpty()) {
-      HorizontalScrollView strip = new HorizontalScrollView(this); strip.setHorizontalScrollBarEnabled(false);
-      LinearLayout avatars = new LinearLayout(this); avatars.setOrientation(LinearLayout.HORIZONTAL);
-      strip.addView(avatars); status.addView(strip);
-      for (PetStore.Instance instance : active) {
-        PetCatalog.Entry e = PetCatalog.get(this, instance.characterId); if (e == null) continue;
-        PetThumb avatar = new PetThumb(this, e); avatar.animate = false;
-        avatar.setBackground(UiKit.ripple(this, tint(e.id), 18));
-        avatar.setContentDescription("调节" + e.name + (instance.pinned ? "，已固定" : ""));
-        avatar.setOnClickListener(v -> detail(e, instance.uid));
-        LinearLayout.LayoutParams a = new LinearLayout.LayoutParams(dp(52), dp(52));
-        a.setMargins(0, dp(6), dp(8), 0); avatars.addView(avatar, a);
-      }
-    }
     EditText search = new EditText(this);
     search.setSingleLine(true); search.setTextSize(14); search.setHint("搜索角色或小工具");
     search.setTextColor(UiKit.INK); search.setHintTextColor(UiKit.MUTED);
-    search.setBackground(UiKit.rounded(this, UiKit.SURFACE, 16));
+    search.setBackground(UiKit.card(this)); UiKit.lift(search,2);
     search.setPadding(dp(14), dp(12), dp(14), dp(12));
     search.setCompoundDrawables(UiKit.icon(this, "search", UiKit.MUTED), null, null, null);
     search.setCompoundDrawablePadding(dp(8)); search.setText(query);
@@ -210,12 +209,37 @@ public final class GengMainActivity extends Activity {
     weighted(filters, allFilter); weighted(filters, favoriteFilter);
     Button trial = UiKit.secondaryButton(this, "试玩", () -> detail(PetCatalog.get(this, "doro"), null));
     weighted(filters, trial);
-    cards = UiKit.column(this, 0); body.addView(cards); renderCards();
+    cards = UiKit.column(this, 0); cards.setClipChildren(false); cards.setClipToPadding(false); body.addView(cards); renderCards();
     search.addTextChangedListener(new TextWatcher() {
       public void beforeTextChanged(CharSequence s, int st, int count, int after) {}
       public void onTextChanged(CharSequence s, int st, int before, int count) { query = s.toString(); renderCards(); }
       public void afterTextChanged(Editable e) {}
     });
+  }
+
+  private void hero() {
+    FrameLayout scene = new FrameLayout(this);
+    scene.setBackground(new SceneBackdrop(SceneBackdrop.HERO,0,dp(24))); UiKit.lift(scene,7);
+    scene.setClipChildren(false);
+    LinearLayout.LayoutParams hp=new LinearLayout.LayoutParams(-1,dp(singleColumn()?156:116));
+    hp.bottomMargin=dp(14); body.addView(scene,hp);
+    PetThumb doro = new PetThumb(this,PetCatalog.get(this,"doro")); doro.animate=false;
+    doro.previewScale=1.3f; doro.setRotation(-8);
+    doro.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+    FrameLayout.LayoutParams pet=new FrameLayout.LayoutParams(dp(singleColumn()?104:132),-1,Gravity.END|Gravity.BOTTOM);
+    pet.rightMargin=dp(2); scene.addView(doro,pet);
+    LinearLayout words=UiKit.column(this,0); words.setGravity(Gravity.CENTER_VERTICAL);
+    words.setPadding(dp(18),dp(8),0,dp(8));
+    TextView kicker=UiKit.text(this,"桌面小伙伴",11); kicker.setTextColor(0xFFE3DAFF); words.addView(kicker);
+    TextView headline=UiKit.heading(this,"让日常，多点可爱",singleColumn()?18:19); headline.setTextColor(UiKit.SURFACE);
+    headline.setPadding(0,dp(5),0,dp(8)); words.addView(headline);
+    TextView link=UiKit.heading(this,"捏捏 Doro  ›",12); link.setTextColor(0xFF443178);
+    link.setPadding(dp(10),dp(5),dp(10),dp(5)); link.setBackground(UiKit.rounded(this,0xFFF1E9FF,10));
+    words.addView(link,new LinearLayout.LayoutParams(-2,-2));
+    scene.addView(words,new FrameLayout.LayoutParams(-1,-1));
+    words.setPadding(dp(18),dp(8),dp(singleColumn()?100:118),dp(8));
+    scene.setContentDescription("捏捏 Doro，打开互动试玩");
+    scene.setOnClickListener(v->detail(PetCatalog.get(this,"doro"),null));
   }
 
   private void managePets() {
@@ -247,35 +271,39 @@ public final class GengMainActivity extends Activity {
 
   private void renderCards() {
     if (cards == null) return;
-    allFilter.setBackground(UiKit.ripple(this, favoritesOnly ? UiKit.BG : UiKit.SOFT, 14));
-    favoriteFilter.setBackground(UiKit.ripple(this, favoritesOnly ? UiKit.SOFT : UiKit.BG, 14));
+    allFilter.setBackground(UiKit.ripple(this, favoritesOnly ? 0x00000000 : UiKit.SURFACE, 14));
+    favoriteFilter.setBackground(UiKit.ripple(this, favoritesOnly ? UiKit.SURFACE : 0x00000000, 14));
     allFilter.setTextColor(favoritesOnly ? UiKit.MUTED : UiKit.ACCENT);
     favoriteFilter.setTextColor(favoritesOnly ? UiKit.ACCENT : UiKit.MUTED);
     allFilter.setSelected(!favoritesOnly); favoriteFilter.setSelected(favoritesOnly);
+    UiKit.lift(allFilter,favoritesOnly?0:2); UiKit.lift(favoriteFilter,favoritesOnly?2:0);
     cards.removeAllViews(); int matches = 0; LinearLayout gridRow = null;
     int columns = singleColumn() ? 1 : 2;
     for (PetCatalog.Entry e : PetCatalog.all(this)) {
       if (favoritesOnly && !favorite(e.id)) continue;
       if (!query.isEmpty() && !(e.name + e.description + featureName(e.id)).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) continue;
       if(matches % columns == 0) { gridRow = row(cards); gridRow.setGravity(Gravity.TOP); }
-      LinearLayout cell = UiKit.column(this, 10); cell.setBackground(UiKit.card(this));
+      LinearLayout cell = UiKit.column(this, 10); cell.setBackground(UiKit.card(this)); UiKit.lift(cell,5);
+      cell.setClipChildren(false); cell.setClipToPadding(false);
       LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, -2, 1);
-      cp.bottomMargin = dp(12); if(columns == 2) {cp.leftMargin = matches % 2 == 0 ? 0 : dp(6); cp.rightMargin = matches % 2 == 0 ? dp(6) : 0;}
+      cp.bottomMargin = dp(18); if(columns == 2) {cp.leftMargin = matches % 2 == 0 ? 0 : dp(6); cp.rightMargin = matches % 2 == 0 ? dp(6) : 0;}
       gridRow.addView(cell, cp); matches++;
-      FrameLayout stage = new FrameLayout(this); stage.setBackground(UiKit.rounded(this, tint(e.id), 14));
-      PetThumb thumb = new PetThumb(this, e); thumb.previewScale = 1.1f;
+      FrameLayout stage = new FrameLayout(this); stage.setBackground(new SceneBackdrop(SceneBackdrop.STAGE, tint(e.id), dp(16)));
+      PetThumb thumb = new PetThumb(this, e); thumb.previewScale = 1.06f; thumb.stagePreview = true;
       thumb.setContentDescription("查看和调节" + e.name); thumb.setOnClickListener(v -> detail(e, null));
       stage.addView(thumb, new FrameLayout.LayoutParams(-1, -1));
       ImageButton fav = UiKit.iconButton(this, favorite(e.id) ? "favorite_filled" : "favorite", (favorite(e.id) ? "取消收藏" : "收藏") + e.name, () -> {
         PetStore.prefs(this).edit().putBoolean("favorite_" + e.id, !favorite(e.id)).apply(); renderCards();
       });
-      FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(dp(48), dp(48), Gravity.TOP | Gravity.END); stage.addView(fav, fp);
-      cell.addView(stage, new LinearLayout.LayoutParams(-1, dp(114)));
+      fav.setBackground(new android.graphics.drawable.InsetDrawable(UiKit.ripple(this,0xF5FFFFFF,24),dp(8))); UiKit.lift(fav,2);
+      fav.setPadding(dp(14),dp(14),dp(14),dp(14));
+      FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(dp(48), dp(48), Gravity.TOP | Gravity.END); fp.setMargins(0,dp(4),dp(4),0); stage.addView(fav, fp);
+      cell.addView(stage, new LinearLayout.LayoutParams(-1, dp(110)));
       TextView name = UiKit.heading(this, e.name, 16); name.setPadding(dp(2), dp(9), 0, 0); cell.addView(name);
       TextView feature = UiKit.text(this, featureName(e.id), 12); feature.setTextColor(UiKit.MUTED);
       feature.setPadding(dp(2), dp(3), 0, dp(6)); cell.addView(feature);
       Button summon = UiKit.button(this, "召唤", () -> summon(e.id));
-      summon.setContentDescription("召唤" + e.name); cell.addView(summon);
+      summon.setText("＋ 召唤"); summon.setContentDescription("召唤" + e.name); cell.addView(summon);
     }
     if(columns == 2 && matches % 2 != 0) gridRow.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1));
     if(matches == 0) {
@@ -325,23 +353,28 @@ public final class GengMainActivity extends Activity {
   private void tools() {
     title("随手用", "日常小工具", "提醒、记录和一点好心情。");
     LinearLayout banner = card(body);
-    banner.setBackground(UiKit.rounded(this, UiKit.SOFT, 20));
-    banner.addView(UiKit.heading(this, "每位伙伴，都有一点拿手好戏", 16));
-    TextView note = UiKit.text(this, "不召唤也能使用，记录保存在本机。", 13); note.setTextColor(UiKit.MUTED); banner.addView(note);
+    banner.setBackground(new SceneBackdrop(SceneBackdrop.HERO,0,dp(22)));
+    TextView bannerTitle=UiKit.heading(this,"每位伙伴，都有一点拿手好戏",16); bannerTitle.setTextColor(UiKit.SURFACE); banner.addView(bannerTitle);
+    TextView note = UiKit.text(this, "不召唤也能使用，记录保存在本机。", 13); note.setTextColor(0xFFEDE8FF); banner.addView(note);
     LinearLayout gridRow = null; int n = 0, columns = singleColumn() ? 1 : 2;
     for (PetCatalog.Entry e : PetCatalog.all(this)) {
       if(n % columns == 0) {gridRow = row(body); gridRow.setGravity(Gravity.TOP);}
-      LinearLayout tile = UiKit.column(this, 16); tile.setBackground(UiKit.ripple(this, UiKit.SURFACE, 20));
+      LinearLayout tile = UiKit.column(this, 16); tile.setBackground(UiKit.ripple(this, UiKit.SURFACE, 22)); UiKit.lift(tile,5);
+      tile.setClipChildren(false);
       ImageView icon = new ImageView(this); icon.setImageDrawable(UiKit.icon(this, featureIcon(e.id), UiKit.ACCENT));
-      icon.setPadding(dp(10),dp(10),dp(10),dp(10)); icon.setBackground(UiKit.rounded(this,tint(e.id),16));
-      tile.addView(icon,new LinearLayout.LayoutParams(dp(48),dp(48))); space(tile,14);
+      icon.setPadding(dp(10),dp(10),dp(10),dp(10)); icon.setBackground(UiKit.gradient(this,0xFFFFFFFF,tint(e.id),16)); UiKit.lift(icon,4);
+      LinearLayout tileTop=row(tile);
+      tileTop.addView(icon,new LinearLayout.LayoutParams(dp(48),dp(48)));
+      tileTop.addView(new View(this),new LinearLayout.LayoutParams(0,1,1));
+      PetThumb buddy=new PetThumb(this,e); buddy.animate=false; buddy.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+      tileTop.addView(buddy,new LinearLayout.LayoutParams(dp(52),dp(52))); space(tile,14);
       tile.addView(UiKit.heading(this,featureName(e.id),16));
       TextView caption = UiKit.text(this, e.name + "的小工具", 12); caption.setTextColor(UiKit.MUTED); caption.setPadding(0,dp(6),0,0); tile.addView(caption);
       tile.setOnClickListener(v -> FeatureActivity.open(this,e.id,""));
       tile.setContentDescription("打开" + featureName(e.id) + "，" + e.name);
       tile.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
       icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
-      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,-2,1); lp.bottomMargin=dp(12);
+      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,-2,1); lp.bottomMargin=dp(18);
       if(columns==2){lp.leftMargin=n%2==0?0:dp(6); lp.rightMargin=n%2==0?dp(6):0;}
       gridRow.addView(tile,lp); n++;
     }
@@ -377,7 +410,7 @@ public final class GengMainActivity extends Activity {
         .setMessage("文字、录音、收藏和桌宠设置会从这台手机删除。建议先导出一份备份。")
         .setNegativeButton("取消",null).setPositiveButton("删除",(d,w)->deleteData()).show());
     LinearLayout about = card(body);
-    about.addView(UiKit.heading(this,"梗宠 · 0.1.2",16));
+    about.addView(UiKit.heading(this,"梗宠 · 0.1.3",16));
     mutedText(about,"6 位伙伴，陪你过日常。所有记录保存在这台手机里。");
     mutedText(about,"麦克风仅在录音时申请。乘车辅助为可随时关闭的实验功能。");
   }
@@ -437,7 +470,7 @@ public final class GengMainActivity extends Activity {
     preview.setSoftness(draft.softness);
     preview.setGravityEnabled(draft.gravity);
     preview.setPinned(draft.pinned);
-    preview.setBackground(UiKit.rounded(this, tint(e.id), 20));
+    preview.setBackground(new SceneBackdrop(SceneBackdrop.STAGE,tint(e.id),dp(20)));
     box.addView(preview, new LinearLayout.LayoutParams(-1, dp(150)));
     mutedText(box, "拖动上方角色，试试回弹手感。");
     space(box, 8);
@@ -759,7 +792,7 @@ public final class GengMainActivity extends Activity {
 
   private LinearLayout card(LinearLayout parent) {
     LinearLayout c = UiKit.column(this, 14);
-    c.setBackground(UiKit.card(this));
+    c.setBackground(UiKit.card(this)); UiKit.lift(c,3);
     LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(-1, -2);
     p.bottomMargin = dp(14);
     parent.addView(c, p);
@@ -770,6 +803,7 @@ public final class GengMainActivity extends Activity {
     LinearLayout r = new LinearLayout(this);
     r.setOrientation(LinearLayout.HORIZONTAL);
     r.setBaselineAligned(false);
+    r.setClipChildren(false); r.setClipToPadding(false);
     r.setGravity(Gravity.CENTER_VERTICAL);
     parent.addView(r, new LinearLayout.LayoutParams(-1, -2));
     return r;
@@ -801,7 +835,7 @@ public final class GengMainActivity extends Activity {
     final android.view.ViewTreeObserver.OnScrollChangedListener scrollListener = this::scheduleAnimation;
     long epoch = SystemClock.uptimeMillis();
     boolean ready, attached;
-    boolean animate = true;
+    boolean animate = true, stagePreview;
     float previewScale = 1, softness = 0;
 
     PetThumb(Context c, PetCatalog.Entry e) {
@@ -869,7 +903,7 @@ public final class GengMainActivity extends Activity {
       Bitmap b = PetCatalog.bitmapIfReady(path);
       if (b == null) return;
       float size = Math.min(getWidth(), getHeight()) * .94f * Math.min(1.35f, previewScale);
-      float cx = getWidth() / 2f, cy = getHeight() / 2f;
+      float cx = getWidth() / 2f, cy = getHeight() * (stagePreview ? .45f : .5f);
       canvas.save();
       float deform =
           .035f * softness * (float) Math.sin((SystemClock.uptimeMillis() - epoch) / 250.0);

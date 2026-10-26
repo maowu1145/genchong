@@ -9,6 +9,8 @@ import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.*;
 import java.time.Instant;
@@ -47,6 +49,8 @@ public final class FeatureActivity extends Activity {
     getWindow().setStatusBarColor(UiKit.BG);
     getWindow().setNavigationBarColor(UiKit.BG);
     getWindow().setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(UiKit.BG));
+    getWindow().getDecorView().setSystemUiVisibility(
+        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
     if (state != null) {
       characterId = state.getString("characterId", characterId);
       instanceId = state.getString("instanceId", instanceId);
@@ -65,11 +69,30 @@ public final class FeatureActivity extends Activity {
     }
     LinearLayout outer = UiKit.column(this, 16);
     outer.setBackgroundColor(UiKit.BG);
-    FeatureUi.button(this, outer, "完成 / 返回", this::finish);
+    LinearLayout toolbar = new LinearLayout(this);
+    toolbar.setGravity(Gravity.CENTER_VERTICAL);
+    ImageButton back = new ImageButton(this);
+    back.setImageDrawable(UiKit.icon(this, "arrow_back", UiKit.INK));
+    back.setContentDescription("返回角色馆");
+    back.setBackground(UiKit.card(this));
+    back.setOnClickListener(v -> finish());
+    toolbar.addView(back, new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48)));
+    LinearLayout title = UiKit.column(this, 0);
+    title.setPadding(UiKit.dp(this, 12), 0, 0, 0);
+    title.addView(UiKit.heading(this, "小工具", 18));
+    TextView subtitle = UiKit.text(this, "随手用，随身陪伴", 12);
+    subtitle.setTextColor(UiKit.MUTED);
+    title.addView(subtitle);
+    toolbar.addView(title, new LinearLayout.LayoutParams(0, -2, 1));
+    LinearLayout.LayoutParams toolbarParams = new LinearLayout.LayoutParams(-1, -2);
+    toolbarParams.bottomMargin = UiKit.dp(this, 16);
+    outer.addView(toolbar, toolbarParams);
     ScrollView scroll = new ScrollView(this);
     scroll.setFillViewport(true);
+    scroll.setVerticalScrollBarEnabled(false);
     outer.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
-    content = UiKit.column(this, 4);
+    content = UiKit.column(this, 16);
+    content.setBackground(UiKit.card(this));
     scroll.addView(content);
     setContentView(outer);
     // Respect system bars and the keyboard even on target-36 edge-to-edge windows.
@@ -145,7 +168,10 @@ public final class FeatureActivity extends Activity {
     ReminderRules.Config config = ReminderScheduler.config(this, kind);
     LinearLayout card = UiKit.column(this, 12);
     card.setBackground(UiKit.card(this));
-    content.addView(card);
+    LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(-1, -2);
+    cardParams.topMargin = UiKit.dp(this, 12);
+    cardParams.bottomMargin = UiKit.dp(this, 4);
+    content.addView(card, cardParams);
     FeatureUi.text(this, card, label + "提醒", 20);
     CheckBox enabled = FeatureUi.check(this, card, "启用" + label + "提醒", config.enabled);
     CheckBox daily = FeatureUi.check(this, card, "每天指定时刻（关闭则按间隔）", config.daily);
@@ -295,11 +321,12 @@ public final class FeatureActivity extends Activity {
   private void slider(String label, String key, float fallback) {
     TextView t = FeatureUi.text(this, content, label, 17);
     SeekBar bar = new SeekBar(this);
+    bar.setContentDescription(label);
     bar.setMax(100);
     bar.setProgress(Math.round(FeaturePreferences.prefs(this).getFloat(key, fallback) * 100));
     bar.setProgressTintList(ColorStateList.valueOf(UiKit.ACCENT));
-    bar.setThumbTintList(ColorStateList.valueOf(UiKit.INK));
-    content.addView(bar);
+    bar.setThumbTintList(ColorStateList.valueOf(UiKit.ACCENT));
+    content.addView(bar, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 48)));
     t.setText(label + " " + bar.getProgress() + "%");
     bar.setOnSeekBarChangeListener(
         new SeekBar.OnSeekBarChangeListener() {
@@ -356,17 +383,20 @@ public final class FeatureActivity extends Activity {
     FeatureUi.text(this, content, selected == null ? "当前没有黄豆，设置会作为新黄豆的默认心情。" : "心情只改变当前选中的黄豆。", 15);
     TextView label = FeatureUi.text(this, content, "当前：" + moodName(selectedMood), 18);
     EditText moodText = FeatureUi.input(this, content, "心情文字，最多 12 字", text, 12);
-    for (int i = 0; i < 8; i++) {
-      final String mood = FeaturePreferences.MOODS[i];
-      FeatureUi.button(
-          this,
-          content,
-          FeaturePreferences.MOOD_NAMES[i],
-          () -> {
-            selectedMood = mood;
-            label.setText("当前：" + moodName(mood));
-            persistMood(moodText.getText().toString());
-          });
+    for (int i = 0; i < 8; i += 2) {
+      LinearLayout moodRow = FeatureUi.row(this, content);
+      for (int j = i; j < Math.min(i + 2, 8); j++) {
+        final String mood = FeaturePreferences.MOODS[j];
+        FeatureUi.rowButton(
+            this,
+            moodRow,
+            FeaturePreferences.MOOD_NAMES[j],
+            () -> {
+              selectedMood = mood;
+              label.setText("当前：" + moodName(mood));
+              persistMood(moodText.getText().toString());
+            });
+      }
     }
     FeatureUi.button(
         this,

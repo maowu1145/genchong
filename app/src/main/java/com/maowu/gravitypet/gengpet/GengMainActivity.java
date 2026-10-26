@@ -2,6 +2,7 @@ package com.maowu.gravitypet.gengpet;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -23,6 +24,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -39,6 +42,9 @@ public final class GengMainActivity extends Activity {
   private LinearLayout outer, body, cards;
   private Button allFilter, favoriteFilter;
   private int tab = 0;
+  private ScrollView pageScroll;
+  private final int[] scrollPositions = new int[3];
+  private Dialog detailDialog;
   private boolean favoritesOnly;
   private String query = "", pendingCharacter;
   private final Runnable refreshUi =
@@ -52,6 +58,10 @@ public final class GengMainActivity extends Activity {
     if (saved != null) {
       tab = saved.getInt("tab");
       pendingCharacter = saved.getString("pendingCharacter");
+      query = saved.getString("query", "");
+      favoritesOnly = saved.getBoolean("favoritesOnly");
+      int[] positions = saved.getIntArray("scrollPositions");
+      if (positions != null && positions.length == 3) System.arraycopy(positions, 0, scrollPositions, 0, 3);
     }
     getWindow().setStatusBarColor(UiKit.BG);
     getWindow().setNavigationBarColor(UiKit.BG);
@@ -59,7 +69,6 @@ public final class GengMainActivity extends Activity {
         .getDecorView()
         .setSystemUiVisibility(
             View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
-    show();
   }
 
   @Override
@@ -74,199 +83,239 @@ public final class GengMainActivity extends Activity {
     super.onSaveInstanceState(out);
     out.putInt("tab", tab);
     out.putString("pendingCharacter", pendingCharacter);
+    out.putString("query", query);
+    out.putBoolean("favoritesOnly", favoritesOnly);
+    if (pageScroll != null) scrollPositions[tab] = pageScroll.getScrollY();
+    out.putIntArray("scrollPositions", scrollPositions);
   }
 
   @Override
   protected void onDestroy() {
     handler.removeCallbacksAndMessages(null);
+    if (detailDialog != null) detailDialog.dismiss();
     super.onDestroy();
   }
 
   private void show() {
+    if (pageScroll != null) scrollPositions[tab] = pageScroll.getScrollY();
     outer = UiKit.column(this, 0);
     outer.setBackgroundColor(UiKit.BG);
     setContentView(outer);
-    outer.setOnApplyWindowInsetsListener(
-        (v, insets) -> {
-          v.setPadding(
-              insets.getSystemWindowInsetLeft(),
-              insets.getSystemWindowInsetTop(),
-              insets.getSystemWindowInsetRight(),
-              insets.getSystemWindowInsetBottom());
-          return insets;
-        });
-    ScrollView sc = new ScrollView(this);
-    sc.setFillViewport(true);
-    outer.addView(sc, new LinearLayout.LayoutParams(-1, 0, 1));
-    body = UiKit.column(this, 20);
-    sc.addView(body);
-    if (tab == 0) gallery();
-    else if (tab == 1) tools();
-    else settings();
+    outer.setOnApplyWindowInsetsListener((v, insets) -> {
+      v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+          insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+      return insets;
+    });
+    pageScroll = new ScrollView(this);
+    pageScroll.setFillViewport(true);
+    pageScroll.setClipToPadding(false);
+    pageScroll.setVerticalScrollBarEnabled(false);
+    outer.addView(pageScroll, new LinearLayout.LayoutParams(-1, 0, 1));
+    body = UiKit.column(this, 16);
+    pageScroll.addView(body);
+    cards = null;
+    if (tab == 0) gallery(); else if (tab == 1) tools(); else settings();
+    space(body, 8);
+    View divider = new View(this); divider.setBackgroundColor(UiKit.LINE);
+    outer.addView(divider, new LinearLayout.LayoutParams(-1, dp(1)));
     LinearLayout nav = row(outer);
-    nav.setPadding(dp(12), dp(6), dp(12), dp(6));
-    String[] labels = {"桌宠馆", "工具与记录", "设置"};
+    nav.setBackgroundColor(UiKit.SURFACE);
+    nav.setPadding(dp(16), dp(5), dp(16), dp(5));
+    nav.setLayoutParams(new LinearLayout.LayoutParams(-1, dp(52 + 18 * getResources().getConfiguration().fontScale)));
+    String[] labels = {"角色", "工具", "设置"};
+    String[] icons = {"pets", "widgets", "settings"};
     for (int i = 0; i < labels.length; i++) {
       final int selected = i;
-      Button b =
-          UiKit.button(
-              this,
-              labels[i],
-              () -> {
-                tab = selected;
-                show();
-              });
-      if (i != tab) b.setBackground(UiKit.card(this));
-      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(48), 1);
-      lp.setMargins(dp(3), 0, dp(3), 0);
-      nav.addView(b, lp);
+      LinearLayout item = UiKit.column(this, 3); item.setGravity(Gravity.CENTER);
+      item.setBackground(UiKit.ripple(this, 0x00000000, 16));
+      item.setContentDescription(labels[i]); item.setSelected(i == tab);
+      item.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+      ImageView icon = new ImageView(this);
+      icon.setImageDrawable(UiKit.icon(this, icons[i] + (i == tab ? "_filled" : ""), i == tab ? UiKit.ACCENT : UiKit.MUTED));
+      icon.setPadding(dp(16), dp(4), dp(16), dp(4));
+      if (i == tab) icon.setBackground(UiKit.rounded(this, UiKit.SOFT, 16));
+      item.addView(icon, new LinearLayout.LayoutParams(dp(60), dp(32)));
+      TextView label = UiKit.heading(this, labels[i], 12);
+      label.setGravity(Gravity.CENTER);
+      label.setTextColor(i == tab ? UiKit.ACCENT : UiKit.MUTED);
+      item.addView(label);
+      icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+      label.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+      item.setOnClickListener(v -> {
+        scrollPositions[tab] = pageScroll.getScrollY(); pageScroll = null;
+        tab = selected; show();
+      });
+      nav.addView(item, new LinearLayout.LayoutParams(0, -1, 1));
     }
+    final ScrollView current = pageScroll;
+    int y = scrollPositions[tab]; current.post(() -> current.scrollTo(0, y));
   }
 
   private void title(String eyebrow, String heading, String detail) {
-    TextView small = UiKit.text(this, eyebrow, 13);
-    body.addView(small);
-    TextView h = UiKit.heading(this, heading, 29);
-    h.setPadding(0, dp(6), 0, dp(8));
-    body.addView(h);
-    if (!detail.isEmpty()) body.addView(UiKit.text(this, detail, 15));
+    LinearLayout line = row(body);
+    line.addView(UiKit.heading(this, heading, 26), new LinearLayout.LayoutParams(0, -2, 1));
+    TextView badge = UiKit.text(this, eyebrow, 12);
+    badge.setTextColor(UiKit.ACCENT); badge.setPadding(dp(10), dp(5), dp(10), dp(5));
+    badge.setBackground(UiKit.rounded(this, UiKit.SOFT, 12)); line.addView(badge);
+    if (!detail.isEmpty()) {
+      TextView subtitle = UiKit.text(this, detail, 14); subtitle.setTextColor(UiKit.MUTED);
+      subtitle.setPadding(0, dp(5), 0, 0); body.addView(subtitle);
+    }
     space(body, 16);
   }
 
   private void gallery() {
-    title("梗宠  /  陪你过日常", "把快乐，放到屏幕上。", "拖一拖、晃一晃，长按打开它的小工具。");
-    body.addView(new PlaygroundView(this), new LinearLayout.LayoutParams(-1, dp(160)));
-    body.addView(UiKit.text(this, "试着拖动上面的 Doro，松手看看回弹。", 13));
-    space(body, 16);
+    title("6 位伙伴", "梗宠", "一点小陪伴，随时在身边。");
     ArrayList<PetStore.Instance> active = PetStore.loadInstances(this);
     LinearLayout status = card(body);
-    status.addView(UiKit.heading(this, (GengOverlayService.isRunning()?"屏幕上的伙伴 · ":"已收起的伙伴 · ") + active.size() + " / 6", 18));
-    if (!Settings.canDrawOverlays(this)) {
-      status.addView(UiKit.text(this, "先允许悬浮窗，桌宠就能陪你使用其他应用。", 14));
-      status.addView(UiKit.button(this, "开启悬浮窗权限", () -> requestOverlay(null)));
-    } else if (active.isEmpty()) status.addView(UiKit.text(this, "挑一只喜欢的，点「放到屏幕上」。", 14));
-    else {
-      String state =
-          GengOverlayService.isRunning()
-              ? (GengOverlayService.isPaused() ? "已暂停，位置保留" : "正在陪伴你")
-              : "已收起，之前的选择已保存";
-      status.addView(UiKit.text(this, state, 14));
-      LinearLayout controls = row(status);
-      weighted(
-          controls,
-          UiKit.button(
-              this,
-              GengOverlayService.isRunning()
-                  ? (GengOverlayService.isPaused() ? "继续陪伴" : "全部暂停")
-                  : "恢复桌宠",
-              () ->
-                  control(
-                      !GengOverlayService.isRunning()
-                          ? GengOverlayService.ACTION_RELOAD
-                          : (GengOverlayService.isPaused()
-                              ? GengOverlayService.ACTION_RESUME
-                              : GengOverlayService.ACTION_PAUSE),
-                      null)));
-      weighted(controls, UiKit.button(this, "收回全部", this::recallAll));
+    LinearLayout top = row(status);
+    LinearLayout copy = UiKit.column(this, 0);
+    top.addView(copy, new LinearLayout.LayoutParams(0, -2, 1));
+    boolean running = GengOverlayService.isRunning();
+    copy.addView(UiKit.heading(this, running ? "屏幕上的伙伴 · " + active.size() : "准备好，认识新伙伴", 16));
+    String state = !Settings.canDrawOverlays(this) ? "允许悬浮窗后，就能召唤到桌面"
+        : active.isEmpty() ? "选一只喜欢的，点击下方召唤"
+        : !running ? "已收起 " + active.size() + " 只 · 可在管理中恢复"
+        : GengOverlayService.isPaused() ? "已暂停 · 位置保留" : "正在陪伴你 · 点头像调节";
+    TextView stateText = UiKit.text(this, state, 12); stateText.setTextColor(UiKit.MUTED); copy.addView(stateText);
+    top.addView(UiKit.iconButton(this, "tune", "管理屏幕上的伙伴", this::managePets), new LinearLayout.LayoutParams(dp(48), dp(48)));
+    if (!Settings.canDrawOverlays(this)) status.addView(UiKit.secondaryButton(this, "开启悬浮窗", () -> requestOverlay(null)));
+    else if (!active.isEmpty()) {
+      HorizontalScrollView strip = new HorizontalScrollView(this); strip.setHorizontalScrollBarEnabled(false);
+      LinearLayout avatars = new LinearLayout(this); avatars.setOrientation(LinearLayout.HORIZONTAL);
+      strip.addView(avatars); status.addView(strip);
       for (PetStore.Instance instance : active) {
-        PetCatalog.Entry e = PetCatalog.get(this, instance.characterId);
-        if (e == null) continue;
-        LinearLayout line = row(status);
-        TextView name = UiKit.text(this, e.name + (instance.pinned ? " · 已固定" : ""), 14);
-        line.addView(name, new LinearLayout.LayoutParams(0, -2, 1));
-        Button tune = UiKit.button(this, "调节", () -> detail(e, instance.uid));
-        line.addView(tune, new LinearLayout.LayoutParams(dp(66), dp(40)));
-        Button remove = UiKit.button(this, "收回", () -> remove(instance.uid));
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(dp(66), dp(40));
-        p.leftMargin = dp(5);
-        line.addView(remove, p);
+        PetCatalog.Entry e = PetCatalog.get(this, instance.characterId); if (e == null) continue;
+        PetThumb avatar = new PetThumb(this, e); avatar.animate = false;
+        avatar.setBackground(UiKit.ripple(this, tint(e.id), 18));
+        avatar.setContentDescription("调节" + e.name + (instance.pinned ? "，已固定" : ""));
+        avatar.setOnClickListener(v -> detail(e, instance.uid));
+        LinearLayout.LayoutParams a = new LinearLayout.LayoutParams(dp(52), dp(52));
+        a.setMargins(0, dp(6), dp(8), 0); avatars.addView(avatar, a);
       }
     }
-    if(PetStore.previousCount(this)>0) status.addView(UiKit.button(this,
-        "恢复上一组桌宠 · "+PetStore.previousCount(this)+" 只",
-        ()->control(GengOverlayService.ACTION_RESTORE_PREVIOUS,null)));
-    space(body, 16);
     EditText search = new EditText(this);
-    search.setSingleLine(true);
-    search.setHint("找一个角色或小工具");
-    search.setTextColor(UiKit.INK);
-    search.setHintTextColor(UiKit.INK);
-    search.setBackground(UiKit.card(this));
-    search.setPadding(dp(14), dp(10), dp(14), dp(10));
-    search.setText(query);
-    body.addView(search, new LinearLayout.LayoutParams(-1, dp(50)));
+    search.setSingleLine(true); search.setTextSize(14); search.setHint("搜索角色或小工具");
+    search.setTextColor(UiKit.INK); search.setHintTextColor(UiKit.MUTED);
+    search.setBackground(UiKit.rounded(this, UiKit.SURFACE, 16));
+    search.setPadding(dp(14), dp(12), dp(14), dp(12));
+    search.setCompoundDrawables(UiKit.icon(this, "search", UiKit.MUTED), null, null, null);
+    search.setCompoundDrawablePadding(dp(8)); search.setText(query);
+    search.setContentDescription("搜索角色或小工具");
+    search.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH);
+    body.addView(search, new LinearLayout.LayoutParams(-1, -2));
     LinearLayout filters = row(body);
-    allFilter =
-        UiKit.button(
-            this,
-            "全部角色",
-            () -> {
-              favoritesOnly = false;
-              renderCards();
-            });
-    favoriteFilter =
-        UiKit.button(
-            this,
-            "我的收藏",
-            () -> {
-              favoritesOnly = true;
-              renderCards();
-            });
-    weighted(filters, allFilter);
-    weighted(filters, favoriteFilter);
-    cards = UiKit.column(this, 0);
-    body.addView(cards);
-    renderCards();
-    search.addTextChangedListener(
-        new TextWatcher() {
-          public void beforeTextChanged(CharSequence s, int st, int count, int after) {}
+    allFilter = UiKit.secondaryButton(this, "全部", () -> { favoritesOnly = false; renderCards(); });
+    favoriteFilter = UiKit.secondaryButton(this, "收藏", () -> { favoritesOnly = true; renderCards(); });
+    weighted(filters, allFilter); weighted(filters, favoriteFilter);
+    Button trial = UiKit.secondaryButton(this, "试玩", () -> detail(PetCatalog.get(this, "doro"), null));
+    weighted(filters, trial);
+    cards = UiKit.column(this, 0); body.addView(cards); renderCards();
+    search.addTextChangedListener(new TextWatcher() {
+      public void beforeTextChanged(CharSequence s, int st, int count, int after) {}
+      public void onTextChanged(CharSequence s, int st, int before, int count) { query = s.toString(); renderCards(); }
+      public void afterTextChanged(Editable e) {}
+    });
+  }
 
-          public void onTextChanged(CharSequence s, int st, int before, int count) {
-            query = s.toString();
-            renderCards();
-          }
+  private void managePets() {
+    LinearLayout content = UiKit.column(this, 16);
+    ScrollView scroll = new ScrollView(this); scroll.addView(content);
+    ArrayList<PetStore.Instance> active = PetStore.loadInstances(this);
+    AlertDialog dialog = new AlertDialog.Builder(this).setTitle("屏幕上的伙伴").setView(scroll).setNegativeButton("完成", null).create();
+    if (!active.isEmpty()) {
+      boolean running = GengOverlayService.isRunning(), paused = GengOverlayService.isPaused();
+      content.addView(UiKit.secondaryButton(this, !running ? "恢复这组伙伴" : paused ? "继续陪伴" : "暂停所有伙伴", () -> {
+        dialog.dismiss(); control(!running ? GengOverlayService.ACTION_RELOAD : paused ? GengOverlayService.ACTION_RESUME : GengOverlayService.ACTION_PAUSE, null);
+      }));
+      for (PetStore.Instance pet : active) {
+        PetCatalog.Entry e = PetCatalog.get(this, pet.characterId); if(e == null) continue;
+        LinearLayout line = row(content);
+        line.addView(UiKit.text(this, e.name, 15), new LinearLayout.LayoutParams(0, -2, 1));
+        line.addView(UiKit.iconButton(this, "tune", "调节" + e.name, () -> {dialog.dismiss(); detail(e, pet.uid);}), new LinearLayout.LayoutParams(dp(48), dp(48)));
+        line.addView(UiKit.iconButton(this, "close", "收回" + e.name, () -> {dialog.dismiss(); remove(pet.uid);}), new LinearLayout.LayoutParams(dp(48), dp(48)));
+      }
+    } else content.addView(UiKit.text(this, "还没有伙伴，去角色馆召唤一只吧。", 14));
+    int previous = PetStore.previousCount(this);
+    if(previous > 0) content.addView(UiKit.secondaryButton(this, "恢复上一组 · " + previous + " 只", () -> {dialog.dismiss(); control(GengOverlayService.ACTION_RESTORE_PREVIOUS, null);}));
+    dialog.show();
+  }
 
-          public void afterTextChanged(Editable e) {}
-        });
+  private boolean singleColumn() {
+    return getResources().getConfiguration().screenWidthDp < 340 || getResources().getConfiguration().fontScale > 1.25f;
   }
 
   private void renderCards() {
     if (cards == null) return;
-    allFilter.setText(favoritesOnly ? "全部角色" : "全部角色 ✓");
-    favoriteFilter.setText(favoritesOnly ? "我的收藏 ✓" : "我的收藏");
-    cards.removeAllViews();
-    int matches = 0;
+    allFilter.setBackground(UiKit.ripple(this, favoritesOnly ? UiKit.BG : UiKit.SOFT, 14));
+    favoriteFilter.setBackground(UiKit.ripple(this, favoritesOnly ? UiKit.SOFT : UiKit.BG, 14));
+    allFilter.setTextColor(favoritesOnly ? UiKit.MUTED : UiKit.ACCENT);
+    favoriteFilter.setTextColor(favoritesOnly ? UiKit.ACCENT : UiKit.MUTED);
+    allFilter.setSelected(!favoritesOnly); favoriteFilter.setSelected(favoritesOnly);
+    cards.removeAllViews(); int matches = 0; LinearLayout gridRow = null;
+    int columns = singleColumn() ? 1 : 2;
     for (PetCatalog.Entry e : PetCatalog.all(this)) {
       if (favoritesOnly && !favorite(e.id)) continue;
-      if (!query.isEmpty()
-          && !(e.name + e.description)
-              .toLowerCase(Locale.ROOT)
-              .contains(query.toLowerCase(Locale.ROOT))) continue;
-      matches++;
-      LinearLayout card = card(cards);
-      LinearLayout top = row(card);
-      PetThumb thumb = new PetThumb(this, e);
-      top.addView(thumb, new LinearLayout.LayoutParams(dp(112), dp(112)));
-      LinearLayout info = UiKit.column(this, 10);
-      top.addView(info, new LinearLayout.LayoutParams(0, -2, 1));
-      info.addView(UiKit.heading(this, e.name, 21));
-      info.addView(UiKit.text(this, e.description, 14));
-      LinearLayout actions = row(card);
-      weighted(actions, UiKit.button(this, "放到屏幕上", () -> summon(e.id)));
-      weighted(actions, UiKit.button(this, "看看 / 调节", () -> detail(e, null)));
-      Button fav =
-          UiKit.button(
-              this,
-              favorite(e.id) ? "已收藏 · 取消收藏" : "收藏这个伙伴",
-              () -> {
-                PetStore.prefs(this).edit().putBoolean("favorite_" + e.id, !favorite(e.id)).apply();
-                renderCards();
-              });
-      fav.setBackground(UiKit.card(this));
-      card.addView(fav);
+      if (!query.isEmpty() && !(e.name + e.description + featureName(e.id)).toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) continue;
+      if(matches % columns == 0) { gridRow = row(cards); gridRow.setGravity(Gravity.TOP); }
+      LinearLayout cell = UiKit.column(this, 10); cell.setBackground(UiKit.card(this));
+      LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(0, -2, 1);
+      cp.bottomMargin = dp(12); if(columns == 2) {cp.leftMargin = matches % 2 == 0 ? 0 : dp(6); cp.rightMargin = matches % 2 == 0 ? dp(6) : 0;}
+      gridRow.addView(cell, cp); matches++;
+      FrameLayout stage = new FrameLayout(this); stage.setBackground(UiKit.rounded(this, tint(e.id), 14));
+      PetThumb thumb = new PetThumb(this, e); thumb.previewScale = 1.1f;
+      thumb.setContentDescription("查看和调节" + e.name); thumb.setOnClickListener(v -> detail(e, null));
+      stage.addView(thumb, new FrameLayout.LayoutParams(-1, -1));
+      ImageButton fav = UiKit.iconButton(this, favorite(e.id) ? "favorite_filled" : "favorite", (favorite(e.id) ? "取消收藏" : "收藏") + e.name, () -> {
+        PetStore.prefs(this).edit().putBoolean("favorite_" + e.id, !favorite(e.id)).apply(); renderCards();
+      });
+      FrameLayout.LayoutParams fp = new FrameLayout.LayoutParams(dp(48), dp(48), Gravity.TOP | Gravity.END); stage.addView(fav, fp);
+      cell.addView(stage, new LinearLayout.LayoutParams(-1, dp(114)));
+      TextView name = UiKit.heading(this, e.name, 16); name.setPadding(dp(2), dp(9), 0, 0); cell.addView(name);
+      TextView feature = UiKit.text(this, featureName(e.id), 12); feature.setTextColor(UiKit.MUTED);
+      feature.setPadding(dp(2), dp(3), 0, dp(6)); cell.addView(feature);
+      Button summon = UiKit.button(this, "召唤", () -> summon(e.id));
+      summon.setContentDescription("召唤" + e.name); cell.addView(summon);
     }
-    if (matches == 0)
-      cards.addView(UiKit.text(this, favoritesOnly ? "这里还没有收藏，先去全部角色看看吧。" : "没有找到，换个关键词试试。", 16));
+    if(columns == 2 && matches % 2 != 0) gridRow.addView(new View(this), new LinearLayout.LayoutParams(0, 1, 1));
+    if(matches == 0) {
+      LinearLayout empty = card(cards); space(empty, 20);
+      TextView title = UiKit.heading(this, favoritesOnly ? "还没有收藏的伙伴" : "暂时没找到", 18); title.setGravity(Gravity.CENTER); empty.addView(title);
+      TextView hint = UiKit.text(this, favoritesOnly ? "点击角色右上角的爱心，留住喜欢。" : "试试角色名字，或者“提醒”“心情”。", 14); hint.setTextColor(UiKit.MUTED); hint.setGravity(Gravity.CENTER); empty.addView(hint); space(empty, 20);
+    }
+  }
+
+  private String featureName(String id) {
+    switch(id) {
+      case "doro": return "喝水 · 水果提醒";
+      case "grudge_panda": return "文字 · 语音记录";
+      case "spinning_cat": return "乘车舒适辅助";
+      case "sweat_emoji": return "记录今日心情";
+      case "kinship_ride": return "亲属称谓计算";
+      default: return "星期四小庆祝";
+    }
+  }
+
+  private String featureIcon(String id) {
+    switch(id) {
+      case "doro": return "water_drop";
+      case "grudge_panda": return "edit_note";
+      case "spinning_cat": return "widgets";
+      case "sweat_emoji": return "mood";
+      case "kinship_ride": return "family_restroom";
+      default: return "celebration";
+    }
+  }
+
+  private int tint(String id) {
+    switch(id) {
+      case "doro": return 0xFFFCEEF5;
+      case "grudge_panda": return 0xFFEEF0F6;
+      case "spinning_cat": return 0xFFEEEAFB;
+      case "sweat_emoji": return 0xFFFFF4D8;
+      case "kinship_ride": return 0xFFE7F3F1;
+      default: return 0xFFFFEDE4;
+    }
   }
 
   private boolean favorite(String id) {
@@ -274,103 +323,88 @@ public final class GengMainActivity extends Activity {
   }
 
   private void tools() {
-    title("小工具", "有事，找它们帮忙。", "提醒、记录、心情与称谓，都留在这台手机里。");
+    title("随手用", "日常小工具", "提醒、记录和一点好心情。");
+    LinearLayout banner = card(body);
+    banner.setBackground(UiKit.rounded(this, UiKit.SOFT, 20));
+    banner.addView(UiKit.heading(this, "每位伙伴，都有一点拿手好戏", 16));
+    TextView note = UiKit.text(this, "不召唤也能使用，记录保存在本机。", 13); note.setTextColor(UiKit.MUTED); banner.addView(note);
+    LinearLayout gridRow = null; int n = 0, columns = singleColumn() ? 1 : 2;
     for (PetCatalog.Entry e : PetCatalog.all(this)) {
-      LinearLayout box = card(body);
-      LinearLayout line = row(box);
-      PetThumb thumb = new PetThumb(this, e);
-      line.addView(thumb, new LinearLayout.LayoutParams(dp(78), dp(78)));
-      LinearLayout texts = UiKit.column(this, 6);
-      line.addView(texts, new LinearLayout.LayoutParams(0, -2, 1));
-      texts.addView(UiKit.heading(this, e.name, 19));
-      texts.addView(UiKit.text(this, e.description, 14));
-      box.addView(UiKit.button(this, "打开小工具", () -> FeatureActivity.open(this, e.id, "")));
+      if(n % columns == 0) {gridRow = row(body); gridRow.setGravity(Gravity.TOP);}
+      LinearLayout tile = UiKit.column(this, 16); tile.setBackground(UiKit.ripple(this, UiKit.SURFACE, 20));
+      ImageView icon = new ImageView(this); icon.setImageDrawable(UiKit.icon(this, featureIcon(e.id), UiKit.ACCENT));
+      icon.setPadding(dp(10),dp(10),dp(10),dp(10)); icon.setBackground(UiKit.rounded(this,tint(e.id),16));
+      tile.addView(icon,new LinearLayout.LayoutParams(dp(48),dp(48))); space(tile,14);
+      tile.addView(UiKit.heading(this,featureName(e.id),16));
+      TextView caption = UiKit.text(this, e.name + "的小工具", 12); caption.setTextColor(UiKit.MUTED); caption.setPadding(0,dp(6),0,0); tile.addView(caption);
+      tile.setOnClickListener(v -> FeatureActivity.open(this,e.id,""));
+      tile.setContentDescription("打开" + featureName(e.id) + "，" + e.name);
+      tile.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+      icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+      LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0,-2,1); lp.bottomMargin=dp(12);
+      if(columns==2){lp.leftMargin=n%2==0?0:dp(6); lp.rightMargin=n%2==0?dp(6):0;}
+      gridRow.addView(tile,lp); n++;
     }
   }
 
   private void settings() {
-    title("陪伴设置", "按你的节奏来。", "随时暂停，随时把它们收起来。");
+    title("按你的节奏", "陪伴设置", "什么时候出现，由你决定。");
+    section("桌宠状态");
     LinearLayout controls = card(body);
-    controls.addView(
-        UiKit.button(
-            this,
-            GengOverlayService.isRunning() ? "暂停 / 继续所有桌宠" : "恢复上次的桌宠",
-            () ->
-                control(
-                    !GengOverlayService.isRunning()
-                        ? GengOverlayService.ACTION_RELOAD
-                        : (GengOverlayService.isPaused()
-                            ? GengOverlayService.ACTION_RESUME
-                            : GengOverlayService.ACTION_PAUSE),
-                    null)));
-    controls.addView(
-        UiKit.button(
-            this,
-            "关闭悬浮桌宠",
-            () -> {
-              stopService(new Intent(this, GengOverlayService.class));
-              handler.postDelayed(refreshUi, 180);
-            }));
-    controls.addView(UiKit.button(this, "收回全部伙伴", this::recallAll));
+    boolean running = GengOverlayService.isRunning(), paused = GengOverlayService.isPaused();
+    actionRow(controls, !running || paused ? "play_arrow" : "pause",
+        !running ? "恢复这组伙伴" : paused ? "继续陪伴" : "暂停所有伙伴",
+        !running ? "恢复上次收起的角色" : paused ? "让伙伴继续活动" : "停止动作，保留当前位置", () -> control(!running ? GengOverlayService.ACTION_RELOAD : paused ? GengOverlayService.ACTION_RESUME : GengOverlayService.ACTION_PAUSE,null));
+    actionRow(controls,"close","收起悬浮桌宠","暂时离开屏幕，保留这组伙伴",()->{stopService(new Intent(this,GengOverlayService.class));handler.postDelayed(refreshUi,180);});
+    actionRow(controls,"pets","收回全部伙伴","清空当前这组，下次重新挑选",this::recallAll);
+    section("节奏与安静时段");
     LinearLayout prefs = card(body);
-    prefs.addView(UiKit.heading(this, "节奏与安静时段", 18));
-    check(
-        prefs,
-        "低功耗模式",
-        PetStore.prefs(this).getBoolean("low_power", false),
-        value -> {
-          PetStore.prefs(this).edit().putBoolean("low_power", value).apply();
-          reload();
-        });
-    prefs.addView(UiKit.text(this, "低功耗会减少动效；熄屏和暂停时停止动画与不必要的传感器采样。", 13));
-    timeSetting(prefs, "安静开始", "quiet_start", 1320);
-    timeSetting(prefs, "安静结束", "quiet_end", 480);
-    prefs.addView(UiKit.text(this, "安静时段减少大幅动作；两个时间相同表示关闭。提醒有各自的时间设置。", 13));
+    check(prefs,"低功耗模式",PetStore.prefs(this).getBoolean("low_power",false),value->{PetStore.prefs(this).edit().putBoolean("low_power",value).apply();reload();});
+    mutedText(prefs,"减少角色动效；熄屏和暂停时停止不必要的采样。");
+    timeSetting(prefs,"安静开始","quiet_start",1320); timeSetting(prefs,"安静结束","quiet_end",480);
+    mutedText(prefs,"两个时间相同即关闭。提醒时间可在工具里单独设置。");
+    section("权限与数据");
     LinearLayout permissions = card(body);
-    permissions.addView(UiKit.heading(this, "权限", 18));
-    permissions.addView(
-        UiKit.text(this, "悬浮窗：" + (Settings.canDrawOverlays(this) ? "已允许" : "未允许"), 15));
-    permissions.addView(UiKit.button(this, "管理悬浮窗权限", () -> requestOverlay(null)));
-    boolean notification =
-        Build.VERSION.SDK_INT < 33
-            || checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
-                == android.content.pm.PackageManager.PERMISSION_GRANTED;
-    permissions.addView(UiKit.text(this, "通知：" + (notification ? "已允许" : "未允许"), 15));
-    permissions.addView(
-        UiKit.button(
-            this,
-            "管理通知权限",
-            () -> {
-              if (Build.VERSION.SDK_INT >= 33 && !notification)
-                requestPermissions(
-                    new String[] {Manifest.permission.POST_NOTIFICATIONS}, NOTIFICATIONS);
-              else
-                startActivity(
-                    new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                        .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName()));
-            }));
-    permissions.addView(UiKit.text(this, "麦克风在首次录音时申请；不需要无障碍、定位或读取其他应用内容。", 13));
-    LinearLayout data = card(body);
-    data.addView(UiKit.heading(this, "本机数据", 18));
-    data.addView(UiKit.button(this, "导出记录与设置", this::exportData));
-    data.addView(
-        UiKit.button(
-            this,
-            "删除本机全部数据",
-            () ->
-                new AlertDialog.Builder(this)
-                    .setTitle("删除所有记录和设置？")
-                    .setMessage("文字、录音、收藏和桌宠设置会从这台手机删除。建议先导出一份备份。")
-                    .setNegativeButton("取消", null)
-                    .setPositiveButton("删除", (d, w) -> deleteData())
-                    .show()));
+    actionRow(permissions,"widgets","悬浮窗权限",Settings.canDrawOverlays(this)?"已允许 · 可在其他应用上显示":"未允许 · 点击开启",()->requestOverlay(null));
+    boolean notification = ReminderReceiver.notificationsAllowed(this);
+    actionRow(permissions,"notifications","通知权限",notification?"已允许":"未允许 · 桌宠气泡仍可使用",()->{
+      if(Build.VERSION.SDK_INT>=33 && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)!=android.content.pm.PackageManager.PERMISSION_GRANTED)
+        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS},NOTIFICATIONS);
+      else startActivity(new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE,getPackageName()));
+    });
+    actionRow(permissions,"download","导出记录与设置","文字、录音和设置打包保存",this::exportData);
+    actionRow(permissions,"delete","删除本机全部数据","此操作不可撤销，建议先导出",()->new AlertDialog.Builder(this).setTitle("删除所有记录和设置？")
+        .setMessage("文字、录音、收藏和桌宠设置会从这台手机删除。建议先导出一份备份。")
+        .setNegativeButton("取消",null).setPositiveButton("删除",(d,w)->deleteData()).show());
     LinearLayout about = card(body);
-    about.addView(UiKit.heading(this, "梗宠 · 0.1", 18));
-    about.addView(UiKit.text(this, "当前有 6 个核心伙伴。乘车舒适辅助是可随时停止的实验功能，供乘客选择使用。", 14));
-    about.addView(UiKit.text(this, "有些系统页面会隐藏悬浮窗；回到允许覆盖的应用后可恢复。", 13));
+    about.addView(UiKit.heading(this,"梗宠 · 0.1.2",16));
+    mutedText(about,"6 位伙伴，陪你过日常。所有记录保存在这台手机里。");
+    mutedText(about,"麦克风仅在录音时申请。乘车辅助为可随时关闭的实验功能。");
+  }
+
+  private void section(String label) {
+    TextView t = UiKit.heading(this,label,14); t.setTextColor(UiKit.MUTED); t.setPadding(dp(2),dp(4),0,dp(10)); body.addView(t);
+  }
+
+  private void mutedText(LinearLayout parent,String text) {
+    TextView t = UiKit.text(this,text,13); t.setTextColor(UiKit.MUTED); t.setPadding(0,dp(4),0,dp(6)); parent.addView(t);
+  }
+
+  private void actionRow(LinearLayout parent,String icon,String label,String description,Runnable action) {
+    LinearLayout line = row(parent); line.setPadding(0,dp(10),0,dp(10)); line.setMinimumHeight(dp(64));
+    line.setBackground(UiKit.ripple(this,UiKit.SURFACE,12)); line.setOnClickListener(v->action.run());
+    ImageView glyph = new ImageView(this); glyph.setImageDrawable(UiKit.icon(this,icon,icon.equals("delete")?UiKit.DANGER:UiKit.ACCENT));
+    LinearLayout.LayoutParams ip = new LinearLayout.LayoutParams(dp(24),dp(24)); ip.rightMargin=dp(12); line.addView(glyph,ip);
+    LinearLayout texts = UiKit.column(this,0); line.addView(texts,new LinearLayout.LayoutParams(0,-2,1));
+    TextView title=UiKit.heading(this,label,15); if(icon.equals("delete"))title.setTextColor(UiKit.DANGER); texts.addView(title);
+    TextView hint=UiKit.text(this,description,12); hint.setTextColor(UiKit.MUTED); texts.addView(hint);
+    ImageView arrow=new ImageView(this); arrow.setImageDrawable(UiKit.icon(this,"chevron_right",UiKit.MUTED)); line.addView(arrow,new LinearLayout.LayoutParams(dp(20),dp(20)));
+    line.setContentDescription(label+"，"+description); line.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
+    glyph.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO); arrow.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
   }
 
   private void detail(PetCatalog.Entry e, String uid) {
+    if (e == null) return;
     PetStore.Instance existing = uid == null ? null : PetStore.find(this, uid);
     PetStore.Instance draft = existing == null ? new PetStore.Instance() : existing.copy();
     draft.characterId = e.id;
@@ -382,16 +416,31 @@ public final class GengMainActivity extends Activity {
       draft.pinned = p.getBoolean("default_pinned_" + e.id, false);
       draft.muted = p.getBoolean("default_muted_" + e.id, true);
     }
-    ScrollView scroll = new ScrollView(this);
-    LinearLayout box = UiKit.column(this, 18);
+    Dialog dialog = new Dialog(this);
+    detailDialog = dialog;
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+    LinearLayout sheet = UiKit.column(this, 16);
+    sheet.setBackground(UiKit.rounded(this, UiKit.SURFACE, 24));
+    LinearLayout header = row(sheet);
+    LinearLayout labels = UiKit.column(this, 0);
+    labels.addView(UiKit.heading(this, e.name, 22));
+    TextView target = UiKit.text(this, existing == null ? "新召唤的默认设置" : "仅调节屏幕上的这只", 12);
+    target.setTextColor(UiKit.MUTED); labels.addView(target);
+    header.addView(labels, new LinearLayout.LayoutParams(0, -2, 1));
+    header.addView(UiKit.iconButton(this, "close", "关闭调节，不保存", dialog::dismiss), new LinearLayout.LayoutParams(dp(48), dp(48)));
+    ScrollView scroll = new ScrollView(this); scroll.setVerticalScrollBarEnabled(false);
+    sheet.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
+    LinearLayout box = UiKit.column(this, 0); box.setPadding(0, dp(12), 0, dp(12));
     scroll.addView(box);
     PlaygroundView preview = new PlaygroundView(this, e);
     preview.setPetSize(draft.sizeDp);
     preview.setSoftness(draft.softness);
     preview.setGravityEnabled(draft.gravity);
     preview.setPinned(draft.pinned);
-    box.addView(preview, new LinearLayout.LayoutParams(-1, dp(170)));
-    box.addView(UiKit.text(this, e.description, 15));
+    preview.setBackground(UiKit.rounded(this, tint(e.id), 20));
+    box.addView(preview, new LinearLayout.LayoutParams(-1, dp(150)));
+    mutedText(box, "拖动上方角色，试试回弹手感。");
+    space(box, 8);
     slider(
         box,
         "大小",
@@ -413,26 +462,21 @@ public final class GengMainActivity extends Activity {
           preview.setSoftness(draft.softness);
         });
     LinearLayout presets=row(box);
-    for(int value:new int[]{30,55,85}) weighted(presets,UiKit.button(this,
+    for(int value:new int[]{30,55,85}) weighted(presets,UiKit.secondaryButton(this,
         value==30?"偏硬":value==55?"适中":"很软",()->softnessSlider.setProgress(value)));
-    box.addView(UiKit.text(this,"上方可以拖拽试手感；重心偏下，松手后会慢慢回正。",13));
+    mutedText(box,"重心偏下，松手后会慢慢回正。");
     check(box, "跟随手机重力", draft.gravity, value -> {draft.gravity = value;preview.setGravityEnabled(value);});
     check(box, "固定位置", draft.pinned, value -> {draft.pinned = value;preview.setPinned(value);});
     check(box, "保持安静", draft.muted, value -> draft.muted = value);
-    box.addView(
-        UiKit.button(
-            this, "打开专属工具", () -> FeatureActivity.open(this, e.id, uid == null ? "" : uid)));
-    AlertDialog dialog =
-        new AlertDialog.Builder(this)
-            .setTitle(e.name)
-            .setView(scroll)
-            .setNegativeButton("返回", null)
-            .setPositiveButton(
-                existing == null ? "保存默认设置" : "应用到这只",
-                (d, w) -> {
+    box.addView(UiKit.secondaryButton(this, "打开专属工具", () -> {
+      dialog.dismiss(); FeatureActivity.open(this, e.id, uid == null ? "" : uid);
+    }));
+    if (existing != null) box.addView(UiKit.secondaryButton(this, "收回这只伙伴", () -> {dialog.dismiss(); remove(uid);}));
+    Button save = UiKit.button(this, existing == null ? "保存默认设置" : "应用到这只伙伴", () -> {
                   if (existing != null) {
                     PetStore.Instance latest = PetStore.find(this, uid);
-                    if (latest != null) {
+                    if (latest == null) { message("这只伙伴已收回，请重新选择。"); dialog.dismiss(); return; }
+                    {
                       latest.sizeDp = draft.sizeDp;
                       latest.softness = draft.softness;
                       latest.gravity = draft.gravity;
@@ -450,10 +494,25 @@ public final class GengMainActivity extends Activity {
                         .putBoolean("default_muted_" + e.id, draft.muted)
                         .apply();
                   reload();
-                  message("已保存");
-                })
-            .create();
+                  message(existing == null ? "已保存，以后召唤时使用" : "已应用到这只伙伴");
+                  dialog.dismiss();
+    });
+    sheet.addView(save);
+    dialog.setContentView(sheet);
+    dialog.setOnDismissListener(d -> { if(detailDialog == dialog) detailDialog = null; });
+    Window window = dialog.getWindow();
+    if(window != null) {
+      window.setBackgroundDrawable(new android.graphics.drawable.ColorDrawable(android.graphics.Color.TRANSPARENT));
+      window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+      WindowManager.LayoutParams attrs = window.getAttributes(); attrs.dimAmount=.32f; window.setAttributes(attrs);
+      window.setGravity(Gravity.BOTTOM);
+    }
     dialog.show();
+    if(window != null) {
+      android.graphics.Rect visible = new android.graphics.Rect();
+      outer.getWindowVisibleDisplayFrame(visible);
+      window.setLayout(Math.min(visible.width(), dp(560)), Math.round(visible.height() * .92f));
+    }
   }
 
   private void summon(String id) {
@@ -635,7 +694,7 @@ public final class GengMainActivity extends Activity {
   private void timeSetting(LinearLayout p, String label, String key, int fallback) {
     int m = PetStore.prefs(this).getInt(key, fallback);
     p.addView(
-        UiKit.button(
+        UiKit.secondaryButton(
             this,
             label + " · " + String.format(Locale.ROOT, "%02d:%02d", m / 60, m % 60),
             () ->
@@ -665,9 +724,10 @@ public final class GengMainActivity extends Activity {
     s.setText(label);
     s.setTextColor(UiKit.INK);
     s.setChecked(value);
-    s.setThumbTintList(ColorStateList.valueOf(UiKit.INK));
-    s.setTrackTintList(ColorStateList.valueOf(UiKit.ACCENT));
+    s.setThumbTintList(new ColorStateList(new int[][]{new int[]{android.R.attr.state_checked},new int[]{}},new int[]{UiKit.ACCENT,0xFF858D99}));
+    s.setTrackTintList(new ColorStateList(new int[][]{new int[]{android.R.attr.state_checked},new int[]{}},new int[]{0xFFBDB6F3,UiKit.LINE}));
     s.setPadding(0, dp(12), 0, dp(12));
+    s.setTextSize(15); s.setMinimumHeight(dp(48));
     parent.addView(s, new LinearLayout.LayoutParams(-1, -2));
     s.setOnCheckedChangeListener((b, v) -> fn.set(v));
   }
@@ -677,11 +737,12 @@ public final class GengMainActivity extends Activity {
     TextView t = UiKit.text(this, label + " · " + current, 15);
     parent.addView(t);
     SeekBar s = new SeekBar(this);
+    s.setContentDescription(label);
     s.setMax(max - min);
     s.setProgress(current - min);
     s.setProgressTintList(ColorStateList.valueOf(UiKit.ACCENT));
-    s.setThumbTintList(ColorStateList.valueOf(UiKit.INK));
-    parent.addView(s, new LinearLayout.LayoutParams(-1, dp(44)));
+    s.setThumbTintList(new ColorStateList(new int[][]{new int[]{android.R.attr.state_checked},new int[]{}},new int[]{UiKit.ACCENT,0xFF858D99}));
+    parent.addView(s, new LinearLayout.LayoutParams(-1, dp(48)));
     s.setOnSeekBarChangeListener(
         new SeekBar.OnSeekBarChangeListener() {
           public void onProgressChanged(SeekBar b, int n, boolean user) {
@@ -708,6 +769,7 @@ public final class GengMainActivity extends Activity {
   private LinearLayout row(LinearLayout parent) {
     LinearLayout r = new LinearLayout(this);
     r.setOrientation(LinearLayout.HORIZONTAL);
+    r.setBaselineAligned(false);
     r.setGravity(Gravity.CENTER_VERTICAL);
     parent.addView(r, new LinearLayout.LayoutParams(-1, -2));
     return r;
@@ -739,6 +801,7 @@ public final class GengMainActivity extends Activity {
     final android.view.ViewTreeObserver.OnScrollChangedListener scrollListener = this::scheduleAnimation;
     long epoch = SystemClock.uptimeMillis();
     boolean ready, attached;
+    boolean animate = true;
     float previewScale = 1, softness = 0;
 
     PetThumb(Context c, PetCatalog.Entry e) {
@@ -773,7 +836,8 @@ public final class GengMainActivity extends Activity {
 
     private void scheduleAnimation() {
       removeCallbacks(this);
-      if (attached
+      if (attached && animate
+          && !PetStore.prefs(getContext()).getBoolean("low_power", false)
           && getWindowVisibility() == VISIBLE
           && getGlobalVisibleRect(visibleRect)
           && (!entry.animationFrames.isEmpty() || softness > 0))
@@ -799,7 +863,7 @@ public final class GengMainActivity extends Activity {
       super.onDraw(canvas);
       if (!ready) return;
       String path =
-          entry.animationFrames.isEmpty()
+          (!animate || PetStore.prefs(getContext()).getBoolean("low_power", false) || entry.animationFrames.isEmpty())
               ? entry.idle
               : entry.animationFrame(SystemClock.uptimeMillis() - epoch);
       Bitmap b = PetCatalog.bitmapIfReady(path);

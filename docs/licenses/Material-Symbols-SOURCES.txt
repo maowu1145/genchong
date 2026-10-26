@@ -1,0 +1,30 @@
+Material Symbols Rounded by Google
+Apache License 2.0. SVG paths converted to Android VectorDrawable; unchanged geometry.
+Downloaded 2026-10-26.
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/pets/materialsymbolsrounded/pets_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/widgets/materialsymbolsrounded/widgets_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/settings/materialsymbolsrounded/settings_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/favorite/materialsymbolsrounded/favorite_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/add/materialsymbolsrounded/add_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/tune/materialsymbolsrounded/tune_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/search/materialsymbolsrounded/search_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/pause/materialsymbolsrounded/pause_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/play_arrow/materialsymbolsrounded/play_arrow_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/close/materialsymbolsrounded/close_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/water_drop/materialsymbolsrounded/water_drop_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/edit_note/materialsymbolsrounded/edit_note_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/mood/materialsymbolsrounded/mood_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/family_restroom/materialsymbolsrounded/family_restroom_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/celebration/materialsymbolsrounded/celebration_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/chevron_right/materialsymbolsrounded/chevron_right_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/arrow_back/materialsymbolsrounded/arrow_back_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/notifications/materialsymbolsrounded/notifications_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/download/materialsymbolsrounded/download_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/delete/materialsymbolsrounded/delete_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/bedtime/materialsymbolsrounded/bedtime_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/battery_saver/materialsymbolsrounded/battery_saver_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/expand_more/materialsymbolsrounded/expand_more_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/pets/materialsymbolsrounded/pets_fill1_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/widgets/materialsymbolsrounded/widgets_fill1_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/settings/materialsymbolsrounded/settings_fill1_24px.svg
+https://raw.githubusercontent.com/google/material-design-icons/master/symbols/web/favorite/materialsymbolsrounded/favorite_fill1_24px.svg

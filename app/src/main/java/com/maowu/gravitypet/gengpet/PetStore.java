@@ -14,6 +14,7 @@ public final class PetStore {
   private PetStore() {}
 
   public static final int MAX_INSTANCES = 6;
+  public static final float DEFAULT_SOFTNESS = .30f;
 
   public static SharedPreferences prefs(Context c) {
     return c.getApplicationContext().getSharedPreferences("gengpet", Context.MODE_PRIVATE);
@@ -21,7 +22,7 @@ public final class PetStore {
 
   public static final class Instance {
     public String uid, characterId, mood = "sweating", moodText = "";
-    public float x = .5f, y = .35f, sizeDp = 88f, softness = .5f;
+    public float x = .5f, y = .35f, sizeDp = 88f, softness = DEFAULT_SOFTNESS;
     public boolean gravity = true, pinned = false, muted = true;
 
     public Instance() {}
@@ -48,9 +49,13 @@ public final class PetStore {
   }
 
   public static synchronized ArrayList<Instance> loadInstances(Context c) {
+    return readInstances(c,"instances");
+  }
+
+  private static ArrayList<Instance> readInstances(Context c,String key) {
     ArrayList<Instance> out = new ArrayList<>();
     try {
-      JSONArray all = new JSONArray(prefs(c).getString("instances", "[]"));
+      JSONArray all = new JSONArray(prefs(c).getString(key, "[]"));
       for (int i = 0; i < all.length() && out.size() < MAX_INSTANCES; i++) {
         JSONObject j = all.getJSONObject(i);
         String id = j.optString("characterId", "");
@@ -65,7 +70,7 @@ public final class PetStore {
         p.x = finite(j.optDouble("x", .5), .5f, 0, 1);
         p.y = finite(j.optDouble("y", .35), .35f, 0, 1);
         p.sizeDp = finite(j.optDouble("sizeDp", 88), 88, 56, 144);
-        p.softness = finite(j.optDouble("softness", .5), .5f, 0, 1);
+        p.softness = finite(j.optDouble("softness", DEFAULT_SOFTNESS), DEFAULT_SOFTNESS, 0, 1);
         p.gravity = j.optBoolean("gravity", true);
         p.pinned = j.optBoolean("pinned", false);
         p.muted = j.optBoolean("muted", true);
@@ -79,9 +84,40 @@ public final class PetStore {
     return out;
   }
 
-  public static synchronized void saveInstances(Context c, List<Instance> instances) {
-    JSONArray out = new JSONArray();
+  /** A fresh summon starts a new visible group; the previous group remains recoverable. */
+  public static synchronized void startNewSession(Context c) {
+    SharedPreferences p=prefs(c);
+    if(!loadInstances(c).isEmpty()) p.edit()
+        .putString("previous_instances",p.getString("instances","[]"))
+        .putString("instances","[]").apply();
+  }
+
+  public static synchronized int previousCount(Context c) {
+    return readInstances(c,"previous_instances").size();
+  }
+
+  public static synchronized void restorePrevious(Context c) {
+    ArrayList<Instance> current=loadInstances(c),remaining=new ArrayList<>();
+    for(Instance saved:readInstances(c,"previous_instances")) {
+      boolean duplicate=false;
+      for(Instance present:current) if(saved.uid.equals(present.uid)) duplicate=true;
+      if(duplicate) continue;
+      if(current.size()<MAX_INSTANCES) current.add(saved);else remaining.add(saved);
+    }
     try {
+      prefs(c).edit().putString("instances",encodeInstances(c,current))
+          .putString("previous_instances",encodeInstances(c,remaining)).apply();
+    } catch(Exception e) {Log.e("PetStore","Restore failed",e);}
+  }
+
+  public static synchronized void saveInstances(Context c, List<Instance> instances) {
+    try {
+      prefs(c).edit().putString("instances",encodeInstances(c,instances)).apply();
+    } catch(Exception e) {Log.e("PetStore","Save failed",e);}
+  }
+
+  private static String encodeInstances(Context c,List<Instance> instances) throws org.json.JSONException {
+    JSONArray out = new JSONArray();
       for (Instance p : instances) {
         if (out.length() >= MAX_INSTANCES) break;
         if (p == null || p.uid == null || PetCatalog.get(c, p.characterId) == null) continue;
@@ -91,7 +127,7 @@ public final class PetStore {
         j.put("x", finite(p.x, .5f, 0, 1));
         j.put("y", finite(p.y, .35f, 0, 1));
         j.put("sizeDp", finite(p.sizeDp, 88, 56, 144));
-        j.put("softness", finite(p.softness, .5f, 0, 1));
+        j.put("softness", finite(p.softness, DEFAULT_SOFTNESS, 0, 1));
         j.put("gravity", p.gravity);
         j.put("pinned", p.pinned);
         j.put("muted", p.muted);
@@ -99,10 +135,7 @@ public final class PetStore {
         j.put("moodText", p.moodText);
         out.put(j);
       }
-      prefs(c).edit().putString("instances", out.toString()).apply();
-    } catch (Exception e) {
-      Log.e("PetStore", "Save failed", e);
-    }
+    return out.toString();
   }
 
   public static synchronized Instance find(Context c, String uid) {
@@ -119,7 +152,7 @@ public final class PetStore {
     p.characterId = id;
     SharedPreferences s = prefs(c);
     p.sizeDp = s.getFloat("default_size_" + id, 88);
-    p.softness = s.getFloat("default_softness_" + id, .5f);
+    p.softness = s.getFloat("default_softness_" + id, DEFAULT_SOFTNESS);
     p.gravity = s.getBoolean("default_gravity_" + id, true);
     p.muted = s.getBoolean("default_muted_" + id, true);
     p.pinned = s.getBoolean("default_pinned_" + id, false);
@@ -152,6 +185,6 @@ public final class PetStore {
   }
 
   public static synchronized void clear(Context c) {
-    prefs(c).edit().putString("instances", "[]").apply();
+    prefs(c).edit().putString("instances", "[]").remove("previous_instances").apply();
   }
 }

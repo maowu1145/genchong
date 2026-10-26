@@ -95,6 +95,7 @@ public final class PetCatalog {
     public final int frameDurationMs;
     public final float animationAnchorY;
     public final boolean functional;
+    public final float[] contourUV;
 
     // Additive contract: static and animated canvases have different foot anchors.
     public final float anchorX, anchorY, animationAnchorX;
@@ -110,6 +111,9 @@ public final class PetCatalog {
       description = json.getString("description");
       feature = json.getString("feature");
       functional = json.optBoolean("functional", true);
+      JSONArray contour = json.optJSONArray("contourUV");
+      contourUV = new float[contour == null ? 0 : contour.length()];
+      for (int n = 0; n < contourUV.length; n++) contourUV[n] = Float.parseFloat(contour.getString(n));
       idle = spritePath(json.getString("idle"), id);
       JSONObject rawStates = json.getJSONObject("states");
       Map<String, String> paths = new LinkedHashMap<>();
@@ -266,6 +270,8 @@ public final class PetCatalog {
    */
   public static Bitmap bitmap(Context context, String assetRelativePath) {
     if (assetRelativePath == null || !load(context).paths.contains(assetRelativePath)) return null;
+    Bitmap ready = BITMAPS.get(assetRelativePath);
+    if (ready != null && !ready.isRecycled()) return ready;
     synchronized (BITMAP_LOCK) {
       Bitmap cached = BITMAPS.get(assetRelativePath);
       if (cached != null && !cached.isRecycled()) return cached;
@@ -301,6 +307,13 @@ public final class PetCatalog {
         return null;
       }
     }
+  }
+
+  /** Drawing must never wait for disk I/O or another character's decoding lock. */
+  public static Bitmap bitmapIfReady(String path) {
+    if(path==null)return null;
+    Bitmap result=BITMAPS.get(path);
+    return result!=null&&!result.isRecycled()?result:null;
   }
 
   /**

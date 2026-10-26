@@ -1,5 +1,116 @@
 Overlay task — implementation complete, integration/device validation pending — 2026-10-26
 
+TRUE XPBD + FIRMER MATERIAL FOLLOW-UP — ready for main build, 2026-10-26
+This section supersedes the old circle/spring implementation description below.
+
+GROUND-UPRIGHT FOLLOW-UP (latest): Real-phone upside-down sleep was reproduced with the
+actual catalog outlines. The fixed 8 rad/s^2 recovery limit could not overcome gravity and
+friction under a broad head. Grounded recovery now uses a bounded g/r-dependent angular
+acceleration, still only changing velocities; all geometry passes the existing collision
+solver. A gravity-enabled unlocked pet more than 30 degrees from upright cannot sleep;
+isSettled and stepSoft also recover an already-sleeping inverted state. Within 30 degrees,
+allow the authored silhouette to find a stable lean instead of continuously fighting it.
+Low-speed whole-body wall friction removes residual skating after recovery (node-only
+friction was insufficient for the asymmetric Doro cage). Dragged bodies are excluded.
+Added only the requested real-contour ground-recovery regression: all six actual contours
+start inverted near the phone floor; Doro/panda also start on their sides; every 30Hz frame
+checks mesh validity, floor clearance and absence of inverted sleep. Final default30 results:
+Doro inverted 4.0s, side 2.67s, angle about 0 degrees; panda inverted 3.03s, side 2.37s,
+angle about -0.64 degrees. Others settle within 30 degrees. All cases have zero rollbacks.
+Existing six-pet floor/side-wall, drag/throw and legacy regressions also pass: 61 legacy +
+6855 soft assertions. No renderer/service edits or Gradle/ADB operations in this follow-up.
+
+DISPLAY-CLOCK FOLLOW-UP (latest): PhysicsWorld.advance now calls the soft bridge once per
+display callback with elapsed <= 1/30 second, matching boxob's native entry. BalloonWorld
+retains its internal 180Hz accumulator; legacy all-circle advance keeps the 120Hz loop.
+Soft elapsed uses double precision from nanoseconds to avoid losing a native tick when
+rounded 60Hz/30Hz display intervals land just below the accumulator threshold. Duplicate
+timestamps and clock reset do not simulate. Only PhysicsWorld, the one display-time test
+and this report changed; renderer/service remain primary-owned.
+One added display-time regression verifies 60Hz=3 native steps, 30Hz=6, actual 50ms motion,
+long-frame 1/30 cap, duplicate timestamp and reset. Full existing runner: PASS 61 legacy +
+5305 soft assertions. No new Gradle/ADB or expanded device testing performed here.
+
+Files in this delegated follow-up:
+- PhysicsWorld.java; BalloonBody.java, BalloonWorld.java, BalloonCage.java,
+  BalloonMesh.java, BalloonRenderer.java, BalloonSweep.java.
+- coordination/tests/SoftPhysicsWorldTest.java and run-physics-tests.ps1.
+- No Service, PetSpriteView, Catalog, settings, APK, Gradle, ADB or Git operations here.
+  Primary owns the real-device profiler, rendering, menus and build/package validation.
+
+Integration contract (implemented and API36-compiled against all 28 real gengpet sources):
+- void PhysicsWorld.configureSoft(Body b, float[] contourUV, float sizePixels).
+  sizePixels is FULL bitmap size; UV pairs are the ORIGINAL normalized canvas. Call after
+  add, including every reload. Equal values are a strict mesh/pose/momentum/sleep no-op.
+- Body.soft is package-access BalloonBody, with 24 actual screen-pixel nodes. Original
+  valid convex 24-point metadata is preserved exactly. Missing/invalid metadata records
+  Body.softFailure; failed reconfiguration keeps the previous valid mesh.
+- BalloonRenderer(body, bitmap) and BalloonRenderer(body, bitmap, RectF boundsUV),
+  draw(Canvas, BalloonBody) match original boxob signatures. Translate by negative window
+  origin once; do not reapply old rotation/squash/scaling. Extended UV fan covers full art.
+- softBounds reads physical cage bounds only. Main renderer.mesh.positions covers the
+  extended visual fan for window sizing. Draw/constrain cannot reposition accepted nodes.
+- Legacy all-circle branch/API and its 61 tests remain intact. Mixed worlds use rigid
+  native proxies for unconfigured neighbors. Max capacity 6, not source-world 192.
+
+Latest user-requested material/upright changes:
+- UI still supplies 0..1 Body.softness. Effective native softness = 0.7 * slider^2.
+  Recommended/new main default 0.30; preserve existing saved settings.
+  Slider 0.30 -> effective 0.063, 0.50 -> 0.175, 1.00 -> 0.70.
+  Native stiffness remains 200 / 200^effectiveSoftness; the 0.50 setting is about 5.6x
+  stiffer than the previous direct mapping. Lower values are harder; higher are softer.
+- Node mass = 0.65 + 2.35*t^2, t = authored vertical coordinate across the contour.
+  Normalize total mass to 24; bottom nodes are heavier, shifting the actual mass centre
+  below the geometric centre. Pin/tool lock and unlock restore these inverse masses.
+- Gentle angular velocity correction about the mass centre aligns to opposite gravity,
+  with a dead zone, bounded angular acceleration and weaker correction in free flight.
+  No pose teleport; disabled while held, locked, sleeping or gravity-off.
+- Side walls now have tangential friction, and node-edge contacts use Coulomb friction.
+  This fixes persistent drift in a pile against a side wall; floor-only friction was
+  insufficient. Quiet supported piles sleep as a group, preserving compressed meshes.
+  Quiet threshold max(1.5px/s, fullTextureSize*0.018) for 0.5s; real support reachability
+  is required. Unsupported airborne contact cannot count as support. Removal/tilt wakes.
+
+Performance changes (real-phone improvement still requires primary's profiler):
+- Continuous collision swept endpoint/edge boxes precomputed once per accepted attempt.
+  Exact sweep remains for candidate pairs, including self-crossing protection.
+- Node-edge projection excludes nodes outside the exact, conservatively expanded target
+  box. Keep all 24 nodes and original seven constraint iterations / 180Hz native step.
+- Support graph/distance work runs only when every body is already quiet enough to sleep.
+- Removed repeated hypot/sqrt work from speed thresholds and cached wall friction factor.
+- Adaptive refinement is capped at 32 attempts per bridge call (previously 96); exceeding
+  the cap discards remaining simulated time while keeping the last valid geometry. This
+  explicitly trades rare high-speed time loss for bounded main-thread work.
+- Main's two reported SuspiciousIndentation boundary branches now have explicit braces;
+  PhysicsWorld formatting normalized. No lint suppression. Main should rerun real lint.
+
+Verification completed (standalone javac/java, no Gradle/ADB):
+- run-physics-tests.ps1: PASS 61 legacy + 5292 real soft-body assertions.
+  Includes six current catalog contours, exact UV preservation, full-image mesh coverage,
+  valid/nonintersecting cages, real support removal, drag/throw, pin/tool freeze, viewport,
+  softness load response, lower mass centre, upside-down recovery and side-wall sleep.
+- 1080x2408, density3/330px-per-metre, full size264, six actual catalog characters:
+  settle test 2400 bridge ticks: 1397 active native calls, 2157 solver attempts, 0 rollback,
+  0 budget exhaustion, all sleeping. Desktop wall time ~231ms, worst tick ~1.67ms.
+  These are desktop JVM timings, NOT Android frame timing or a device jank claim.
+- Lift from pile + 2400/-1800px/s throw: bounded attempts every tick, 0 rollback, 2
+  budget-exhausted remainder leaves, 0.00278s discarded total (< one display frame).
+  All cages remain disjoint. This rare budget fallback is intentional and visible in stats.
+- Six pets at side wall with new default30: all sleep, 0 rollback, 0 budget exhaustion.
+- Single initially inverted pet: settles at about -7.71 degrees without pose teleport.
+- All 28 current real gengpet Java sources compile against local Android API36 android.jar;
+  deprecation notes only, no mock classes. Main's Gradle/lint/device checks remain required.
+
+Remaining practical limitations:
+- Tight piles can remain tilted when neighbors block rotation; sleeping does not force an
+  upright pose through another cage. Actual feel and current 4-pet scene need phone review.
+- Viewport change reconstructs valid geometry, preserving centre/fitted angle/mean velocity
+  where placement permits, but resets local deformation. Normal reload does not reconstruct.
+- Convex idle-contour collision is the source design, not per-animation concave geometry.
+- Extremely crowded mixed fallback worlds can fail to create a proxy; softFailure records
+  this. Real six-catalog default layouts passed; no guarantee for arbitrarily enlarged pets.
+- No claim that the reported device 99.74% jank is solved until primary's final phone test.
+
 FOLLOW-UP REVIEW completed 2026-10-26 (supersedes original compile status below):
 - Pending reminder delivery now queues ReminderScheduler.deliverPendingFeedback(this) after
   reload/render and after actual View attachment. Screen wake / USER_PRESENT / RESUME /

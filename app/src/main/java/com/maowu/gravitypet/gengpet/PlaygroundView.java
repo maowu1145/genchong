@@ -15,26 +15,43 @@ public final class PlaygroundView extends View implements Runnable {
   private final PhysicsWorld.Body pet;
   private final PetCatalog.Entry entry;
   private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-  private final float size;
+  private float size;
+  private BalloonRenderer renderer;
+  private BalloonBody renderedBody;
   private final RectF spriteBounds = new RectF();
   private VelocityTracker tracker;
   private float offsetX, offsetY;
   private boolean attached;
 
   public PlaygroundView(Context context) {
+    this(context,PetCatalog.get(context,"doro"));
+  }
+
+  public PlaygroundView(Context context, PetCatalog.Entry selected) {
     super(context);
     size = UiKit.dp(context, 104);
     spriteBounds.set(-size / 2, -size / 2, size / 2, size / 2);
     pet = new PhysicsWorld.Body("preview", size, size / 2, size * .39f);
+    pet.softness=PetStore.DEFAULT_SOFTNESS;
     pet.edgeX = pet.edgeY = size * .5f;
     world.add(pet);
     world.setPixelsPerMeter(UiKit.dp(context, 125));
-    entry = PetCatalog.get(context, "doro");
+    entry = selected;
     setBackground(UiKit.card(context));
-    setContentDescription("拖动这里的 Doro，松手看看回弹；无需悬浮窗权限");
+    setContentDescription("拖动角色，松手看看回弹；无需悬浮窗权限");
     setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
     if (entry != null) PetCatalog.preload(context, entry, this::invalidate);
   }
+
+  public void setPetSize(float dp) {
+    size=UiKit.dp(getContext(),dp);
+    if(getWidth()>0 && entry!=null) world.configureSoft(pet,entry.contourUV,size);
+    wake();
+  }
+
+  public void setSoftness(float value) { pet.softness=value; pet.wake(); wake(); }
+  public void setGravityEnabled(boolean value) { pet.gravity=value; pet.wake(); wake(); }
+  public void setPinned(boolean value) { pet.pinned=value; pet.wake(); wake(); }
 
   @Override
   protected void onSizeChanged(int w, int h, int oldW, int oldH) {
@@ -47,6 +64,7 @@ public final class PlaygroundView extends View implements Runnable {
       pet.x = w * .5f;
       pet.y = size * .6f;
     }
+    if(entry!=null) world.configureSoft(pet,entry.contourUV,size);
     wake();
   }
 
@@ -90,15 +108,20 @@ public final class PlaygroundView extends View implements Runnable {
     world.advance(System.nanoTime());
     invalidate();
     if (!world.isSettled())
-      postDelayed(this, PetStore.prefs(getContext()).getBoolean("low_power", false) ? 66 : 16);
+      postOnAnimation(this);
   }
 
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     if (entry == null) return;
-    Bitmap bitmap = PetCatalog.bitmap(getContext(), entry.idle);
+    Bitmap bitmap = PetCatalog.bitmapIfReady(entry.idle);
     if (bitmap == null) return;
+    if(pet.soft!=null) {
+      if(renderedBody!=pet.soft) { renderedBody=pet.soft;renderer=new BalloonRenderer(pet.soft,bitmap,new RectF(0,0,1,1)); }
+      renderer.draw(canvas,pet.soft);
+      return;
+    }
     canvas.save();
     canvas.translate(pet.x, pet.y);
     float normal = (float) Math.toDegrees(Math.atan2(pet.normalY, pet.normalX));

@@ -140,7 +140,7 @@ public final class GengMainActivity extends Activity {
     space(body, 16);
     ArrayList<PetStore.Instance> active = PetStore.loadInstances(this);
     LinearLayout status = card(body);
-    status.addView(UiKit.heading(this, "屏幕上的伙伴 · " + active.size() + " / 6", 18));
+    status.addView(UiKit.heading(this, (GengOverlayService.isRunning()?"屏幕上的伙伴 · ":"已收起的伙伴 · ") + active.size() + " / 6", 18));
     if (!Settings.canDrawOverlays(this)) {
       status.addView(UiKit.text(this, "先允许悬浮窗，桌宠就能陪你使用其他应用。", 14));
       status.addView(UiKit.button(this, "开启悬浮窗权限", () -> requestOverlay(null)));
@@ -182,6 +182,9 @@ public final class GengMainActivity extends Activity {
         line.addView(remove, p);
       }
     }
+    if(PetStore.previousCount(this)>0) status.addView(UiKit.button(this,
+        "恢复上一组桌宠 · "+PetStore.previousCount(this)+" 只",
+        ()->control(GengOverlayService.ACTION_RESTORE_PREVIOUS,null)));
     space(body, 16);
     EditText search = new EditText(this);
     search.setSingleLine(true);
@@ -374,7 +377,7 @@ public final class GengMainActivity extends Activity {
     if (existing == null) {
       SharedPreferences p = PetStore.prefs(this);
       draft.sizeDp = p.getFloat("default_size_" + e.id, 88);
-      draft.softness = p.getFloat("default_softness_" + e.id, .5f);
+      draft.softness = p.getFloat("default_softness_" + e.id, PetStore.DEFAULT_SOFTNESS);
       draft.gravity = p.getBoolean("default_gravity_" + e.id, true);
       draft.pinned = p.getBoolean("default_pinned_" + e.id, false);
       draft.muted = p.getBoolean("default_muted_" + e.id, true);
@@ -382,7 +385,11 @@ public final class GengMainActivity extends Activity {
     ScrollView scroll = new ScrollView(this);
     LinearLayout box = UiKit.column(this, 18);
     scroll.addView(box);
-    PetThumb preview = new PetThumb(this, e);
+    PlaygroundView preview = new PlaygroundView(this, e);
+    preview.setPetSize(draft.sizeDp);
+    preview.setSoftness(draft.softness);
+    preview.setGravityEnabled(draft.gravity);
+    preview.setPinned(draft.pinned);
     box.addView(preview, new LinearLayout.LayoutParams(-1, dp(170)));
     box.addView(UiKit.text(this, e.description, 15));
     slider(
@@ -393,23 +400,24 @@ public final class GengMainActivity extends Activity {
         Math.round(draft.sizeDp),
         value -> {
           draft.sizeDp = value;
-          preview.previewScale = value / 88f;
-          preview.invalidate();
+          preview.setPetSize(value);
         });
-    slider(
+    SeekBar softnessSlider=slider(
         box,
-        "柔软度",
+        "柔软度（0 硬 → 100 软）",
         0,
         100,
         Math.round(draft.softness * 100),
         value -> {
           draft.softness = value / 100f;
-          preview.softness = draft.softness;
-          preview.invalidate();
-          preview.scheduleAnimation();
+          preview.setSoftness(draft.softness);
         });
-    check(box, "跟随手机重力", draft.gravity, value -> draft.gravity = value);
-    check(box, "固定位置", draft.pinned, value -> draft.pinned = value);
+    LinearLayout presets=row(box);
+    for(int value:new int[]{30,55,85}) weighted(presets,UiKit.button(this,
+        value==30?"偏硬":value==55?"适中":"很软",()->softnessSlider.setProgress(value)));
+    box.addView(UiKit.text(this,"上方可以拖拽试手感；重心偏下，松手后会慢慢回正。",13));
+    check(box, "跟随手机重力", draft.gravity, value -> {draft.gravity = value;preview.setGravityEnabled(value);});
+    check(box, "固定位置", draft.pinned, value -> {draft.pinned = value;preview.setPinned(value);});
     check(box, "保持安静", draft.muted, value -> draft.muted = value);
     box.addView(
         UiKit.button(
@@ -449,7 +457,7 @@ public final class GengMainActivity extends Activity {
   }
 
   private void summon(String id) {
-    if (PetStore.loadInstances(this).size() >= 6) {
+    if (GengOverlayService.isRunning() && PetStore.loadInstances(this).size() >= 6) {
       message("同时最多放出 6 只，先收回一只吧。");
       return;
     }
@@ -466,7 +474,7 @@ public final class GengMainActivity extends Activity {
       requestOverlay(null);
       return;
     }
-    if (!GengOverlayService.ACTION_SHOW.equals(action) && PetStore.loadInstances(this).isEmpty()) {
+    if (!GengOverlayService.ACTION_SHOW.equals(action) && !GengOverlayService.ACTION_RESTORE_PREVIOUS.equals(action) && PetStore.loadInstances(this).isEmpty()) {
       message("先在桌宠馆放出一个伙伴吧。");
       return;
     }
@@ -664,7 +672,7 @@ public final class GengMainActivity extends Activity {
     s.setOnCheckedChangeListener((b, v) -> fn.set(v));
   }
 
-  private void slider(
+  private SeekBar slider(
       LinearLayout parent, String label, int min, int max, int current, IntChange fn) {
     TextView t = UiKit.text(this, label + " · " + current, 15);
     parent.addView(t);
@@ -685,6 +693,7 @@ public final class GengMainActivity extends Activity {
 
           public void onStopTrackingTouch(SeekBar b) {}
         });
+    return s;
   }
 
   private LinearLayout card(LinearLayout parent) {
@@ -726,6 +735,8 @@ public final class GengMainActivity extends Activity {
     final PetCatalog.Entry entry;
     final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
     final RectF bounds = new RectF();
+    final android.graphics.Rect visibleRect = new android.graphics.Rect();
+    final android.view.ViewTreeObserver.OnScrollChangedListener scrollListener = this::scheduleAnimation;
     long epoch = SystemClock.uptimeMillis();
     boolean ready, attached;
     float previewScale = 1, softness = 0;
@@ -748,12 +759,14 @@ public final class GengMainActivity extends Activity {
     protected void onAttachedToWindow() {
       super.onAttachedToWindow();
       attached = true;
+      getViewTreeObserver().addOnScrollChangedListener(scrollListener);
       scheduleAnimation();
     }
 
     @Override
     protected void onDetachedFromWindow() {
       attached = false;
+      if(getViewTreeObserver().isAlive())getViewTreeObserver().removeOnScrollChangedListener(scrollListener);
       removeCallbacks(this);
       super.onDetachedFromWindow();
     }
@@ -762,6 +775,7 @@ public final class GengMainActivity extends Activity {
       removeCallbacks(this);
       if (attached
           && getWindowVisibility() == VISIBLE
+          && getGlobalVisibleRect(visibleRect)
           && (!entry.animationFrames.isEmpty() || softness > 0))
         postDelayed(this, Math.max(33, entry.frameDurationMs));
     }
@@ -788,7 +802,7 @@ public final class GengMainActivity extends Activity {
           entry.animationFrames.isEmpty()
               ? entry.idle
               : entry.animationFrame(SystemClock.uptimeMillis() - epoch);
-      Bitmap b = PetCatalog.bitmap(getContext(), path);
+      Bitmap b = PetCatalog.bitmapIfReady(path);
       if (b == null) return;
       float size = Math.min(getWidth(), getHeight()) * .94f * Math.min(1.35f, previewScale);
       float cx = getWidth() / 2f, cy = getHeight() / 2f;

@@ -32,6 +32,7 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.Choreographer;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowManager;
@@ -45,7 +46,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-/** Each pet owns exactly one bounded window. There is no fullscreen overlay or input layer. */
+/** One non-touchable render layer, with bounded transparent touch handles as in boxob. */
 public final class GengOverlayService extends Service implements PetSpriteView.Interaction {
   public static final String ACTION_SHOW = "gengpet.SHOW",
       ACTION_REMOVE = "gengpet.REMOVE",
@@ -53,6 +54,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       ACTION_RESUME = "gengpet.RESUME",
       ACTION_STOP = "gengpet.STOP",
       ACTION_RELOAD = "gengpet.RELOAD",
+      ACTION_RESTORE_PREVIOUS = "gengpet.RESTORE_PREVIOUS",
       ACTION_COMFORT = "gengpet.COMFORT";
   public static final String ACTION_FEEDBACK = "com.maowu.gengpet.FEEDBACK",
       ACTION_RELOAD_SETTINGS = "com.maowu.gengpet.RELOAD_SETTINGS";
@@ -84,6 +86,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
   private final Handler handler = new Handler(Looper.getMainLooper());
   private final PhysicsWorld world = new PhysicsWorld();
   private final LinkedHashMap<String, Slot> slots = new LinkedHashMap<>();
+  private final Set<View> registeredWindows=Collections.newSetFromMap(new java.util.IdentityHashMap<>());
   private WindowManager windows;
   private DisplayManager displays;
   private MotionSensor motion;
@@ -101,14 +104,21 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       registered,
       sensorNoticeShown;
   private long lastRender, lastSave, resetReferenceToken;
+  private long profilePhysics, profileRender, profileFrames, profileAt;
+  private volatile String performanceSummary="Waiting for frames";
+  private boolean initialCommandHandled;
   private View menu, recycle, bubble;
+  private View petLayer;
+  private WindowManager.LayoutParams layerParams;
   private Slot menuOwner;
   private PetSpriteView gestureOwner;
   private final Rect recycleBounds = new Rect();
   private EdgeView leftCue, rightCue;
   private float dragOffsetX, dragOffsetY;
   private boolean recycleHit;
-  private final Runnable tick = this::frame;
+  private RecycleGesture recycleIntent;
+  private float dragRawX,dragRawY;
+  private final Choreographer.FrameCallback tick = ignored -> frame();
   private final Runnable pendingFeedback =
       () -> {
         publishFeedbackTargets();
@@ -137,6 +147,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     PetSpriteView view;
     WindowManager.LayoutParams params;
     boolean awaitingToolStart;
+    long lastHandleUpdate;
     int toolLaunchGeneration;
 
     Slot(PetStore.Instance i) {
@@ -243,6 +254,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     windows = getSystemService(WindowManager.class);
     displays = getSystemService(DisplayManager.class);
     density = getResources().getDisplayMetrics().density;
+    recycleIntent=new RecycleGesture(dp(72),350);
     prefs = PetStore.prefs(this);
     PowerManager power = getSystemService(PowerManager.class);
     screenOn = power == null || power.isInteractive();
@@ -312,11 +324,20 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     if (ACTION_SHOW.equals(action)) {
       String id = intent.getStringExtra("characterId");
       PetCatalog.Entry entry = PetCatalog.get(this, id);
-      if (entry == null || PetCatalog.bitmap(this, entry.idle) == null) toast("这个角色的图片暂时不可用");
+      if (entry == null) {
+        toast("这个角色的图片暂时不可用");
+        if(!initialCommandHandled) requestStop();
+        return START_NOT_STICKY;
+      }
       else {
+        if(!initialCommandHandled) PetStore.startNewSession(this);
         persistPositions();
         if (PetStore.add(this, id) == null) toast("最多同时放出 6 只桌宠");
       }
+    } else if (ACTION_RESTORE_PREVIOUS.equals(action)) {
+      prefs.edit().putBoolean("paused",false).apply();
+      persistPositions();
+      PetStore.restorePrevious(this);
     } else if (ACTION_REMOVE.equals(action)) {
       persistPositions();
       PetStore.remove(this, intent.getStringExtra("instanceId"));
@@ -324,6 +345,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       prefs.edit().putBoolean("paused", ACTION_PAUSE.equals(action)).apply();
     } else if (ACTION_COMFORT.equals(action))
       prefs.edit().putBoolean("comfort_enabled", intent.getBooleanExtra("enabled", false)).apply();
+    initialCommandHandled=true;
     reload();
     return START_NOT_STICKY;
   }
@@ -350,6 +372,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       motion.resetReference();
     }
     ArrayList<PetStore.Instance> current = PetStore.loadInstances(this);
+    if(!current.isEmpty() && !ensurePetLayer())return;
     Map<String, PetStore.Instance> wanted = new LinkedHashMap<>();
     for (PetStore.Instance i : current) if (wanted.size() < 6) wanted.put(i.uid, i);
     for (String id : new ArrayList<>(slots.keySet()))
@@ -359,7 +382,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       if (entry == null) continue;
       Slot slot = slots.get(i.uid);
       if (slot == null) {
-        if (PetCatalog.bitmap(this, entry.idle) == null) continue;
+
         slot = new Slot(i);
         slot.body =
             new PhysicsWorld.Body(
@@ -368,6 +391,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
                 i.y * screenHeight,
                 PhysicsWorld.clamp(i.sizeDp, 56, 144) * density * .42f);
         slot.view = new PetSpriteView(this, slot.body, this);
+        slot.view.setInputOnly(true);
         slot.view.configure(entry, i, density);
         PetCatalog.preload(
             this,
@@ -410,7 +434,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
             (view, insets) -> {
               if (Build.VERSION.SDK_INT >= 30) {
                 Insets ime = insets.getInsets(WindowInsets.Type.ime());
-                int floor = screenHeight - Math.max(ime.bottom, systemBottomInset());
+                int floor = screenHeight - (insets.isVisible(WindowInsets.Type.ime()) ? ime.bottom : 0);
                 if (floor != safe.bottom) {
                   safe.bottom = Math.max(safe.top + 100, floor);
                   applyBounds();
@@ -429,6 +453,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       slot.body.gravity = i.gravity;
       slot.body.softness = i.softness;
       slot.body.radius = PhysicsWorld.clamp(i.sizeDp, 56, 144) * density * .42f;
+      world.configureSoft(slot.body, entry.contourUV, PhysicsWorld.clamp(i.sizeDp, 56, 144) * density);
       if (changed || wasPaused != paused || oldComfort != comfort) slot.body.wake();
       slot.view.configure(entry, i, density);
       slot.view.setCalm(comfort || lowPower || quietNow(), paused);
@@ -489,7 +514,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
   }
 
   private void refreshLoop() {
-    handler.removeCallbacks(tick);
+    Choreographer.getInstance().removeFrameCallback(tick);
     scheduled = false;
     world.resetClock();
     handler.removeCallbacks(quietBoundary);
@@ -508,36 +533,43 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
   private void schedule() {
     if (!scheduled && !destroyed && !stopping && screenOn && !paused && !slots.isEmpty()) {
       scheduled = true;
-      handler.post(tick);
+      Choreographer.getInstance().postFrameCallback(tick);
     }
   }
 
   private void frame() {
     scheduled = false;
     if (destroyed || stopping || !screenOn || paused) return;
-    if (!Settings.canDrawOverlays(this)) {
-      fail("悬浮窗权限已关闭");
-      return;
-    }
     long now = SystemClock.uptimeMillis();
-    world.advance(System.nanoTime());
+    if(gestureOwner!=null && recycle!=null)updateRecycleIntent();
+    long started=System.nanoTime();
+    world.advance(started);
+    long physicsEnd=System.nanoTime();
     boolean dragging = false, animated = false;
     for (Slot slot : slots.values()) {
       dragging |= slot.body.held;
       animated |= slot.view.animated();
     }
-    if (now - lastRender >= (dragging ? 16 : lowPower ? 66 : 32)) {
-      render();
-      lastRender = now;
+    // Active physical motion follows display vsync even in low power. Savings come
+    // from sleeping bodies and suspended decorative animations, not jerky dragging.
+    render();
+    lastRender = now;
+    profilePhysics+=physicsEnd-started;
+    profileRender+=System.nanoTime()-physicsEnd;
+    profileFrames++;
+    if(now-profileAt>=5000) {
+      performanceSummary="pets="+slots.size()+" lowPower="+lowPower+" frames="+profileFrames+" physicsMs="+(profilePhysics/1e6/profileFrames)+" renderMs="+(profileRender/1e6/profileFrames)+" attempts="+world.softPhysicsAttempts()+" rollbacks="+world.softRollbacks()+" budgets="+world.softBudgetExhaustions();
+      profilePhysics=profileRender=profileFrames=0;profileAt=now;
     }
     if (now - lastSave > 5000) {
+      if (!Settings.canDrawOverlays(this)) { fail("悬浮窗权限已关闭"); return; }
       persistPositions();
       lastSave = now;
       for (Slot slot : slots.values()) slot.view.setCalm(comfort || lowPower || quietNow(), paused);
     }
     if (!world.isSettled() || animated || comfort || dragging) {
       scheduled = true;
-      handler.postDelayed(tick, lowPower ? 32 : 16);
+      Choreographer.getInstance().postFrameCallback(tick);
     } else {
       render();
       persistPositions();
@@ -547,28 +579,65 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
 
   private void render() {
     if (destroyed || stopping || !screenOn) return;
-    for (Slot slot : new ArrayList<>(slots.values())) {
-      slot.view.worldBounds();
-      world.constrain(slot.body);
+    syncLayerOpacity();
+    boolean redraw=false;
+    long now=SystemClock.uptimeMillis();
+    for (Slot slot : slots.values()) {
       RectF rect = slot.view.worldBounds();
-      int x = (int) Math.floor(rect.left), y = (int) Math.floor(rect.top);
-      int w = Math.max(1, (int) Math.ceil(rect.right) - x),
-          h = Math.max(1, (int) Math.ceil(rect.bottom) - y);
-      slot.view.setWindowOrigin(x, y);
-      if (slot.params.x != x
-          || slot.params.y != y
-          || slot.params.width != w
-          || slot.params.height != h) {
-        slot.params.x = x;
-        slot.params.y = y;
-        slot.params.width = w;
-        slot.params.height = h;
-        updateWindow(slot.view, slot.params);
+      // Keep a stable buffer. Deformation now changes vertices, not Surface dimensions every frame.
+      int quantum = dp(16);
+      int needW = Math.max(dp(48), (int)Math.ceil(rect.width()) + 4);
+      int needH = Math.max(dp(48), (int)Math.ceil(rect.height()) + 4);
+      int w = Math.min(screenWidth, Math.max(slot.params.width, ((needW+quantum-1)/quantum)*quantum));
+      int h = Math.min(screenHeight, Math.max(slot.params.height, ((needH+quantum-1)/quantum)*quantum));
+      int x = Math.round(PhysicsWorld.clamp(rect.centerX()-w/2f, 0, screenWidth-w));
+      int y = Math.round(PhysicsWorld.clamp(rect.centerY()-h/2f, 0, screenHeight-h));
+      if (!slot.body.held && (slot.params.x != x || slot.params.y != y || slot.params.width != w || slot.params.height != h)) {
+        boolean urgent=slot.body.held || slot.params.width!=w || slot.params.height!=h
+            ||Math.abs(x-slot.params.x)>dp(6)||Math.abs(y-slot.params.y)>dp(6);
+        if(urgent||now-slot.lastHandleUpdate>=150){
+          slot.params.x=x;slot.params.y=y;slot.params.width=w;slot.params.height=h;
+          updateWindow(slot.view,slot.params);slot.lastHandleUpdate=now;
+          if(stopping)return;
+        }
       }
-      slot.view.invalidate();
+      slot.view.setWindowOrigin(slot.params.x,slot.params.y);
+      redraw|=slot.view.invalidateIfChanged();
     }
+    if(petLayer!=null && redraw)petLayer.invalidate();
   }
 
+  private boolean ensurePetLayer(){
+    if(petLayer!=null)return true;
+    petLayer=new View(this){
+      @Override protected void onDraw(Canvas canvas){
+        super.onDraw(canvas);
+        for(Slot slot:slots.values())slot.view.drawInWorld(canvas);
+      }
+    };
+    petLayer.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+    layerParams=params(screenWidth,screenHeight,false);
+    layerParams.x=layerParams.y=0;
+    layerParams.alpha=Build.VERSION.SDK_INT>=31?.79f:1f;
+    return attach(petLayer,layerParams);
+  }
+
+  private void syncLayerOpacity(){
+    if(petLayer==null||layerParams==null||Build.VERSION.SDK_INT<31)return;
+    // Compose obscuring opacity with the optional cue/recycle/bubble overlays.
+    float transmission=1f;
+    if(comfort)transmission*=1-comfortOpacity;
+    if(bubble!=null)transmission*=.65f;
+    if(recycle!=null)transmission*=.65f;
+    float alpha=Math.max(0,Math.min(.79f,1-.21f/transmission));
+    if(layerParams.alpha!=alpha){layerParams.alpha=alpha;updateWindow(petLayer,layerParams);}
+  }
+
+  @Override
+  protected void dump(java.io.FileDescriptor fd,java.io.PrintWriter writer,String[] args) {
+    writer.println(performanceSummary);
+    writer.println("windows="+registeredWindows.size()+" recycle="+(recycle!=null)+" dragging="+(gestureOwner!=null));
+  }
   private void updateBounds() {
     if (windows == null) return;
     int oldWidth = screenWidth, oldHeight = screenHeight;
@@ -582,7 +651,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
               .getWindowInsets()
               .getInsetsIgnoringVisibility(
                   WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-      safe.set(insets.left, insets.top, screenWidth - insets.right, screenHeight - insets.bottom);
+      safe.set(insets.left, insets.top, screenWidth - insets.right, screenHeight - metrics.getWindowInsets().getInsetsIgnoringVisibility(WindowInsets.Type.displayCutout()).bottom);
     } else {
       DisplayMetrics dm = new DisplayMetrics();
       windows.getDefaultDisplay().getRealMetrics(dm);
@@ -590,7 +659,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
       screenHeight = dm.heightPixels;
       int status = resourceDimension("status_bar_height"),
           nav = resourceDimension("navigation_bar_height");
-      safe.set(0, status, screenWidth, screenHeight - nav);
+      safe.set(0, status, screenWidth, screenHeight);
     }
     if (oldWidth != screenWidth || oldHeight != screenHeight)
       for (Slot slot : slots.values()) {
@@ -598,6 +667,9 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
         slot.body.y *= screenHeight / (float) oldHeight;
       }
     applyBounds();
+    if(petLayer!=null && (layerParams.width!=screenWidth||layerParams.height!=screenHeight)){
+      layerParams.width=screenWidth;layerParams.height=screenHeight;updateWindow(petLayer,layerParams);
+    }
     closeMenu();
     hideBubble.run();
     refreshCues();
@@ -627,7 +699,8 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     int flags =
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
             | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+            | WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED;
     if (!touchable) flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
     WindowManager.LayoutParams p =
         new WindowManager.LayoutParams(
@@ -640,14 +713,16 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     // Bubble is removed before dragging/recycle. At most one .35 UI window and
     // one .6 edge cue overlap: combined opacity 1 - .65 * .4 = .74 < .8.
     p.alpha = touchable ? 1 : .35f;
-    if (Build.VERSION.SDK_INT >= 30) p.setFitInsetsTypes(0);
+    if (Build.VERSION.SDK_INT >= 30) { p.setFitInsetsTypes(0); p.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS; }
     return p;
   }
 
   private boolean attach(View view, WindowManager.LayoutParams p) {
     if (destroyed || stopping) return false;
+    syncLayerOpacity();
     try {
       windows.addView(view, p);
+      registeredWindows.add(view);
       return true;
     } catch (RuntimeException e) {
       fail("桌宠窗口暂时无法显示，请检查悬浮窗权限");
@@ -666,8 +741,11 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
 
   private void removeWindow(View view) {
     if (view == null) return;
+    if(!registeredWindows.remove(view))return;
     try {
-      if (view.isAttachedToWindow()) windows.removeViewImmediate(view);
+      // addView registers a root before the first traversal attaches its View.
+      // Removing during that gap must still remove the registered window.
+      windows.removeViewImmediate(view);
     } catch (IllegalArgumentException ignored) {
     }
   }
@@ -676,6 +754,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     if (slot == null) return;
     if (slot == menuOwner) closeMenu();
     slots.remove(slot.instance.uid);
+    if(petLayer!=null)petLayer.invalidate();
     removeWindow(slot.view);
     world.remove(slot.body);
     activeCount = slots.size();
@@ -710,19 +789,19 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     view.body.wake();
     dragOffsetX = view.body.x - view.downRawX();
     dragOffsetY = view.body.y - view.downRawY();
+    dragRawX=view.downRawX();dragRawY=view.downRawY();
+    recycleIntent.begin(dragRawX,dragRawY,SystemClock.uptimeMillis());
     schedule();
   }
 
   @Override
   public void drag(PetSpriteView view, float rawX, float rawY) {
     if (destroyed || stopping || !screenOn || gestureOwner != view) return;
-    if (recycle == null) showRecycle();
+    if (recycle == null && Math.hypot(rawX-view.downRawX(),rawY-view.downRawY())>=dp(72)) showRecycle();
     view.body.x = rawX + dragOffsetX;
     view.body.y = rawY + dragOffsetY;
     world.constrain(view.body);
-    recycleHit = recycleBounds.contains(Math.round(rawX), Math.round(rawY));
-    if (recycle instanceof TextView) ((TextView) recycle).setText(recycleHit ? "松手收回" : "拖到这里收回");
-    render();
+    dragRawX=rawX;dragRawY=rawY;updateRecycleIntent();
     schedule();
   }
 
@@ -733,6 +812,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     gestureOwner = null;
     boolean recall = dragged && !canceled && recycleHit;
     recycleHit = false;
+    recycleIntent.reset();
     removeWindow(recycle);
     recycle = null;
     recycleBounds.setEmpty();
@@ -747,6 +827,24 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
         canceled || !dragged || paused ? 0 : vy);
     persistPositions();
     schedule();
+  }
+
+  @Override
+  public void finishDrag(PetSpriteView view,float rawX,float rawY){
+    boolean wasArmed=recycleHit;
+    drag(view,rawX,rawY);
+    recycleHit &= wasArmed; // UP can cancel a recall, but cannot arm it for the first time.
+  }
+
+  private void updateRecycleIntent(){
+    boolean inside=recycleBounds.contains(Math.round(dragRawX),Math.round(dragRawY));
+    recycleIntent.move(dragRawX,dragRawY,inside,SystemClock.uptimeMillis());
+    boolean armed=recycleIntent.armed();
+    if(recycle instanceof TextView){
+      String label=armed?"松手收回":inside?"停留一下，再松手收回":"拖到这里收回";
+      if(!label.contentEquals(((TextView)recycle).getText()))((TextView)recycle).setText(label);
+    }
+    recycleHit=armed;
   }
 
   @Override
@@ -827,6 +925,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
               reload();
             }));
     content.addView(UiKit.button(this, "调整大小", () -> showSizeMenu(slot)));
+    content.addView(UiKit.button(this, "调整柔软度", () -> showSoftnessMenu(slot)));
     content.addView(UiKit.button(this, "收回这只", () -> recall(slot)));
     content.addView(
         UiKit.button(
@@ -867,6 +966,36 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     content.addView(UiKit.button(this, "关闭", this::closeMenu));
     showPanel(content, slot);
     handler.postDelayed(closeMenuLater, 15000);
+  }
+
+  private void showSoftnessMenu(Slot slot) {
+    closeMenu();
+    menuOwner=slot;
+    slot.body.toolOpen=true;
+    LinearLayout content=UiKit.column(this,10);
+    content.setBackground(UiKit.card(this));
+    TextView label=UiKit.text(this,"柔软度 · "+Math.round(slot.body.softness*100),16);
+    content.addView(label);
+    content.addView(UiKit.text(this,"左边偏硬，右边更软。保存后生效。",13));
+    android.widget.SeekBar seek=new android.widget.SeekBar(this);
+    seek.setMax(100);seek.setProgress(Math.round(slot.body.softness*100));
+    seek.setContentDescription("柔软度，0 最硬，100 最软");
+    content.addView(seek,new LinearLayout.LayoutParams(-1,dp(48)));
+    seek.setOnSeekBarChangeListener(new android.widget.SeekBar.OnSeekBarChangeListener(){
+      public void onProgressChanged(android.widget.SeekBar b,int n,boolean user){label.setText("柔软度 · "+n);}
+      public void onStartTrackingTouch(android.widget.SeekBar b){handler.removeCallbacks(closeMenuLater);}
+      public void onStopTrackingTouch(android.widget.SeekBar b){}
+    });
+    for(int value:new int[]{30,55,85}) content.addView(UiKit.button(this,
+        value==30?"偏硬 · 30":value==55?"适中 · 55":"很软 · 85",()->seek.setProgress(value)));
+    content.addView(UiKit.button(this,"保存",()->{
+      persistPositions();
+      PetStore.Instance fresh=PetStore.find(this,slot.instance.uid);
+      if(fresh!=null){fresh.softness=seek.getProgress()/100f;PetStore.update(this,fresh);}
+      closeMenu();reload();
+    }));
+    content.addView(UiKit.button(this,"取消",this::closeMenu));
+    showPanel(content,slot);
   }
 
   private void showPanel(View content, Slot slot) {
@@ -1072,6 +1201,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     running = false;
     feedbackTargets = Collections.emptySet();
     persistPositions();
+    Choreographer.getInstance().removeFrameCallback(tick);
     handler.removeCallbacksAndMessages(null);
     scheduled = false;
     if (motion != null) motion.stop();
@@ -1115,6 +1245,7 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     paused = false;
     activeCount = 0;
     feedbackTargets = Collections.emptySet();
+    Choreographer.getInstance().removeFrameCallback(tick);
     handler.removeCallbacksAndMessages(null);
     motion.stop();
     cancelTouches();
@@ -1124,6 +1255,8 @@ public final class GengOverlayService extends Service implements PetSpriteView.I
     removeWindow(rightCue);
     leftCue = rightCue = null;
     for (Slot slot : new ArrayList<>(slots.values())) detach(slot);
+    removeWindow(petLayer);petLayer=null;layerParams=null;
+    for(View remaining:new ArrayList<>(registeredWindows))removeWindow(remaining);
     if (registered) unregisterReceiver(receiver);
     if (displays != null) displays.unregisterDisplayListener(displayListener);
     if (appOps != null) appOps.stopWatchingMode(overlayPermission);

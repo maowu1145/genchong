@@ -18,6 +18,7 @@ public final class PetSpriteView extends View {
     void press(PetSpriteView view);
 
     void drag(PetSpriteView view, float rawX, float rawY);
+    void finishDrag(PetSpriteView view,float rawX,float rawY);
 
     void release(PetSpriteView view, float vx, float vy, boolean dragged, boolean canceled);
 
@@ -32,6 +33,31 @@ public final class PetSpriteView extends View {
   private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
   private final Matrix transform = new Matrix();
   private final RectF artRect = new RectF(), transformed = new RectF();
+  private final java.util.Map<String, BalloonRenderer> meshRenderers = new java.util.HashMap<>();
+  private BalloonBody meshOwner;
+  private float windowX, windowY;
+  private boolean inputOnly;
+  public void setInputOnly(boolean value) {inputOnly=value;setWillNotDraw(value);}
+  private long lastDrawSignature=Long.MIN_VALUE;
+
+  /** Integer window translations reuse the same buffer; stationary neighbours need no redraw. */
+  public boolean invalidateIfChanged() {
+    String path=imagePath();
+    long signature=path==null?0:path.hashCode();
+    BalloonRenderer renderer=softRenderer();
+    if(renderer!=null) {
+      float[] positions=renderer.mesh.positions;
+      for(int n=0;n<positions.length;n++)
+        signature=signature*31+Math.round((positions[n]-(inputOnly?0:n%2==0?windowX:windowY))*4);
+    } else {
+      signature=signature*31+Float.floatToIntBits(body.deformation);
+      signature=signature*31+Float.floatToIntBits(body.angle);
+      signature=signature*31+Math.round(localCenterX*4);
+      signature=signature*31+Math.round(localCenterY*4);
+    }
+    if(signature!=lastDrawSignature) {lastDrawSignature=signature;if(!inputOnly)invalidate();return true;}
+    return false;
+  }
   private PetCatalog.Entry entry;
   private String mood = "sweating", temporaryState, restingState = "idle";
   private long stateUntil, animationStart = SystemClock.uptimeMillis();
@@ -102,17 +128,30 @@ public final class PetSpriteView extends View {
 
   /** Returns the exact transformed rectangular art bounds, with a 2px anti-alias margin. */
   public RectF worldBounds() {
+    BalloonRenderer renderer = softRenderer();
+    if (renderer != null) {
+      renderer.mesh.update(body.soft);
+      float[] vertices = renderer.mesh.positions;
+      transformed.set(vertices[0], vertices[1], vertices[0], vertices[1]);
+      for (int n=2;n<vertices.length;n+=2) {
+        transformed.left=Math.min(transformed.left,vertices[n]);
+        transformed.top=Math.min(transformed.top,vertices[n+1]);
+        transformed.right=Math.max(transformed.right,vertices[n]);
+        transformed.bottom=Math.max(transformed.bottom,vertices[n+1]);
+      }
+      transformed.inset(-2,-2);
+      return transformed;
+    }
     updateTransform();
     transformed.set(artRect);
     transform.mapRect(transformed);
-    body.edgeX = Math.max(Math.abs(transformed.left), Math.abs(transformed.right)) + 2;
-    body.edgeY = Math.max(Math.abs(transformed.top), Math.abs(transformed.bottom)) + 2;
     transformed.offset(body.x, body.y);
     transformed.inset(-2, -2);
     return transformed;
   }
 
   public void setWindowOrigin(float x, float y) {
+    windowX=x; windowY=y;
     localCenterX = body.x - x;
     localCenterY = body.y - y;
   }
@@ -168,14 +207,47 @@ public final class PetSpriteView extends View {
         : entry.statePath(currentState());
   }
 
+  private BalloonRenderer softRenderer() {
+    if (body.soft == null || entry == null) return null;
+    if (meshOwner != body.soft) { meshOwner=body.soft; meshRenderers.clear(); }
+    String path=imagePath();
+    BalloonRenderer renderer=meshRenderers.get(path);
+    if (renderer != null) return renderer;
+    Bitmap bitmap=PetCatalog.bitmapIfReady(path);
+    if (bitmap==null) return null;
+    float dx,dy;
+    if (usesFrames()) { dx=entry.anchorX-entry.animationAnchorX; dy=entry.anchorY-entry.animationAnchorY; }
+    else { PetCatalog.Anchor anchor=entry.stateAnchor(currentState()); dx=entry.anchorX-anchor.x; dy=entry.anchorY-anchor.y; }
+    renderer=new BalloonRenderer(body.soft,bitmap,new RectF(dx,dy,1+dx,1+dy));
+    meshRenderers.put(path,renderer);
+    return renderer;
+  }
+
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
+    if(inputOnly)return;
+    drawSprite(canvas);
+  }
+
+  public void drawInWorld(Canvas canvas) {
+    canvas.save();canvas.translate(windowX,windowY);drawSprite(canvas);canvas.restore();
+  }
+
+  private void drawSprite(Canvas canvas) {
+    BalloonRenderer renderer=softRenderer();
+    if (renderer != null) {
+      canvas.save();
+      canvas.translate(-windowX,-windowY);
+      renderer.draw(canvas,body.soft);
+      canvas.restore();
+      return;
+    }
     updateTransform();
     String path = imagePath();
-    Bitmap bitmap = path == null ? null : PetCatalog.bitmap(getContext(), path);
+    Bitmap bitmap = path == null ? null : PetCatalog.bitmapIfReady(path);
     if (bitmap == null && entry != null && entry.idle != null)
-      bitmap = PetCatalog.bitmap(getContext(), entry.idle);
+      bitmap = PetCatalog.bitmapIfReady(entry.idle);
     if (bitmap == null)
       return; // Missing art is reported by service; never substitute a fake character.
     canvas.save();
@@ -184,15 +256,8 @@ public final class PetSpriteView extends View {
     // drawBitmap preserves the original anti-aliased alpha; no thresholding or pixel rewrite.
     float scale = size / Math.max(bitmap.getWidth(), bitmap.getHeight());
     float w = bitmap.getWidth() * scale, h = bitmap.getHeight() * scale;
-    canvas.drawBitmap(
-        bitmap,
-        null,
-        new RectF(
-            artRect.centerX() - w / 2,
-            artRect.centerY() - h / 2,
-            artRect.centerX() + w / 2,
-            artRect.centerY() + h / 2),
-        paint);
+    transformed.set(artRect.centerX()-w/2,artRect.centerY()-h/2,artRect.centerX()+w/2,artRect.centerY()+h/2);
+    canvas.drawBitmap(bitmap,null,transformed,paint);
     canvas.restore();
   }
 
@@ -244,7 +309,7 @@ public final class PetSpriteView extends View {
         } else if (previous == DRAGGING) {
           // UP may carry a final position without a preceding MOVE. Test the
           // actual release point against the visible recycle rectangle.
-          interaction.drag(this, event.getRawX(), event.getRawY());
+          interaction.finishDrag(this, event.getRawX(), event.getRawY());
           interaction.release(this, vx, vy, true, false);
         }
         // LONG_PRESS's release must not throw, tap, delete or close the feature.

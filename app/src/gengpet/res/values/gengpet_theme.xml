@@ -2,16 +2,16 @@
 <resources>
     <style name="Theme.GengPetBase" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#6650CB</item>
-        <item name="android:colorControlNormal">#29243B</item>
-        <item name="android:colorControlActivated">#6650CB</item>
-        <item name="android:colorButtonNormal">#6650CB</item>
-        <item name="android:textColorPrimary">#29243B</item>
-        <item name="android:textColorSecondary">#626B78</item>
-        <item name="android:colorBackground">#F3F1FA</item>
-        <item name="android:windowBackground">#F3F1FA</item>
-        <item name="android:navigationBarColor">#F3F1FA</item>
-        <item name="android:statusBarColor">#F3F1FA</item>
+        <item name="android:colorAccent">#252525</item>
+        <item name="android:colorControlNormal">#252525</item>
+        <item name="android:colorControlActivated">#252525</item>
+        <item name="android:colorButtonNormal">#252525</item>
+        <item name="android:textColorPrimary">#252525</item>
+        <item name="android:textColorSecondary">#696969</item>
+        <item name="android:colorBackground">#FAFAF8</item>
+        <item name="android:windowBackground">#FAFAF8</item>
+        <item name="android:navigationBarColor">#FAFAF8</item>
+        <item name="android:statusBarColor">#FAFAF8</item>
         <item name="android:windowLightStatusBar">true</item>
 
         <item name="android:windowActionModeOverlay">true</item>

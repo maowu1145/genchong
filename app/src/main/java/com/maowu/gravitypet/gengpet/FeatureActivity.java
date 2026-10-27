@@ -73,14 +73,14 @@ public final class FeatureActivity extends Activity {
     toolbar.setGravity(Gravity.CENTER_VERTICAL);
     ImageButton back = new ImageButton(this);
     back.setImageDrawable(UiKit.icon(this, "arrow_back", UiKit.INK));
-    back.setContentDescription("返回角色馆");
-    back.setBackground(UiKit.card(this));
+    back.setContentDescription("返回小工具");
+    back.setBackground(UiKit.ripple(this,0x00000000,8));
     back.setOnClickListener(v -> finish());
     toolbar.addView(back, new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48)));
     LinearLayout title = UiKit.column(this, 0);
     title.setPadding(UiKit.dp(this, 12), 0, 0, 0);
     title.addView(UiKit.heading(this, "小工具", 18));
-    TextView subtitle = UiKit.text(this, "随手用，随身陪伴", 12);
+    TextView subtitle = UiKit.text(this, "记录保存在本机", 12);
     subtitle.setTextColor(UiKit.MUTED);
     title.addView(subtitle);
     toolbar.addView(title, new LinearLayout.LayoutParams(0, -2, 1));
@@ -91,8 +91,7 @@ public final class FeatureActivity extends Activity {
     scroll.setFillViewport(true);
     scroll.setVerticalScrollBarEnabled(false);
     outer.addView(scroll, new LinearLayout.LayoutParams(-1, 0, 1));
-    content = UiKit.column(this, 16);
-    content.setBackground(UiKit.card(this));
+    content = UiKit.column(this, 0);
     scroll.addView(content);
     setContentView(outer);
     // Respect system bars and the keyboard even on target-36 edge-to-edge windows.
